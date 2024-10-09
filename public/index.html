@@ -13,7 +13,6 @@
     <link rel="stylesheet" href="/css/mdb.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/css/intlTelInput.css">
 
-
 </head>
 
 <body>
@@ -219,14 +218,14 @@
                         <input class="input-field" type="email" id="contact-email" name="email" required>
                         <label class="input-label" for="contact-email">Email</label>
                     </div>
+                    <!-- First phone input field -->
                     <div class="Model_phone-input">
                         <div class="Model_phone-input-country phonewidth">
-                            <input id="phone" type="tel" class="Model_tel-input border-0" name="phone"
-                                required />
+                            <input id="phone1" type="tel" class="Model_tel-input border-0" name="phone1" required />
                         </div>
                     </div>
                     <!-- Submit Button -->
-                    <button type="submit"  id="contact-form-button"  class="btn-submit">
+                    <button type="submit" id="contact-form-button" class="btn-submit">
                         Request Information
                     </button>
                 </form>
@@ -845,38 +844,6 @@
     </footer>
 
 
-
-    <!-- Callback Popup Modal -->
-    <div class="Model_callback-popup-wrapper">
-        <div class="Model_callback-popup-close-button"></div>
-        <div>
-            <div class="Model_callback-popup-title">Request Callback</div>
-            <!-- Start of the Form -->
-            <form id="callback-form" class="Model_callback-popup-form">
-                <div class="Model_input-group">
-                    <label class="Model_input-label" for="callback-name">Your name</label>
-                    <input id="callback-name" class="Model_input" placeholder="" type="text" name="name" required />
-                </div>
-                <div class="Model_input-group">
-                    <label class="Model_input-label" for="callback-email">Email</label>
-                    <input id="callback-email" class="Model_input" placeholder="" type="email" name="email" required />
-                </div>
-                <div class="Model_phone-input">
-                    <div class="Model_phone-input-country phonewidth">
-                        <input id="phone" type="tel" class="Model_tel-input border-0" name="phone" required />
-                    </div>
-                </div>
-                <!-- Hidden Slug Input -->
-                <input id="callback-project-slug" type="hidden" name="slug" value="" />
-                <!-- Submit Button Inside the Form -->
-                <button id="callback-submit-button" type="submit" class="Model_button">Request Callback</button>
-            </form>
-            <!-- End of the Form -->
-        </div>
-    </div>
-
-
-
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>
 
@@ -886,7 +853,7 @@
     <script src="/app.js"></script> <!-- Link to your app.js -->
 
     <!-- Callback Popup Modal -->
-    <div class="Model_callback-popup-wrapper">
+    <div class="Model_callback-popup-wrapper" style="width: 50%;">
         <div class="Model_callback-popup-close-button"></div>
         <div>
             <div class="Model_callback-popup-title">Request Callback</div>
@@ -900,9 +867,10 @@
                     <label class="Model_input-label" for="callback-email">Email</label>
                     <input id="callback-email" class="Model_input" placeholder="" type="email" name="email" required />
                 </div>
+                <!-- Second phone input field -->
                 <div class="Model_phone-input">
                     <div class="Model_phone-input-country phonewidth">
-                        <input id="phone" type="tel" class="Model_tel-input border-0" name="phone" required />
+                        <input id="phone2" type="tel" class="Model_tel-input border-0" name="phone2" required />
                     </div>
                 </div>
                 <!-- Hidden Slug Input -->
@@ -913,10 +881,7 @@
             <!-- End of the Form -->
         </div>
     </div>
-
     <script>
-        document.querySelector('.Model_callback-popup-close-button').addEventListener('click', hidePopup);
-
         // Function to close popup
         function hidePopup() {
             const popup = document.querySelector('.Model_callback-popup-wrapper');
@@ -930,15 +895,19 @@
                 }
             }
         }
-
+    
+        // Add event listener for the modal close button
+        document.querySelector('.Model_callback-popup-close-button').addEventListener('click', hidePopup);
+    
         // Function to show popup
         function showPopup() {
             const popup = document.querySelector('.Model_callback-popup-wrapper');
             const overlay = document.createElement('div');
             overlay.classList.add('Model_overlay');
             document.body.appendChild(overlay);
-
+    
             if (popup) {
+                console.log('Popup opened'); // Debugging
                 popup.style.display = 'block';
                 popup.classList.add('active');
                 overlay.classList.add('active');
@@ -946,72 +915,84 @@
                 console.error('Popup element not found.');
             }
         }
-
-        // Initialize intl-tel-input
-        const phoneInputField = document.querySelector("#phone");
-        const iti = window.intlTelInput(phoneInputField, {
+    
+        // Initialize intl-tel-input for the first phone field
+        const phoneInputField1 = document.querySelector("#phone1");
+        const iti1 = window.intlTelInput(phoneInputField1, {
             initialCountry: "auto",
             geoIpLookup: function (callback) {
                 fetch('https://ipinfo.io/json', {
-                    headers: {
-                        'Accept': 'application/json'
-                    }
-                }).then((resp) => resp.json())
-                    .then((resp) => {
-                        const countryCode = (resp && resp.country) ? resp.country : "us";
-                        callback(countryCode);
-                    }).catch(() => {
-                        callback("us");
-                    });
+                    headers: { 'Accept': 'application/json' }
+                })
+                .then((resp) => resp.json())
+                .then((resp) => {
+                    const countryCode = (resp && resp.country) ? resp.country : "us";
+                    callback(countryCode);
+                })
+                .catch(() => callback("us"));
             },
             utilsScript: "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/utils.js",
         });
-
-        // Handle submit button click explicitly
-        document.getElementById('callback-submit-button').addEventListener('click', async function () {
-            // Prevent default behavior just in case
+    
+        // Declare iti2 at a higher scope
+        let iti2;
+    
+        // Initialize intl-tel-input for the second phone field
+        const phoneInputField2 = document.querySelector("#phone2");
+        if (phoneInputField2) {
+            console.log('phone2 element found'); // Debugging
+            iti2 = window.intlTelInput(phoneInputField2, {
+                initialCountry: "auto",
+                geoIpLookup: function (callback) {
+                    fetch('https://ipinfo.io/json', {
+                        headers: { 'Accept': 'application/json' }
+                    })
+                    .then((resp) => resp.json())
+                    .then((resp) => {
+                        const countryCode = (resp && resp.country) ? resp.country : "us";
+                        callback(countryCode);
+                    })
+                    .catch(() => callback("us"));
+                },
+                utilsScript: "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/utils.js",
+            });
+    
+            console.log('intl-tel-input initialized for phone2'); // Debugging
+        } else {
+            console.error('phone2 element not found!'); // Debugging
+        }
+    
+        // Handle submit button click explicitly for callback form
+        document.getElementById('callback-submit-button').addEventListener('click', async function (event) {
             event.preventDefault();
-
-            // Gather form data from updated IDs
+    
+            // Gather form data
             const name = document.getElementById('callback-name').value.trim();
             const email = document.getElementById('callback-email').value.trim();
-            const phone = iti.getNumber(); // Use intlTelInput to get the formatted phone number
-            const slug = window.location.pathname.split('/').pop(); // Extract the slug from the current URL
-
-            console.log({ name, email, phone }); // Check what values are being captured
-
-            // Check if all fields are filled
+            const phone = iti2.getNumber(); // Use iti2 for the modal phone field
+            const slug = window.location.pathname.split('/').pop();
+    
+            console.log({ name, email, phone });
+            console.log(name, '----', email, '-----', phone);
+    
             if (!name || !email || !phone) {
                 alert('Please fill out all fields.');
-                return; // Stop the form from submitting if validation fails
+                return;
             }
-
-            // Prepare form data for submission
-            const formData = {
-                name,
-                email,
-                phone,
-                slug
-            };
-
+    
+            const formData = { name, email, phone, slug };
+    
             try {
-                console.log("Submitting form data:", formData); // Add logging to inspect the data
-                // Send a POST request to the API
                 const response = await fetch('/api/submit-callback', {
                     method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
+                    headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(formData),
                 });
-
                 const result = await response.json();
-                console.log("API response:", result); // Log the API response
-
+    
                 if (result.success) {
                     alert('Callback request submitted successfully!');
-                    // Optionally reset the form or close the modal
-                    document.getElementById('callback-form').reset(); // Reset the form
+                    document.getElementById('callback-form').reset();
                     hidePopup(); // Close the modal after successful submission
                 } else {
                     alert('Error submitting request: ' + result.error);
@@ -1021,59 +1002,65 @@
                 alert('Failed to submit request. Please try again.');
             }
         });
-
-        // Event listeners for the buttons to show the modal
-        document.getElementById('btn-availability').addEventListener('click', function () {
-            showPopup(); // Trigger the modal when the "Check Availability" button is clicked
-        });
-
-        document.getElementById('btn-brochure').addEventListener('click', function () {
-            showPopup(); // Trigger the modal when the "Download Brochure" button is clicked
-        });
-
-
+    
+        // Handle the contact form submission
         document.getElementById('contact-form-button').addEventListener('click', async function (event) {
             event.preventDefault();
-
+    
             const name = document.getElementById('contact-name').value.trim();
             const email = document.getElementById('contact-email').value.trim();
-            const phone = iti.getNumber(); // Assuming intl-tel-input is initialized for contact phone
+    
+            console.log('Before accessing phone1'); // Debugging
+            console.log('iti1 instance:', iti1); // Check the iti1 instance
+    
+            const phone = iti1.getNumber(); // Get formatted number from iti1
+            console.log('phone:', phone); // Debugging phone value
+    
             const slug = window.location.pathname.split('/').pop();
-
-            // Validate form data
+            console.log(name, '----', email, '-----', phone);
+    
             if (!name || !email || !phone) {
                 alert('Please fill out all fields.');
                 return;
             }
-
-            // Prepare form data
+    
             const formData = { name, email, phone, slug };
-
+    
             try {
-               
-                // Submit the contact form data
                 const response = await fetch('/api/submit-callback', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(formData),
                 });
                 const result = await response.json();
-
+    
                 if (result.success) {
-                    alert('Request submitted successfully!');
-                    document.getElementById('contact-form').reset();
+                    alert('Callback request submitted successfully!');
+                    document.getElementById('callback-form').reset();
+                    hidePopup(); // Close the modal after successful submission
                 } else {
                     alert('Error submitting request: ' + result.error);
                 }
             } catch (error) {
-                console.error('Error submitting request:', error);
+                console.error('Error submitting callback request:', error);
                 alert('Failed to submit request. Please try again.');
             }
         });
-
-
-
+    
+        // Event listeners for the buttons to show the modal
+        const availabilityButton = document.getElementById('btn-availability');
+        if (availabilityButton) {
+            availabilityButton.addEventListener('click', showPopup);
+        }
+    
+        const brochureButton = document.getElementById('btn-brochure');
+        if (brochureButton) {
+            brochureButton.addEventListener('click', showPopup);
+        }
     </script>
+    
+
+
 
 
 
