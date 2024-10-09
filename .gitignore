@@ -2,3 +2,5 @@ node_modules
 .keystone/
 keystone.db
 *.log
+# Ignore uploads folder
+public/uploads/*
