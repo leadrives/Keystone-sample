@@ -273,7 +273,8 @@ fetch(`/api/project/${slug}`)
         <div class="unit-size-description">Total square:<br> ${plan.measurement}</div>
       </div>
       <div class="unit-button-wrapper">
-        <a href="${plan.floorPlanDocument?.url || '#'}" class="download-brochure-button black-border-btn" download>
+        <a class="download-brochure-button black-border-btn" 
+   onclick="handleMaterialDownload('${plan.floorPlanDocument?.url || '#'}')">
           Download Brochure
           <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="download"
             class="download-icon" viewBox="0 0 512 512">
@@ -360,9 +361,9 @@ fetch(`/api/project/${slug}`)
           />
         </div>
         <div class="card-body d-flex justify-content-center align-items-center">
-          <a href="${material.downloadLink.url}" class="btn-request-callback">
-            Download ${material.title}
-            <i class="fas fa-download ms-3"></i>
+          <a href="#" class="btn-request-callback" onclick="handleMaterialDownload('${material.downloadLink.url}')">
+              Download ${material.title}
+              <i class="fas fa-download ms-3"></i>
           </a>
         </div>
       </div>
@@ -589,7 +590,7 @@ fetch(`/api/project/${slug}`)
        }
      });*/
 
-    
+
 
 
   })

@@ -853,7 +853,7 @@
     <script src="/app.js"></script> <!-- Link to your app.js -->
 
     <!-- Callback Popup Modal -->
-    <div class="Model_callback-popup-wrapper" style="width: 50%;">
+    <div class="Model_callback-popup-wrapper">
         <div class="Model_callback-popup-close-button"></div>
         <div>
             <div class="Model_callback-popup-title">Request Callback</div>
@@ -882,6 +882,13 @@
         </div>
     </div>
     <script>
+        let pendingDownloadUrl = null; // Global variable to store pending download URL
+        function handleMaterialDownload(downloadUrl) {
+            pendingDownloadUrl = downloadUrl; // Store the download URL
+            showPopup(); // Open the modal
+        }
+
+
         // Function to close popup
         function hidePopup() {
             const popup = document.querySelector('.Model_callback-popup-wrapper');
@@ -894,18 +901,20 @@
                     overlay.remove();
                 }
             }
+            // Reset pendingDownloadUrl when modal is closed
+            pendingDownloadUrl = null;
         }
-    
+
         // Add event listener for the modal close button
         document.querySelector('.Model_callback-popup-close-button').addEventListener('click', hidePopup);
-    
+
         // Function to show popup
         function showPopup() {
             const popup = document.querySelector('.Model_callback-popup-wrapper');
             const overlay = document.createElement('div');
             overlay.classList.add('Model_overlay');
             document.body.appendChild(overlay);
-    
+
             if (popup) {
                 console.log('Popup opened'); // Debugging
                 popup.style.display = 'block';
@@ -915,7 +924,7 @@
                 console.error('Popup element not found.');
             }
         }
-    
+
         // Initialize intl-tel-input for the first phone field
         const phoneInputField1 = document.querySelector("#phone1");
         const iti1 = window.intlTelInput(phoneInputField1, {
@@ -924,19 +933,19 @@
                 fetch('https://ipinfo.io/json', {
                     headers: { 'Accept': 'application/json' }
                 })
-                .then((resp) => resp.json())
-                .then((resp) => {
-                    const countryCode = (resp && resp.country) ? resp.country : "us";
-                    callback(countryCode);
-                })
-                .catch(() => callback("us"));
+                    .then((resp) => resp.json())
+                    .then((resp) => {
+                        const countryCode = (resp && resp.country) ? resp.country : "us";
+                        callback(countryCode);
+                    })
+                    .catch(() => callback("us"));
             },
             utilsScript: "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/utils.js",
         });
-    
+
         // Declare iti2 at a higher scope
         let iti2;
-    
+
         // Initialize intl-tel-input for the second phone field
         const phoneInputField2 = document.querySelector("#phone2");
         if (phoneInputField2) {
@@ -947,41 +956,41 @@
                     fetch('https://ipinfo.io/json', {
                         headers: { 'Accept': 'application/json' }
                     })
-                    .then((resp) => resp.json())
-                    .then((resp) => {
-                        const countryCode = (resp && resp.country) ? resp.country : "us";
-                        callback(countryCode);
-                    })
-                    .catch(() => callback("us"));
+                        .then((resp) => resp.json())
+                        .then((resp) => {
+                            const countryCode = (resp && resp.country) ? resp.country : "us";
+                            callback(countryCode);
+                        })
+                        .catch(() => callback("us"));
                 },
                 utilsScript: "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/utils.js",
             });
-    
+
             console.log('intl-tel-input initialized for phone2'); // Debugging
         } else {
             console.error('phone2 element not found!'); // Debugging
         }
-    
+
         // Handle submit button click explicitly for callback form
         document.getElementById('callback-submit-button').addEventListener('click', async function (event) {
             event.preventDefault();
-    
+
             // Gather form data
             const name = document.getElementById('callback-name').value.trim();
             const email = document.getElementById('callback-email').value.trim();
             const phone = iti2.getNumber(); // Use iti2 for the modal phone field
             const slug = window.location.pathname.split('/').pop();
-    
+
             console.log({ name, email, phone });
             console.log(name, '----', email, '-----', phone);
-    
+
             if (!name || !email || !phone) {
                 alert('Please fill out all fields.');
                 return;
             }
-    
+
             const formData = { name, email, phone, slug };
-    
+
             try {
                 const response = await fetch('/api/submit-callback', {
                     method: 'POST',
@@ -989,11 +998,26 @@
                     body: JSON.stringify(formData),
                 });
                 const result = await response.json();
-    
+
                 if (result.success) {
+
+                    // Trigger the download programmatically
+                    if (pendingDownloadUrl && pendingDownloadUrl !== '#') {
+
+                        const link = document.createElement('a');
+                        link.href = pendingDownloadUrl;
+                        link.download = ''; // Optionally specify a filename
+                        document.body.appendChild(link);
+                        link.click();
+                        document.body.removeChild(link);
+
+                        // Reset pendingDownloadUrl after the download
+                        pendingDownloadUrl = null;
+                    }
                     alert('Callback request submitted successfully!');
                     document.getElementById('callback-form').reset();
                     hidePopup(); // Close the modal after successful submission
+
                 } else {
                     alert('Error submitting request: ' + result.error);
                 }
@@ -1002,30 +1026,30 @@
                 alert('Failed to submit request. Please try again.');
             }
         });
-    
+
         // Handle the contact form submission
         document.getElementById('contact-form-button').addEventListener('click', async function (event) {
             event.preventDefault();
-    
+
             const name = document.getElementById('contact-name').value.trim();
             const email = document.getElementById('contact-email').value.trim();
-    
+
             console.log('Before accessing phone1'); // Debugging
             console.log('iti1 instance:', iti1); // Check the iti1 instance
-    
+
             const phone = iti1.getNumber(); // Get formatted number from iti1
             console.log('phone:', phone); // Debugging phone value
-    
+
             const slug = window.location.pathname.split('/').pop();
             console.log(name, '----', email, '-----', phone);
-    
+
             if (!name || !email || !phone) {
                 alert('Please fill out all fields.');
                 return;
             }
-    
+
             const formData = { name, email, phone, slug };
-    
+
             try {
                 const response = await fetch('/api/submit-callback', {
                     method: 'POST',
@@ -1033,7 +1057,7 @@
                     body: JSON.stringify(formData),
                 });
                 const result = await response.json();
-    
+
                 if (result.success) {
                     alert('Callback request submitted successfully!');
                     document.getElementById('callback-form').reset();
@@ -1046,19 +1070,19 @@
                 alert('Failed to submit request. Please try again.');
             }
         });
-    
+
         // Event listeners for the buttons to show the modal
         const availabilityButton = document.getElementById('btn-availability');
         if (availabilityButton) {
             availabilityButton.addEventListener('click', showPopup);
         }
-    
+
         const brochureButton = document.getElementById('btn-brochure');
         if (brochureButton) {
             brochureButton.addEventListener('click', showPopup);
         }
     </script>
-    
+
 
 
 
