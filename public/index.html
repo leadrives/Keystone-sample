@@ -513,7 +513,7 @@
             document.head.appendChild(script);
         </script>
     </section>
-     <!-- Floor Plan -->
+    <!-- Floor Plan -->
     <section id="generalPlanSection" class="bg-light">
         <div id="generalPlanContainer" class="container py-5">
             <div id="generalPlanHeader" class="text-center mb-5">
@@ -1166,140 +1166,130 @@
         }
     </script>
 
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
-      var unitTypeSelect = document.getElementById('Main_form_unitType');
-      var detailsGroup = document.getElementById('Main_form_detailsGroup');
-      var contactMethodGroup = document.getElementById('Main_form_contactMethodGroup');
-      var nameGroup = document.getElementById('Main_form_nameGroup');
-      var phoneGroup = document.getElementById('Main_form_phoneGroup');
-      var emailGroup = document.getElementById('Main_form_emailGroup');
-  
-      var contactMethodSelect = document.getElementById('Main_form_contactMethod');
-  
-      // Function to show additional fields
-      function showFields() {
-        detailsGroup.style.display = 'block';
-        contactMethodGroup.style.display = 'block';
-        nameGroup.style.display = 'block';
-  
-        // Add fade-in effect
-        setTimeout(function () {
-          detailsGroup.classList.add('show');
-          contactMethodGroup.classList.add('show');
-          nameGroup.classList.add('show');
-        }, 10);
-      }
-  
-      // Listen for changes in the "Preferred Unit Type" dropdown
-      unitTypeSelect.addEventListener('change', function () {
-        if (unitTypeSelect.value !== "") {
-          // Show the additional fields when a value is selected
-          showFields();
-        } else {
-          // Hide the fields if no unit type is selected
-          detailsGroup.style.display = 'none';
-          contactMethodGroup.style.display = 'none';
-          nameGroup.style.display = 'none';
-  
-          // Remove fade-in effect
-          detailsGroup.classList.remove('show');
-          contactMethodGroup.classList.remove('show');
-          nameGroup.classList.remove('show');
-        }
-      });
-  
-      // Listen for changes in the "Preferred Contact Method" dropdown
-      contactMethodSelect.addEventListener('change', function () {
-        if (contactMethodSelect.value === 'Call' || contactMethodSelect.value === 'WhatsApp') {
-          // Show phone field and hide email field
-          phoneGroup.style.display = 'block';
-          emailGroup.style.display = 'none';
-  
-          // Add fade-in effect
-          phoneGroup.classList.add('show');
-          emailGroup.classList.remove('show');
-        } else if (contactMethodSelect.value === 'Email') {
-          // Show email field and hide phone field
-          emailGroup.style.display = 'block';
-          phoneGroup.style.display = 'none';
-  
-          // Add fade-in effect
-          emailGroup.classList.add('show');
-          phoneGroup.classList.remove('show');
-        }
-      });
-  
-      // Bootstrap form validation and submission
-      var form = document.getElementById('Main_form_form');
-      form.addEventListener('submit', async function (event) {
-        event.preventDefault();
-  
-        if (!form.checkValidity()) {
-          event.stopPropagation();
-          form.classList.add('was-validated');
-          return;
-        }
-  
-        form.classList.add('was-validated');
-  
-        // Gather form data
-        var unitType = unitTypeSelect.value;
-        var details = document.getElementById('Main_form_details').value.trim();
-        var contactMethod = contactMethodSelect.value;
-        var name = document.getElementById('Main_form_name').value.trim();
-        var phone = document.getElementById('Main_form_phone').value.trim();
-        var email = document.getElementById('Main_form_email').value.trim();
-        var slug = window.location.pathname.split('/').pop();
-  
-        // Validate phone or email based on contact method
-        if (contactMethod === 'Call' || contactMethod === 'WhatsApp') {
-          if (!phone) {
-            alert('Please provide a valid phone number.');
-            return;
-          }
-        } else if (contactMethod === 'Email') {
-          if (!email) {
-            alert('Please provide a valid email address.');
-            return;
-          }
-        }
-  
-        var formData = {
-          unitType,
-          details,
-          contactMethod,
-          name,
-          phone,
-          email,
-          slug,
-        };
-  
-        try {
-          const response = await fetch('/api/submit-unit-info-request', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(formData),
-          });
-  
-          const result = await response.json();
-  
-          if (result.success) {
-            alert('Your request has been submitted successfully!');
-            form.reset();
-            form.classList.remove('was-validated');
-            // Optionally, redirect or perform another action
-          } else {
-            alert('Error submitting request: ' + result.error);
-          }
-        } catch (error) {
-          console.error('Error submitting unit info request:', error);
-          alert('Failed to submit request. Please try again.');
-        }
-      }, false);
-    });
-  </script>
-  
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var unitTypeSelect = document.getElementById('Main_form_unitType');
+            var detailsGroup = document.getElementById('Main_form_detailsGroup');
+            var contactMethodGroup = document.getElementById('Main_form_contactMethodGroup');
+            var nameGroup = document.getElementById('Main_form_nameGroup');
+            var phoneGroup = document.getElementById('Main_form_phoneGroup');
+            var emailGroup = document.getElementById('Main_form_emailGroup');
+
+            var contactMethodSelect = document.getElementById('Main_form_contactMethod');
+
+            // Function to show additional fields
+            function showFields() {
+                detailsGroup.style.display = 'block';
+                contactMethodGroup.style.display = 'block';
+                nameGroup.style.display = 'block';
+
+                // Add fade-in effect
+                setTimeout(function () {
+                    detailsGroup.classList.add('show');
+                    contactMethodGroup.classList.add('show');
+                    nameGroup.classList.add('show');
+                }, 10);
+            }
+
+            // Listen for changes in the "Preferred Unit Type" dropdown
+            unitTypeSelect.addEventListener('change', function () {
+                if (unitTypeSelect.value !== "") {
+                    // Show the additional fields when a value is selected
+                    showFields();
+                } else {
+                    // Hide the fields if no unit type is selected
+                    detailsGroup.style.display = 'none';
+                    contactMethodGroup.style.display = 'none';
+                    nameGroup.style.display = 'none';
+
+                    // Remove fade-in effect
+                    detailsGroup.classList.remove('show');
+                    contactMethodGroup.classList.remove('show');
+                    nameGroup.classList.remove('show');
+                }
+            });
+
+            // Listen for changes in the "Preferred Contact Method" dropdown
+            contactMethodSelect.addEventListener('change', function () {
+                if (contactMethodSelect.value === 'Call' || contactMethodSelect.value === 'WhatsApp') {
+                    // Show phone field and hide email field
+                    phoneGroup.style.display = 'block';
+                    emailGroup.style.display = 'none';
+
+                    // Add fade-in effect
+                    phoneGroup.classList.add('show');
+                    emailGroup.classList.remove('show');
+                } else if (contactMethodSelect.value === 'Email') {
+                    // Show email field and hide phone field
+                    emailGroup.style.display = 'block';
+                    phoneGroup.style.display = 'none';
+
+                    // Add fade-in effect
+                    emailGroup.classList.add('show');
+                    phoneGroup.classList.remove('show');
+                }
+            });
+
+            document.getElementById('Main_form_form').addEventListener('submit', async function (event) {
+                event.preventDefault();
+
+                if (!this.checkValidity()) {
+                    event.stopPropagation();
+                    this.classList.add('was-validated');
+                    return;
+                }
+
+                this.classList.add('was-validated');
+
+                // Gather form data
+                const unitType = document.getElementById('Main_form_unitType').value;
+                const details = document.getElementById('Main_form_details').value.trim();
+                const contactMethod = document.getElementById('Main_form_contactMethod').value;
+                const name = document.getElementById('Main_form_name').value.trim();
+                const phone = document.getElementById('Main_form_phone').value.trim();
+                const email = document.getElementById('Main_form_email').value.trim();
+                const slug = window.location.pathname.split('/').pop();
+
+                if (!unitType || !name || (!phone && !email)) {
+                    alert('Please fill out all required fields.');
+                    return;
+                }
+
+                const formData = {
+                    unitType,
+                    details,
+                    contactMethod,
+                    name,
+                    phone,
+                    email,
+                    slug,
+                };
+
+                try {
+                    const response = await fetch('/api/submit-unit-info-request', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(formData),
+                    });
+
+                    const result = await response.json();
+
+                    if (result.success) {
+                        alert('Your request has been submitted successfully!');
+                        this.reset();
+                        this.classList.remove('was-validated');
+                    } else {
+                        alert('Error submitting request: ' + result.error);
+                    }
+                } catch (error) {
+                    console.error('Error submitting unit info request:', error);
+                    alert('Failed to submit request. Please try again.');
+                }
+            });
+
+        });
+    </script>
+
 
 
 

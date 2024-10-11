@@ -426,7 +426,7 @@ export const lists: Lists = {
     },
     ui: {
       listView: {
-        initialColumns: ['name', 'unitType', 'contactMethod', 'project', 'createdAt'],
+        initialColumns: ['name', 'unitType', 'contactMethod', 'phone', 'email', 'project', 'createdAt'],  // Add phone and email here
       },
     },
   }),

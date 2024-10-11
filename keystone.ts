@@ -135,18 +135,22 @@ export default withAuth(
         });
 
         app.post('/api/submit-unit-info-request', async (req, res) => {
-          const { unitType, details, contactMethod, name, phone, email, slug } = req.body;
-
           try {
+            const { unitType, details, contactMethod, name, phone, email, slug } = req.body;
+        
+            if (!unitType || !contactMethod || !name || (!phone && !email) || !slug) {
+              return res.status(400).json({ success: false, error: 'Missing required fields' });
+            }
+        
             const project = await context.query.Project.findOne({
               where: { slug },
               query: 'id',
             });
-
+        
             if (!project) {
               return res.status(404).json({ success: false, error: 'Project not found' });
             }
-
+        
             await context.query.UnitInfoRequest.createOne({
               data: {
                 unitType,
@@ -158,13 +162,14 @@ export default withAuth(
                 project: { connect: { id: project.id } },
               },
             });
-
-            res.json({ success: true });
+        
+            return res.json({ success: true });
           } catch (error) {
             console.error('Error submitting unit info request:', error);
-            res.status(500).json({ success: false, error: 'Failed to submit request' });
+            return res.status(500).json({ success: false, error: 'Failed to submit request' });
           }
         });
+        
 
       },
 
