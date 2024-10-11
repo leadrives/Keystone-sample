@@ -2100,3 +2100,130 @@
     border-radius: 60px;
 
 }
+
+
+
+
+#Main_form_container {
+    background-color: #fff;
+    padding: 50px 15px;
+}
+
+#Main_form_formWrapper {
+    background-color: #fff;
+    border-radius: 50px;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+    margin: 0 auto;
+    padding: 50px;
+}
+
+#Main_form_title h2 {
+    font-size: 30px;
+    font-weight: 600;
+    line-height: 44px;
+    margin-bottom: 30px;
+}
+
+#Main_form_description {
+    font-size: 18px;
+    font-weight: 400;
+    margin-bottom: 30px;
+    text-align: center;
+}
+
+#Main_form_input-group {
+    margin-bottom: 20px;
+}
+
+#Main_form_form .form-label {
+    font-size: 14px;
+    color: #333;
+    margin-bottom: 5px;
+    display: block;
+}
+
+#Main_form_form .form-control {
+    height: 50px;
+    padding: 10px 15px;
+    font-size: 16px;
+    border-radius: 30px;
+    border: 1px solid #e7e7e7;
+    box-shadow: none;
+}
+
+#Main_form_form textarea.form-control {
+    height: auto;
+    padding: 10px 15px;
+}
+
+#Main_form_submit {
+    background: linear-gradient(90deg, #e61e4e, #e8337f);
+    border: none;
+    color: #fff;
+    font-size: 18px;
+    font-weight: 600;
+    padding: 15px 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(230, 30, 78, 0.4);
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+#Main_form_submit:hover {
+    background-color: #d91e4e;
+}
+
+/* Minimal styling to add rounded corners and maintain Bootstrap responsiveness */
+#Main_form_unitType {
+    border-radius: 30px; /* Rounded corners for select box */
+    padding: 12px 20px;  /* Extra padding for a better look */
+  }
+  
+  #Main_form_unitType:focus {
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25); /* Bootstrap default focus styling */
+  }
+  
+
+  /* Common styles for input, select, and textarea */
+.form-select, 
+.form-control {
+  border-radius: 30px; /* Rounded corners for all form elements */
+  padding: 12px 20px;  /* Comfortable padding */
+  border: 1px solid #ced4da; /* Light border similar to Bootstrap's default */
+  box-shadow: none; /* Remove any default shadow */
+}
+
+.form-select:focus, 
+.form-control:focus {
+  box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25); /* Bootstrap default focus style */
+  outline: none;
+}
+
+/* Additional styles for textarea padding alignment */
+textarea.form-control {
+  padding: 12px 20px; 
+}
+
+/* Styling for the submit button */
+#Main_form_submit {
+  border-radius: 30px; /* Rounded button */
+  padding: 15px; /* Comfortable button padding */
+}
+/* Initially hide phone, email fields, and other fields */
+#Main_form_detailsGroup,
+#Main_form_contactMethodGroup,
+#Main_form_nameGroup,
+#Main_form_phoneGroup,
+#Main_form_emailGroup {
+  display: none;
+}
+
+/* Optional styling for smoother appearance */
+.fade-in {
+  opacity: 0;
+  transition: opacity 0.3s ease-in-out;
+}
+
+.fade-in.show {
+  opacity: 1;
+}

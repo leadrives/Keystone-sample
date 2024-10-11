@@ -119,9 +119,6 @@
         </div>
     </section>
 
-
-
-
     <!-- Tag Navigation Section -->
     <section class="tag-navigation-section">
         <div class="container my-4 text-center">
@@ -248,7 +245,6 @@
         </div>
     </section>
 
-
     <!-- Full Width Image Section -->
     <section id="fullwidth-image-section" class="fullwidth-image-section">
         <div class="container-fluid px-0">
@@ -257,7 +253,6 @@
             </div>
         </div>
     </section>
-
 
     <!-- Amenities Section -->
     <section id="amenities-section" class="amenities-section">
@@ -491,7 +486,7 @@
             </div>
         </div>
     </section>
-
+    <!-- Map Section -->
     <section id="map-section" class="map-style">
         <div id="map" style="height: 500px; width: 100%;"></div>
 
@@ -518,7 +513,7 @@
             document.head.appendChild(script);
         </script>
     </section>
-
+     <!-- Floor Plan -->
     <section id="generalPlanSection" class="bg-light">
         <div id="generalPlanContainer" class="container py-5">
             <div id="generalPlanHeader" class="text-center mb-5">
@@ -556,7 +551,99 @@
         </div>
     </section>
 
+    <!-- main Contact Form Section -->
+    <div id="Main_form_container" class="container my-5">
+        <div id="Main_form_wrapper" class="row justify-content-center">
+            <div id="Main_form_formWrapper" class="col-lg-8 col-md-10 col-sm-12 p-5 Main_form_card">
+                <!-- Title -->
+                <div id="Main_form_title" class="text-center mb-4">
+                    <h2>Check Current Availability</h2>
+                </div>
+                <!-- Description -->
+                <div id="Main_form_description" class="text-center mb-4">
+                    Our Property Manager will send you details on available units.
+                </div>
+                <!-- Form -->
+                <form id="Main_form_form" class="form-group needs-validation" novalidate>
+                    <!-- Preferred Unit Type -->
+                    <div id="Main_form_unitTypeGroup" class="mb-3">
+                        <label for="Main_form_unitType" class="form-label">Preferred Unit Type</label>
+                        <select id="Main_form_unitType" class="form-select" required>
+                            <option value="" disabled selected>Select a unit type</option>
+                            <option value="Any">Any</option>
+                            <option value="Townhouses">Townhouses</option>
+                            <option value="Villas">Villas</option>
+                        </select>
+                        <div class="invalid-feedback">
+                            Please select a preferred unit type.
+                        </div>
+                    </div>
 
+                    <!-- Details Textarea (Initially hidden) -->
+                    <div id="Main_form_detailsGroup" class="mb-3 fade-in">
+                        <label for="Main_form_details" class="form-label">Details (bedrooms, price range, location,
+                            etc.)</label>
+                        <textarea id="Main_form_details" class="form-control" rows="4" required></textarea>
+                        <div class="invalid-feedback">
+                            Please provide some details.
+                        </div>
+                    </div>
+
+                    <!-- Preferred Contact Method -->
+                    <div id="Main_form_contactMethodGroup" class="mb-3 fade-in">
+                        <label for="Main_form_contactMethod" class="form-label">Preferred Contact Method</label>
+                        <select id="Main_form_contactMethod" class="form-select" required>
+                            <option value="" disabled selected>Select a contact method</option>
+                            <option value="Call">Call</option>
+                            <option value="Email">Email</option>
+                            <option value="WhatsApp">WhatsApp</option>
+                        </select>
+                        <div class="invalid-feedback">
+                            Please select a contact method.
+                        </div>
+                    </div>
+
+                    <!-- Your Name -->
+                    <div id="Main_form_nameGroup" class="mb-3 fade-in">
+                        <label for="Main_form_name" class="form-label">Your Name</label>
+                        <input id="Main_form_name" class="form-control" type="text" name="name"
+                            placeholder="Enter your name" required>
+                        <div class="invalid-feedback">
+                            Please enter your name.
+                        </div>
+                    </div>
+
+                    <!-- Phone Number (Initially hidden) -->
+                    <div id="Main_form_phoneGroup" class="mb-3 fade-in">
+                        <label for="Main_form_phone" class="form-label">Phone Number</label>
+                        <input id="Main_form_phone" class="form-control" type="tel" autocomplete="tel" name="phone"
+                            placeholder="Enter phone number" pattern="^\+?[0-9\s\-\(\)]*$">
+                        <div class="invalid-feedback">
+                            Please provide a valid phone number.
+                        </div>
+                    </div>
+
+                    <!-- Email (Initially hidden) -->
+                    <div id="Main_form_emailGroup" class="mb-3 fade-in">
+                        <label for="Main_form_email" class="form-label">Email Address</label>
+                        <input id="Main_form_email" class="form-control" type="email" name="email"
+                            placeholder="Enter your email">
+                        <div class="invalid-feedback">
+                            Please provide a valid email address.
+                        </div>
+                    </div>
+
+                    <!-- Submit Button (Always visible) -->
+                    <div id="Main_form_submitGroup" class="d-grid gap-2">
+                        <button id="Main_form_submit" class="btn btn-primary btn-lg" type="submit">
+                            Get Unit Info
+                        </button>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+    </div>
 
     <!-- Financial Section -->
     <section id="financialSection" class="py-5 bg-light">
@@ -647,7 +734,6 @@
             </div>
         </div>
     </section>
-
 
     <!-- FAQ Section -->
     <section id="faq" class="py-5">
@@ -746,9 +832,6 @@
             </div>
         </div>
     </section>
-
-
-
 
     <!-- Similar Projects Section -->
     <section id="similarProjectsSection">
@@ -1083,7 +1166,140 @@
         }
     </script>
 
-
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+      var unitTypeSelect = document.getElementById('Main_form_unitType');
+      var detailsGroup = document.getElementById('Main_form_detailsGroup');
+      var contactMethodGroup = document.getElementById('Main_form_contactMethodGroup');
+      var nameGroup = document.getElementById('Main_form_nameGroup');
+      var phoneGroup = document.getElementById('Main_form_phoneGroup');
+      var emailGroup = document.getElementById('Main_form_emailGroup');
+  
+      var contactMethodSelect = document.getElementById('Main_form_contactMethod');
+  
+      // Function to show additional fields
+      function showFields() {
+        detailsGroup.style.display = 'block';
+        contactMethodGroup.style.display = 'block';
+        nameGroup.style.display = 'block';
+  
+        // Add fade-in effect
+        setTimeout(function () {
+          detailsGroup.classList.add('show');
+          contactMethodGroup.classList.add('show');
+          nameGroup.classList.add('show');
+        }, 10);
+      }
+  
+      // Listen for changes in the "Preferred Unit Type" dropdown
+      unitTypeSelect.addEventListener('change', function () {
+        if (unitTypeSelect.value !== "") {
+          // Show the additional fields when a value is selected
+          showFields();
+        } else {
+          // Hide the fields if no unit type is selected
+          detailsGroup.style.display = 'none';
+          contactMethodGroup.style.display = 'none';
+          nameGroup.style.display = 'none';
+  
+          // Remove fade-in effect
+          detailsGroup.classList.remove('show');
+          contactMethodGroup.classList.remove('show');
+          nameGroup.classList.remove('show');
+        }
+      });
+  
+      // Listen for changes in the "Preferred Contact Method" dropdown
+      contactMethodSelect.addEventListener('change', function () {
+        if (contactMethodSelect.value === 'Call' || contactMethodSelect.value === 'WhatsApp') {
+          // Show phone field and hide email field
+          phoneGroup.style.display = 'block';
+          emailGroup.style.display = 'none';
+  
+          // Add fade-in effect
+          phoneGroup.classList.add('show');
+          emailGroup.classList.remove('show');
+        } else if (contactMethodSelect.value === 'Email') {
+          // Show email field and hide phone field
+          emailGroup.style.display = 'block';
+          phoneGroup.style.display = 'none';
+  
+          // Add fade-in effect
+          emailGroup.classList.add('show');
+          phoneGroup.classList.remove('show');
+        }
+      });
+  
+      // Bootstrap form validation and submission
+      var form = document.getElementById('Main_form_form');
+      form.addEventListener('submit', async function (event) {
+        event.preventDefault();
+  
+        if (!form.checkValidity()) {
+          event.stopPropagation();
+          form.classList.add('was-validated');
+          return;
+        }
+  
+        form.classList.add('was-validated');
+  
+        // Gather form data
+        var unitType = unitTypeSelect.value;
+        var details = document.getElementById('Main_form_details').value.trim();
+        var contactMethod = contactMethodSelect.value;
+        var name = document.getElementById('Main_form_name').value.trim();
+        var phone = document.getElementById('Main_form_phone').value.trim();
+        var email = document.getElementById('Main_form_email').value.trim();
+        var slug = window.location.pathname.split('/').pop();
+  
+        // Validate phone or email based on contact method
+        if (contactMethod === 'Call' || contactMethod === 'WhatsApp') {
+          if (!phone) {
+            alert('Please provide a valid phone number.');
+            return;
+          }
+        } else if (contactMethod === 'Email') {
+          if (!email) {
+            alert('Please provide a valid email address.');
+            return;
+          }
+        }
+  
+        var formData = {
+          unitType,
+          details,
+          contactMethod,
+          name,
+          phone,
+          email,
+          slug,
+        };
+  
+        try {
+          const response = await fetch('/api/submit-unit-info-request', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(formData),
+          });
+  
+          const result = await response.json();
+  
+          if (result.success) {
+            alert('Your request has been submitted successfully!');
+            form.reset();
+            form.classList.remove('was-validated');
+            // Optionally, redirect or perform another action
+          } else {
+            alert('Error submitting request: ' + result.error);
+          }
+        } catch (error) {
+          console.error('Error submitting unit info request:', error);
+          alert('Failed to submit request. Please try again.');
+        }
+      }, false);
+    });
+  </script>
+  
 
 
 

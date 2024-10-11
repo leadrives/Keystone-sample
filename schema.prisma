@@ -120,6 +120,7 @@ model Project {
   twitterLink                  String            @default("https://twitter.com/airbnb_in")
   instagramLink                String            @default("https://instagram.com/airbnb")
   callbackRequests             CallbackRequest[] @relation("CallbackRequest_project")
+  unitInfoRequests             UnitInfoRequest[] @relation("UnitInfoRequest_project")
 }
 
 model GalleryImage {
@@ -205,6 +206,21 @@ model CallbackRequest {
   project   Project?  @relation("CallbackRequest_project", fields: [projectId], references: [id])
   projectId String?   @map("project")
   createdAt DateTime? @default(now())
+
+  @@index([projectId])
+}
+
+model UnitInfoRequest {
+  id            String    @id @default(cuid())
+  unitType      String    @default("")
+  details       String    @default("")
+  contactMethod String    @default("")
+  name          String    @default("")
+  phone         String    @default("")
+  email         String    @default("")
+  project       Project?  @relation("UnitInfoRequest_project", fields: [projectId], references: [id])
+  projectId     String?   @map("project")
+  createdAt     DateTime? @default(now())
 
   @@index([projectId])
 }

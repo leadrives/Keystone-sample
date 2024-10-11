@@ -276,6 +276,8 @@ type Project {
   instagramLink: String
   callbackRequests(where: CallbackRequestWhereInput! = {}, orderBy: [CallbackRequestOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: CallbackRequestWhereUniqueInput): [CallbackRequest!]
   callbackRequestsCount(where: CallbackRequestWhereInput! = {}): Int
+  unitInfoRequests(where: UnitInfoRequestWhereInput! = {}, orderBy: [UnitInfoRequestOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: UnitInfoRequestWhereUniqueInput): [UnitInfoRequest!]
+  unitInfoRequestsCount(where: UnitInfoRequestWhereInput! = {}): Int
 }
 
 type FileFieldOutput {
@@ -362,6 +364,7 @@ input ProjectWhereInput {
   twitterLink: StringFilter
   instagramLink: StringFilter
   callbackRequests: CallbackRequestManyRelationFilter
+  unitInfoRequests: UnitInfoRequestManyRelationFilter
 }
 
 input GalleryImageManyRelationFilter {
@@ -404,6 +407,12 @@ input CallbackRequestManyRelationFilter {
   every: CallbackRequestWhereInput
   some: CallbackRequestWhereInput
   none: CallbackRequestWhereInput
+}
+
+input UnitInfoRequestManyRelationFilter {
+  every: UnitInfoRequestWhereInput
+  some: UnitInfoRequestWhereInput
+  none: UnitInfoRequestWhereInput
 }
 
 input ProjectOrderByInput {
@@ -550,6 +559,7 @@ input ProjectUpdateInput {
   twitterLink: String
   instagramLink: String
   callbackRequests: CallbackRequestRelateToManyForUpdateInput
+  unitInfoRequests: UnitInfoRequestRelateToManyForUpdateInput
 }
 
 input FileFieldInput {
@@ -606,6 +616,13 @@ input CallbackRequestRelateToManyForUpdateInput {
   set: [CallbackRequestWhereUniqueInput!]
   create: [CallbackRequestCreateInput!]
   connect: [CallbackRequestWhereUniqueInput!]
+}
+
+input UnitInfoRequestRelateToManyForUpdateInput {
+  disconnect: [UnitInfoRequestWhereUniqueInput!]
+  set: [UnitInfoRequestWhereUniqueInput!]
+  create: [UnitInfoRequestCreateInput!]
+  connect: [UnitInfoRequestWhereUniqueInput!]
 }
 
 input ProjectUpdateArgs {
@@ -692,6 +709,7 @@ input ProjectCreateInput {
   twitterLink: String
   instagramLink: String
   callbackRequests: CallbackRequestRelateToManyForCreateInput
+  unitInfoRequests: UnitInfoRequestRelateToManyForCreateInput
 }
 
 input GalleryImageRelateToManyForCreateInput {
@@ -727,6 +745,11 @@ input SimilarProjectRelateToManyForCreateInput {
 input CallbackRequestRelateToManyForCreateInput {
   create: [CallbackRequestCreateInput!]
   connect: [CallbackRequestWhereUniqueInput!]
+}
+
+input UnitInfoRequestRelateToManyForCreateInput {
+  create: [UnitInfoRequestCreateInput!]
+  connect: [UnitInfoRequestWhereUniqueInput!]
 }
 
 type GalleryImage {
@@ -1084,6 +1107,75 @@ input CallbackRequestCreateInput {
   createdAt: DateTime
 }
 
+type UnitInfoRequest {
+  id: ID!
+  unitType: String
+  details: String
+  contactMethod: String
+  name: String
+  phone: String
+  email: String
+  project: Project
+  createdAt: DateTime
+}
+
+input UnitInfoRequestWhereUniqueInput {
+  id: ID
+}
+
+input UnitInfoRequestWhereInput {
+  AND: [UnitInfoRequestWhereInput!]
+  OR: [UnitInfoRequestWhereInput!]
+  NOT: [UnitInfoRequestWhereInput!]
+  id: IDFilter
+  unitType: StringFilter
+  details: StringFilter
+  contactMethod: StringFilter
+  name: StringFilter
+  phone: StringFilter
+  email: StringFilter
+  project: ProjectWhereInput
+  createdAt: DateTimeNullableFilter
+}
+
+input UnitInfoRequestOrderByInput {
+  id: OrderDirection
+  unitType: OrderDirection
+  details: OrderDirection
+  contactMethod: OrderDirection
+  name: OrderDirection
+  phone: OrderDirection
+  email: OrderDirection
+  createdAt: OrderDirection
+}
+
+input UnitInfoRequestUpdateInput {
+  unitType: String
+  details: String
+  contactMethod: String
+  name: String
+  phone: String
+  email: String
+  project: ProjectRelateToOneForUpdateInput
+  createdAt: DateTime
+}
+
+input UnitInfoRequestUpdateArgs {
+  where: UnitInfoRequestWhereUniqueInput!
+  data: UnitInfoRequestUpdateInput!
+}
+
+input UnitInfoRequestCreateInput {
+  unitType: String
+  details: String
+  contactMethod: String
+  name: String
+  phone: String
+  email: String
+  project: ProjectRelateToOneForCreateInput
+  createdAt: DateTime
+}
+
 """
 The `JSON` scalar type represents JSON values as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf).
 """
@@ -1150,6 +1242,12 @@ type Mutation {
   updateCallbackRequests(data: [CallbackRequestUpdateArgs!]!): [CallbackRequest]
   deleteCallbackRequest(where: CallbackRequestWhereUniqueInput!): CallbackRequest
   deleteCallbackRequests(where: [CallbackRequestWhereUniqueInput!]!): [CallbackRequest]
+  createUnitInfoRequest(data: UnitInfoRequestCreateInput!): UnitInfoRequest
+  createUnitInfoRequests(data: [UnitInfoRequestCreateInput!]!): [UnitInfoRequest]
+  updateUnitInfoRequest(where: UnitInfoRequestWhereUniqueInput!, data: UnitInfoRequestUpdateInput!): UnitInfoRequest
+  updateUnitInfoRequests(data: [UnitInfoRequestUpdateArgs!]!): [UnitInfoRequest]
+  deleteUnitInfoRequest(where: UnitInfoRequestWhereUniqueInput!): UnitInfoRequest
+  deleteUnitInfoRequests(where: [UnitInfoRequestWhereUniqueInput!]!): [UnitInfoRequest]
   endSession: Boolean!
   authenticateUserWithPassword(email: String!, password: String!): UserAuthenticationWithPasswordResult
   createInitialUser(data: CreateInitialUserInput!): UserAuthenticationWithPasswordSuccess!
@@ -1203,6 +1301,9 @@ type Query {
   callbackRequest(where: CallbackRequestWhereUniqueInput!): CallbackRequest
   callbackRequests(where: CallbackRequestWhereInput! = {}, orderBy: [CallbackRequestOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: CallbackRequestWhereUniqueInput): [CallbackRequest!]
   callbackRequestsCount(where: CallbackRequestWhereInput! = {}): Int
+  unitInfoRequest(where: UnitInfoRequestWhereUniqueInput!): UnitInfoRequest
+  unitInfoRequests(where: UnitInfoRequestWhereInput! = {}, orderBy: [UnitInfoRequestOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: UnitInfoRequestWhereUniqueInput): [UnitInfoRequest!]
+  unitInfoRequestsCount(where: UnitInfoRequestWhereInput! = {}): Int
   keystone: KeystoneMeta!
   authenticatedItem: AuthenticatedItem
 }

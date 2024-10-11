@@ -269,6 +269,16 @@ export const lists: Lists = {
         },
       }),
 
+      unitInfoRequests: relationship({
+        ref: 'UnitInfoRequest.project',
+        many: true,
+        ui: {
+          displayMode: 'cards',
+          cardFields: ['name', 'contactMethod'],
+          inlineEdit: { fields: ['name', 'contactMethod'] },
+        },
+      }),
+
     },
   }),
 
@@ -394,6 +404,31 @@ export const lists: Lists = {
     },
   }),
 
-  
+  // New model for the unit info request form
+  UnitInfoRequest: list({
+    access: allowAll,
+    fields: {
+      unitType: text({ validation: { isRequired: true } }),
+      details: text({ ui: { displayMode: 'textarea' }, validation: { isRequired: true } }),
+      contactMethod: text({ validation: { isRequired: true } }),
+      name: text({ validation: { isRequired: true } }),
+      phone: text(),
+      email: text(),
+      project: relationship({
+        ref: 'Project.unitInfoRequests',
+        ui: {
+          displayMode: 'cards',
+          cardFields: ['title'],
+          inlineEdit: { fields: ['title'] },
+        },
+      }),
+      createdAt: timestamp({ defaultValue: { kind: 'now' } }),
+    },
+    ui: {
+      listView: {
+        initialColumns: ['name', 'unitType', 'contactMethod', 'project', 'createdAt'],
+      },
+    },
+  }),
 
 };

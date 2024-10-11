@@ -37,7 +37,11 @@ export default withAuth(
       extendExpressApp: (app, context) => {
         const publicDir = path.join(process.cwd(), 'public');
         app.use(express.static(publicDir)); // Serve static files from public folder
+        // Middleware to parse JSON data
+        app.use(express.json());
 
+        // Middleware to parse URL-encoded form data (optional)
+        app.use(express.urlencoded({ extended: true }));
         // Dynamic route for fetching project content by slug
         app.get('/projects/:slug', async (req, res) => {
           const { slug } = req.params;
@@ -129,7 +133,39 @@ export default withAuth(
             res.status(500).json({ success: false, error: 'Failed to save callback request' });
           }
         });
-        
+
+        app.post('/api/submit-unit-info-request', async (req, res) => {
+          const { unitType, details, contactMethod, name, phone, email, slug } = req.body;
+
+          try {
+            const project = await context.query.Project.findOne({
+              where: { slug },
+              query: 'id',
+            });
+
+            if (!project) {
+              return res.status(404).json({ success: false, error: 'Project not found' });
+            }
+
+            await context.query.UnitInfoRequest.createOne({
+              data: {
+                unitType,
+                details,
+                contactMethod,
+                name,
+                phone,
+                email,
+                project: { connect: { id: project.id } },
+              },
+            });
+
+            res.json({ success: true });
+          } catch (error) {
+            console.error('Error submitting unit info request:', error);
+            res.status(500).json({ success: false, error: 'Failed to submit request' });
+          }
+        });
+
       },
 
     },
