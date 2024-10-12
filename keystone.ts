@@ -36,12 +36,89 @@ export default withAuth(
     server: {
       extendExpressApp: (app, context) => {
         const publicDir = path.join(process.cwd(), 'public');
+
+
+         // Serve the home.html for the root URL
+         app.get('/', (req, res) => {
+          res.sendFile(path.join(publicDir, 'home.html')); // Serve home.html for the root URL
+        });
         app.use(express.static(publicDir)); // Serve static files from public folder
         // Middleware to parse JSON data
         app.use(express.json());
 
         // Middleware to parse URL-encoded form data (optional)
         app.use(express.urlencoded({ extended: true }));
+
+
+        app.get('/', async (req, res) => {
+          try {
+            const projects = await context.query.Project.findMany({
+              query: 'title slug description',
+            });
+
+            if (!projects || projects.length === 0) {
+              throw new Error('No projects found.');
+            }
+
+            let projectListHtml = `
+      <html>
+      <head>
+        <title>All Projects</title>
+        <style>
+          body { font-family: Arial, sans-serif; }
+          .project { padding: 10px; border-bottom: 1px solid #ccc; }
+          a { text-decoration: none; color: #333; }
+        </style>
+      </head>
+      <body>
+        <h1>All Projects</h1>
+        <ul>
+          ${projects
+                .map(
+                  (project) => `
+              <li class="project">
+                <a href="/projects/${project.slug}">
+                  <h2>${project.title}</h2>
+                  <p>${project.description}</p>
+                </a>
+              </li>
+            `
+                )
+                .join('')}
+        </ul>
+      </body>
+      </html>
+    `;
+
+            res.send(projectListHtml);
+          } catch (error) {
+            console.error('Error fetching projects:', error.message); // Log the error message
+            res.status(500).send('Failed to load projects. Please try again later.');
+          }
+        });
+
+        // API route to return all projects as JSON
+        app.get('/api/projects', async (req, res) => {
+          try {
+            const projects = await context.query.Project.findMany({
+              query: `
+                title
+                description
+                slug
+                bannerImage {
+                  url
+                }
+              `,
+            });
+        
+            res.json(projects);
+          } catch (error) {
+            console.error('Error fetching projects:', error);
+            res.status(500).json({ error: 'Failed to fetch projects' });
+          }
+        });
+
+
         // Dynamic route for fetching project content by slug
         app.get('/projects/:slug', async (req, res) => {
           const { slug } = req.params;
@@ -137,20 +214,20 @@ export default withAuth(
         app.post('/api/submit-unit-info-request', async (req, res) => {
           try {
             const { unitType, details, contactMethod, name, phone, email, slug } = req.body;
-        
+
             if (!unitType || !contactMethod || !name || (!phone && !email) || !slug) {
               return res.status(400).json({ success: false, error: 'Missing required fields' });
             }
-        
+
             const project = await context.query.Project.findOne({
               where: { slug },
               query: 'id',
             });
-        
+
             if (!project) {
               return res.status(404).json({ success: false, error: 'Project not found' });
             }
-        
+
             await context.query.UnitInfoRequest.createOne({
               data: {
                 unitType,
@@ -162,14 +239,14 @@ export default withAuth(
                 project: { connect: { id: project.id } },
               },
             });
-        
+
             return res.json({ success: true });
           } catch (error) {
             console.error('Error submitting unit info request:', error);
             return res.status(500).json({ success: false, error: 'Failed to submit request' });
           }
         });
-        
+
 
       },
 

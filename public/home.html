@@ -1,0 +1,119 @@
+<!-- File: public/home.html -->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <!-- Head content -->
+    <meta charset="UTF-8">
+    <title>Home - Project List</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>ODP</title>
+    <!-- Correct paths to the styles -->
+    <link href="/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/css/styles.css">
+    <link rel="stylesheet" href="/css/all.css">
+    <link rel="stylesheet" href="/css/mdb.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/css/intlTelInput.css">
+
+    <style>
+        /* Add your CSS styles here */
+        .projects-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            padding: 20px;
+        }
+
+        .project-item {
+            flex: 1 1 calc(33.333% - 40px);
+            box-sizing: border-box;
+            padding: 15px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            text-align: center;
+        }
+
+        .project-item a {
+            text-decoration: none;
+            color: #333;
+        }
+
+        .project-item h3 {
+            margin: 0 0 10px;
+        }
+
+        @media (max-width: 768px) {
+            .project-item {
+                flex: 1 1 calc(50% - 40px);
+            }
+        }
+
+        @media (max-width: 480px) {
+            .project-item {
+                flex: 1 1 100%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Your existing content can go here -->
+
+    <!-- Projects List Section -->
+    <section id="projects-list">
+        <div class="container my-5">
+            <h2 class="text-center mb-4">Our Projects</h2>
+            <div class="row" id="project-list">
+                <!-- Dynamic project cards will be injected here -->
+            </div>
+        </div>
+    </section>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const projectListContainer = document.getElementById('project-list');
+
+            // Fetch projects from the API
+            fetch('/api/projects')
+                .then(response => response.json())
+                .then(projects => {
+                    // Clear the project list container
+                    projectListContainer.innerHTML = '';
+
+                    // Loop through the projects and create Bootstrap cards
+                    projects.forEach(project => {
+                        const projectCard = document.createElement('div');
+                        projectCard.classList.add('col-md-4', 'mb-4');
+
+                        projectCard.innerHTML = `
+          <div class="card h-100">
+            <img class="card-img-top" src="${project.bannerImage?.url || 'placeholder-image-url.jpg'}" alt="${project.title}">
+            <div class="card-body">
+              <h5 class="card-title">${project.title}</h5>
+              <p class="card-text">${project.description}</p>
+            </div>
+          </div>
+        `;
+
+                        // Add click event to the card to navigate to the project's landing page
+                        projectCard.addEventListener('click', function () {
+                            window.location.href = `/projects/${project.slug}`;
+                        });
+
+                        // Append the card to the project list container
+                        projectListContainer.appendChild(projectCard);
+                    });
+                })
+                .catch(error => {
+                    console.error('Error loading projects:', error);
+                    projectListContainer.innerHTML = '<p>Failed to load projects. Please try again later.</p>';
+                });
+        });
+
+
+    </script>
+</body>
+
+</html>
