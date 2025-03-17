@@ -191,93 +191,58 @@ input UserRelateToOneForCreateInput {
 
 type Project {
   id: ID!
-  title: String
-  description: String
   slug: String
-  requestCallbackText: String
-  headerLogo: FileFieldOutput
-  bannerImage: FileFieldOutput
-  projectLogo: FileFieldOutput
-  developerLogo: FileFieldOutput
-  startingPrice: String
-  paymentPlan: String
-  area: String
-  handoverDate: String
-  projectTag1: String
-  projectTag2: String
-  paymentStructure: String
-  downPayment: String
-  developerName: String
-  bedrooms: String
-  numberOfUnits: String
-  aboutHeading: String
-  aboutDescription: String
-  featurePrice: String
-  featureDownPayment: String
-  featureHandoverDate: String
-  availabilityButtonText: String
-  brochureButtonText: String
+  heroImage: FileFieldOutput
+  mainHeading: String
+  subHeading: String
+  agents(where: AgentWhereInput! = {}, orderBy: [AgentOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: AgentWhereUniqueInput): [Agent!]
+  agentsCount(where: AgentWhereInput! = {}): Int
+  galleryMainHeading: String
+  galleryTitle: String
+  galleryParagraph: String
   galleryImages(where: GalleryImageWhereInput! = {}, orderBy: [GalleryImageOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: GalleryImageWhereUniqueInput): [GalleryImage!]
   galleryImagesCount(where: GalleryImageWhereInput! = {}): Int
-  videoUrl: String
-  agentName: String
-  agentOccupation: String
-  agentPhone: String
-  agentPhoto: FileFieldOutput
-  contactFormHeaderText: String
-  contactFormBoldText: String
-  fullwidthImage: FileFieldOutput
-  amenitiesImage: FileFieldOutput
+  amenitiesList: String
+  paymentPlanHeading: String
+  paymentPlanImage: FileFieldOutput
+  paymentPlanTitle: String
+  paymentPlanNumber: String
+  paymentPlanSuffix: String
+  paymentPlanDescription: String
+  paymentPlanBullets: String
+  locationHeading: String
+  locationSubheading: String
   locationTitle: String
   locationDescription: String
-  locationItems(where: LocationItemWhereInput! = {}, orderBy: [LocationItemOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: LocationItemWhereUniqueInput): [LocationItem!]
-  locationItemsCount(where: LocationItemWhereInput! = {}): Int
-  latitude: String
-  longitude: String
-  generalPlanTag: String
-  generalPlanTitle: String
-  generalPlanImage: FileFieldOutput
-  floorPlans(where: FloorPlanWhereInput! = {}, orderBy: [FloorPlanOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: FloorPlanWhereUniqueInput): [FloorPlan!]
-  floorPlansCount(where: FloorPlanWhereInput! = {}): Int
-  paymentPlanHeading: String
-  paymentPlanValue: String
-  downPaymentFinancial: String
-  installments: String
-  completion: String
-  developerHeadingTag: String
-  developerHeadingTitle: String
-  developerContent1: String
-  developerContent2: String
-  developerVideoUrl: String
-  materials(where: MaterialWhereInput! = {}, orderBy: [MaterialOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: MaterialWhereUniqueInput): [Material!]
-  materialsCount(where: MaterialWhereInput! = {}): Int
-  faqs(where: FAQWhereInput! = {}, orderBy: [FAQOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: FAQWhereUniqueInput): [FAQ!]
-  faqsCount(where: FAQWhereInput! = {}): Int
-  contact2HeadingTag: String
-  contact2Title: String
-  contact2Name: String
-  contact2Occupation: String
-  contact2PhoneNumber: String
-  contact2EmailAddress: String
-  contact2Website: String
-  contact2CompanyLogo: FileFieldOutput
-  contact2Image: FileFieldOutput
-  similarProjects(where: SimilarProjectWhereInput! = {}, orderBy: [SimilarProjectOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: SimilarProjectWhereUniqueInput): [SimilarProject!]
-  similarProjectsCount(where: SimilarProjectWhereInput! = {}): Int
-  footerText: String
-  privacyLink: String
-  termsLink: String
-  sitemapLink: String
-  companyDetailsLink: String
-  languageText: String
-  currencyText: String
-  facebookLink: String
-  twitterLink: String
-  instagramLink: String
-  callbackRequests(where: CallbackRequestWhereInput! = {}, orderBy: [CallbackRequestOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: CallbackRequestWhereUniqueInput): [CallbackRequest!]
-  callbackRequestsCount(where: CallbackRequestWhereInput! = {}): Int
-  unitInfoRequests(where: UnitInfoRequestWhereInput! = {}, orderBy: [UnitInfoRequestOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: UnitInfoRequestWhereUniqueInput): [UnitInfoRequest!]
-  unitInfoRequestsCount(where: UnitInfoRequestWhereInput! = {}): Int
+  locationDescription2: String
+  locationBullets: String
+  locationMapImage: FileFieldOutput
+  developerTitle: String
+  developerParagraph1: String
+  developerParagraph2: String
+  developerRedParagraph: String
+  developerRedBoldText: String
+  developerImage1: FileFieldOutput
+  developerImage2: FileFieldOutput
+  contactHeading: String
+  contactProfilePic: FileFieldOutput
+  contactProfileName: String
+  contactProfileDescription: String
+  contactBullets: String
+  contactMap: FileFieldOutput
+  faq(where: FAQWhereInput! = {}, orderBy: [FAQOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: FAQWhereUniqueInput): [FAQ!]
+  faqCount(where: FAQWhereInput! = {}): Int
+  amenitiesSectionHeading: String
+  amenitiesCards(where: AmenityCardWhereInput! = {}, orderBy: [AmenityCardOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: AmenityCardWhereUniqueInput): [AmenityCard!]
+  amenitiesCardsCount(where: AmenityCardWhereInput! = {}): Int
+  amenityFilters(where: AmenityFilterWhereInput! = {}, orderBy: [AmenityFilterOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: AmenityFilterWhereUniqueInput): [AmenityFilter!]
+  amenityFiltersCount(where: AmenityFilterWhereInput! = {}): Int
+  units(where: UnitWhereInput! = {}, orderBy: [UnitOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: UnitWhereUniqueInput): [Unit!]
+  unitsCount(where: UnitWhereInput! = {}): Int
+  unitFilters(where: UnitFilterWhereInput! = {}, orderBy: [UnitFilterOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: UnitFilterWhereUniqueInput): [UnitFilter!]
+  unitFiltersCount(where: UnitFilterWhereInput! = {}): Int
+  materials(where: MaterialCardWhereInput! = {}, orderBy: [MaterialCardOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: MaterialCardWhereUniqueInput): [MaterialCard!]
+  materialsCount(where: MaterialCardWhereInput! = {}): Int
 }
 
 type FileFieldOutput {
@@ -296,75 +261,49 @@ input ProjectWhereInput {
   OR: [ProjectWhereInput!]
   NOT: [ProjectWhereInput!]
   id: IDFilter
-  title: StringFilter
-  description: StringFilter
   slug: StringFilter
-  requestCallbackText: StringFilter
-  startingPrice: StringFilter
-  paymentPlan: StringFilter
-  area: StringFilter
-  handoverDate: StringFilter
-  projectTag1: StringFilter
-  projectTag2: StringFilter
-  paymentStructure: StringFilter
-  downPayment: StringFilter
-  developerName: StringFilter
-  bedrooms: StringFilter
-  numberOfUnits: StringFilter
-  aboutHeading: StringFilter
-  aboutDescription: StringFilter
-  featurePrice: StringFilter
-  featureDownPayment: StringFilter
-  featureHandoverDate: StringFilter
-  availabilityButtonText: StringFilter
-  brochureButtonText: StringFilter
+  mainHeading: StringFilter
+  subHeading: StringFilter
+  agents: AgentManyRelationFilter
+  galleryMainHeading: StringFilter
+  galleryTitle: StringFilter
+  galleryParagraph: StringFilter
   galleryImages: GalleryImageManyRelationFilter
-  videoUrl: StringFilter
-  agentName: StringFilter
-  agentOccupation: StringFilter
-  agentPhone: StringFilter
-  contactFormHeaderText: StringFilter
-  contactFormBoldText: StringFilter
+  amenitiesList: StringFilter
+  paymentPlanHeading: StringFilter
+  paymentPlanTitle: StringFilter
+  paymentPlanNumber: StringFilter
+  paymentPlanSuffix: StringFilter
+  paymentPlanDescription: StringFilter
+  paymentPlanBullets: StringFilter
+  locationHeading: StringFilter
+  locationSubheading: StringFilter
   locationTitle: StringFilter
   locationDescription: StringFilter
-  locationItems: LocationItemManyRelationFilter
-  latitude: StringFilter
-  longitude: StringFilter
-  generalPlanTag: StringFilter
-  generalPlanTitle: StringFilter
-  floorPlans: FloorPlanManyRelationFilter
-  paymentPlanHeading: StringFilter
-  paymentPlanValue: StringFilter
-  downPaymentFinancial: StringFilter
-  installments: StringFilter
-  completion: StringFilter
-  developerHeadingTag: StringFilter
-  developerHeadingTitle: StringFilter
-  developerContent1: StringFilter
-  developerContent2: StringFilter
-  developerVideoUrl: StringFilter
-  materials: MaterialManyRelationFilter
-  faqs: FAQManyRelationFilter
-  contact2HeadingTag: StringFilter
-  contact2Title: StringFilter
-  contact2Name: StringFilter
-  contact2Occupation: StringFilter
-  contact2PhoneNumber: StringFilter
-  contact2EmailAddress: StringFilter
-  contact2Website: StringFilter
-  similarProjects: SimilarProjectManyRelationFilter
-  footerText: StringFilter
-  privacyLink: StringFilter
-  termsLink: StringFilter
-  sitemapLink: StringFilter
-  companyDetailsLink: StringFilter
-  languageText: StringFilter
-  currencyText: StringFilter
-  facebookLink: StringFilter
-  twitterLink: StringFilter
-  instagramLink: StringFilter
-  callbackRequests: CallbackRequestManyRelationFilter
-  unitInfoRequests: UnitInfoRequestManyRelationFilter
+  locationDescription2: StringFilter
+  locationBullets: StringFilter
+  developerTitle: StringFilter
+  developerParagraph1: StringFilter
+  developerParagraph2: StringFilter
+  developerRedParagraph: StringFilter
+  developerRedBoldText: StringFilter
+  contactHeading: StringFilter
+  contactProfileName: StringFilter
+  contactProfileDescription: StringFilter
+  contactBullets: StringFilter
+  faq: FAQManyRelationFilter
+  amenitiesSectionHeading: StringFilter
+  amenitiesCards: AmenityCardManyRelationFilter
+  amenityFilters: AmenityFilterManyRelationFilter
+  units: UnitManyRelationFilter
+  unitFilters: UnitFilterManyRelationFilter
+  materials: MaterialCardManyRelationFilter
+}
+
+input AgentManyRelationFilter {
+  every: AgentWhereInput
+  some: AgentWhereInput
+  none: AgentWhereInput
 }
 
 input GalleryImageManyRelationFilter {
@@ -373,193 +312,120 @@ input GalleryImageManyRelationFilter {
   none: GalleryImageWhereInput
 }
 
-input LocationItemManyRelationFilter {
-  every: LocationItemWhereInput
-  some: LocationItemWhereInput
-  none: LocationItemWhereInput
-}
-
-input FloorPlanManyRelationFilter {
-  every: FloorPlanWhereInput
-  some: FloorPlanWhereInput
-  none: FloorPlanWhereInput
-}
-
-input MaterialManyRelationFilter {
-  every: MaterialWhereInput
-  some: MaterialWhereInput
-  none: MaterialWhereInput
-}
-
 input FAQManyRelationFilter {
   every: FAQWhereInput
   some: FAQWhereInput
   none: FAQWhereInput
 }
 
-input SimilarProjectManyRelationFilter {
-  every: SimilarProjectWhereInput
-  some: SimilarProjectWhereInput
-  none: SimilarProjectWhereInput
+input AmenityCardManyRelationFilter {
+  every: AmenityCardWhereInput
+  some: AmenityCardWhereInput
+  none: AmenityCardWhereInput
 }
 
-input CallbackRequestManyRelationFilter {
-  every: CallbackRequestWhereInput
-  some: CallbackRequestWhereInput
-  none: CallbackRequestWhereInput
+input AmenityFilterManyRelationFilter {
+  every: AmenityFilterWhereInput
+  some: AmenityFilterWhereInput
+  none: AmenityFilterWhereInput
 }
 
-input UnitInfoRequestManyRelationFilter {
-  every: UnitInfoRequestWhereInput
-  some: UnitInfoRequestWhereInput
-  none: UnitInfoRequestWhereInput
+input UnitManyRelationFilter {
+  every: UnitWhereInput
+  some: UnitWhereInput
+  none: UnitWhereInput
+}
+
+input UnitFilterManyRelationFilter {
+  every: UnitFilterWhereInput
+  some: UnitFilterWhereInput
+  none: UnitFilterWhereInput
+}
+
+input MaterialCardManyRelationFilter {
+  every: MaterialCardWhereInput
+  some: MaterialCardWhereInput
+  none: MaterialCardWhereInput
 }
 
 input ProjectOrderByInput {
   id: OrderDirection
-  title: OrderDirection
-  description: OrderDirection
   slug: OrderDirection
-  requestCallbackText: OrderDirection
-  startingPrice: OrderDirection
-  paymentPlan: OrderDirection
-  area: OrderDirection
-  handoverDate: OrderDirection
-  projectTag1: OrderDirection
-  projectTag2: OrderDirection
-  paymentStructure: OrderDirection
-  downPayment: OrderDirection
-  developerName: OrderDirection
-  bedrooms: OrderDirection
-  numberOfUnits: OrderDirection
-  aboutHeading: OrderDirection
-  aboutDescription: OrderDirection
-  featurePrice: OrderDirection
-  featureDownPayment: OrderDirection
-  featureHandoverDate: OrderDirection
-  availabilityButtonText: OrderDirection
-  brochureButtonText: OrderDirection
-  videoUrl: OrderDirection
-  agentName: OrderDirection
-  agentOccupation: OrderDirection
-  agentPhone: OrderDirection
-  contactFormHeaderText: OrderDirection
-  contactFormBoldText: OrderDirection
+  mainHeading: OrderDirection
+  subHeading: OrderDirection
+  galleryMainHeading: OrderDirection
+  galleryTitle: OrderDirection
+  galleryParagraph: OrderDirection
+  amenitiesList: OrderDirection
+  paymentPlanHeading: OrderDirection
+  paymentPlanTitle: OrderDirection
+  paymentPlanNumber: OrderDirection
+  paymentPlanSuffix: OrderDirection
+  paymentPlanDescription: OrderDirection
+  paymentPlanBullets: OrderDirection
+  locationHeading: OrderDirection
+  locationSubheading: OrderDirection
   locationTitle: OrderDirection
   locationDescription: OrderDirection
-  latitude: OrderDirection
-  longitude: OrderDirection
-  generalPlanTag: OrderDirection
-  generalPlanTitle: OrderDirection
-  paymentPlanHeading: OrderDirection
-  paymentPlanValue: OrderDirection
-  downPaymentFinancial: OrderDirection
-  installments: OrderDirection
-  completion: OrderDirection
-  developerHeadingTag: OrderDirection
-  developerHeadingTitle: OrderDirection
-  developerContent1: OrderDirection
-  developerContent2: OrderDirection
-  developerVideoUrl: OrderDirection
-  contact2HeadingTag: OrderDirection
-  contact2Title: OrderDirection
-  contact2Name: OrderDirection
-  contact2Occupation: OrderDirection
-  contact2PhoneNumber: OrderDirection
-  contact2EmailAddress: OrderDirection
-  contact2Website: OrderDirection
-  footerText: OrderDirection
-  privacyLink: OrderDirection
-  termsLink: OrderDirection
-  sitemapLink: OrderDirection
-  companyDetailsLink: OrderDirection
-  languageText: OrderDirection
-  currencyText: OrderDirection
-  facebookLink: OrderDirection
-  twitterLink: OrderDirection
-  instagramLink: OrderDirection
+  locationDescription2: OrderDirection
+  locationBullets: OrderDirection
+  developerTitle: OrderDirection
+  developerParagraph1: OrderDirection
+  developerParagraph2: OrderDirection
+  developerRedParagraph: OrderDirection
+  developerRedBoldText: OrderDirection
+  contactHeading: OrderDirection
+  contactProfileName: OrderDirection
+  contactProfileDescription: OrderDirection
+  contactBullets: OrderDirection
+  amenitiesSectionHeading: OrderDirection
 }
 
 input ProjectUpdateInput {
-  title: String
-  description: String
   slug: String
-  requestCallbackText: String
-  headerLogo: FileFieldInput
-  bannerImage: FileFieldInput
-  projectLogo: FileFieldInput
-  developerLogo: FileFieldInput
-  startingPrice: String
-  paymentPlan: String
-  area: String
-  handoverDate: String
-  projectTag1: String
-  projectTag2: String
-  paymentStructure: String
-  downPayment: String
-  developerName: String
-  bedrooms: String
-  numberOfUnits: String
-  aboutHeading: String
-  aboutDescription: String
-  featurePrice: String
-  featureDownPayment: String
-  featureHandoverDate: String
-  availabilityButtonText: String
-  brochureButtonText: String
+  heroImage: FileFieldInput
+  mainHeading: String
+  subHeading: String
+  agents: AgentRelateToManyForUpdateInput
+  galleryMainHeading: String
+  galleryTitle: String
+  galleryParagraph: String
   galleryImages: GalleryImageRelateToManyForUpdateInput
-  videoUrl: String
-  agentName: String
-  agentOccupation: String
-  agentPhone: String
-  agentPhoto: FileFieldInput
-  contactFormHeaderText: String
-  contactFormBoldText: String
-  fullwidthImage: FileFieldInput
-  amenitiesImage: FileFieldInput
+  amenitiesList: String
+  paymentPlanHeading: String
+  paymentPlanImage: FileFieldInput
+  paymentPlanTitle: String
+  paymentPlanNumber: String
+  paymentPlanSuffix: String
+  paymentPlanDescription: String
+  paymentPlanBullets: String
+  locationHeading: String
+  locationSubheading: String
   locationTitle: String
   locationDescription: String
-  locationItems: LocationItemRelateToManyForUpdateInput
-  latitude: String
-  longitude: String
-  generalPlanTag: String
-  generalPlanTitle: String
-  generalPlanImage: FileFieldInput
-  floorPlans: FloorPlanRelateToManyForUpdateInput
-  paymentPlanHeading: String
-  paymentPlanValue: String
-  downPaymentFinancial: String
-  installments: String
-  completion: String
-  developerHeadingTag: String
-  developerHeadingTitle: String
-  developerContent1: String
-  developerContent2: String
-  developerVideoUrl: String
-  materials: MaterialRelateToManyForUpdateInput
-  faqs: FAQRelateToManyForUpdateInput
-  contact2HeadingTag: String
-  contact2Title: String
-  contact2Name: String
-  contact2Occupation: String
-  contact2PhoneNumber: String
-  contact2EmailAddress: String
-  contact2Website: String
-  contact2CompanyLogo: FileFieldInput
-  contact2Image: FileFieldInput
-  similarProjects: SimilarProjectRelateToManyForUpdateInput
-  footerText: String
-  privacyLink: String
-  termsLink: String
-  sitemapLink: String
-  companyDetailsLink: String
-  languageText: String
-  currencyText: String
-  facebookLink: String
-  twitterLink: String
-  instagramLink: String
-  callbackRequests: CallbackRequestRelateToManyForUpdateInput
-  unitInfoRequests: UnitInfoRequestRelateToManyForUpdateInput
+  locationDescription2: String
+  locationBullets: String
+  locationMapImage: FileFieldInput
+  developerTitle: String
+  developerParagraph1: String
+  developerParagraph2: String
+  developerRedParagraph: String
+  developerRedBoldText: String
+  developerImage1: FileFieldInput
+  developerImage2: FileFieldInput
+  contactHeading: String
+  contactProfilePic: FileFieldInput
+  contactProfileName: String
+  contactProfileDescription: String
+  contactBullets: String
+  contactMap: FileFieldInput
+  faq: FAQRelateToManyForUpdateInput
+  amenitiesSectionHeading: String
+  amenitiesCards: AmenityCardRelateToManyForUpdateInput
+  amenityFilters: AmenityFilterRelateToManyForUpdateInput
+  units: UnitRelateToManyForUpdateInput
+  unitFilters: UnitFilterRelateToManyForUpdateInput
+  materials: MaterialCardRelateToManyForUpdateInput
 }
 
 input FileFieldInput {
@@ -569,32 +435,18 @@ input FileFieldInput {
 """The `Upload` scalar type represents a file upload."""
 scalar Upload
 
+input AgentRelateToManyForUpdateInput {
+  disconnect: [AgentWhereUniqueInput!]
+  set: [AgentWhereUniqueInput!]
+  create: [AgentCreateInput!]
+  connect: [AgentWhereUniqueInput!]
+}
+
 input GalleryImageRelateToManyForUpdateInput {
   disconnect: [GalleryImageWhereUniqueInput!]
   set: [GalleryImageWhereUniqueInput!]
   create: [GalleryImageCreateInput!]
   connect: [GalleryImageWhereUniqueInput!]
-}
-
-input LocationItemRelateToManyForUpdateInput {
-  disconnect: [LocationItemWhereUniqueInput!]
-  set: [LocationItemWhereUniqueInput!]
-  create: [LocationItemCreateInput!]
-  connect: [LocationItemWhereUniqueInput!]
-}
-
-input FloorPlanRelateToManyForUpdateInput {
-  disconnect: [FloorPlanWhereUniqueInput!]
-  set: [FloorPlanWhereUniqueInput!]
-  create: [FloorPlanCreateInput!]
-  connect: [FloorPlanWhereUniqueInput!]
-}
-
-input MaterialRelateToManyForUpdateInput {
-  disconnect: [MaterialWhereUniqueInput!]
-  set: [MaterialWhereUniqueInput!]
-  create: [MaterialCreateInput!]
-  connect: [MaterialWhereUniqueInput!]
 }
 
 input FAQRelateToManyForUpdateInput {
@@ -604,25 +456,39 @@ input FAQRelateToManyForUpdateInput {
   connect: [FAQWhereUniqueInput!]
 }
 
-input SimilarProjectRelateToManyForUpdateInput {
-  disconnect: [SimilarProjectWhereUniqueInput!]
-  set: [SimilarProjectWhereUniqueInput!]
-  create: [SimilarProjectCreateInput!]
-  connect: [SimilarProjectWhereUniqueInput!]
+input AmenityCardRelateToManyForUpdateInput {
+  disconnect: [AmenityCardWhereUniqueInput!]
+  set: [AmenityCardWhereUniqueInput!]
+  create: [AmenityCardCreateInput!]
+  connect: [AmenityCardWhereUniqueInput!]
 }
 
-input CallbackRequestRelateToManyForUpdateInput {
-  disconnect: [CallbackRequestWhereUniqueInput!]
-  set: [CallbackRequestWhereUniqueInput!]
-  create: [CallbackRequestCreateInput!]
-  connect: [CallbackRequestWhereUniqueInput!]
+input AmenityFilterRelateToManyForUpdateInput {
+  disconnect: [AmenityFilterWhereUniqueInput!]
+  set: [AmenityFilterWhereUniqueInput!]
+  create: [AmenityFilterCreateInput!]
+  connect: [AmenityFilterWhereUniqueInput!]
 }
 
-input UnitInfoRequestRelateToManyForUpdateInput {
-  disconnect: [UnitInfoRequestWhereUniqueInput!]
-  set: [UnitInfoRequestWhereUniqueInput!]
-  create: [UnitInfoRequestCreateInput!]
-  connect: [UnitInfoRequestWhereUniqueInput!]
+input UnitRelateToManyForUpdateInput {
+  disconnect: [UnitWhereUniqueInput!]
+  set: [UnitWhereUniqueInput!]
+  create: [UnitCreateInput!]
+  connect: [UnitWhereUniqueInput!]
+}
+
+input UnitFilterRelateToManyForUpdateInput {
+  disconnect: [UnitFilterWhereUniqueInput!]
+  set: [UnitFilterWhereUniqueInput!]
+  create: [UnitFilterCreateInput!]
+  connect: [UnitFilterWhereUniqueInput!]
+}
+
+input MaterialCardRelateToManyForUpdateInput {
+  disconnect: [MaterialCardWhereUniqueInput!]
+  set: [MaterialCardWhereUniqueInput!]
+  create: [MaterialCardCreateInput!]
+  connect: [MaterialCardWhereUniqueInput!]
 }
 
 input ProjectUpdateArgs {
@@ -631,85 +497,55 @@ input ProjectUpdateArgs {
 }
 
 input ProjectCreateInput {
-  title: String
-  description: String
   slug: String
-  requestCallbackText: String
-  headerLogo: FileFieldInput
-  bannerImage: FileFieldInput
-  projectLogo: FileFieldInput
-  developerLogo: FileFieldInput
-  startingPrice: String
-  paymentPlan: String
-  area: String
-  handoverDate: String
-  projectTag1: String
-  projectTag2: String
-  paymentStructure: String
-  downPayment: String
-  developerName: String
-  bedrooms: String
-  numberOfUnits: String
-  aboutHeading: String
-  aboutDescription: String
-  featurePrice: String
-  featureDownPayment: String
-  featureHandoverDate: String
-  availabilityButtonText: String
-  brochureButtonText: String
+  heroImage: FileFieldInput
+  mainHeading: String
+  subHeading: String
+  agents: AgentRelateToManyForCreateInput
+  galleryMainHeading: String
+  galleryTitle: String
+  galleryParagraph: String
   galleryImages: GalleryImageRelateToManyForCreateInput
-  videoUrl: String
-  agentName: String
-  agentOccupation: String
-  agentPhone: String
-  agentPhoto: FileFieldInput
-  contactFormHeaderText: String
-  contactFormBoldText: String
-  fullwidthImage: FileFieldInput
-  amenitiesImage: FileFieldInput
+  amenitiesList: String
+  paymentPlanHeading: String
+  paymentPlanImage: FileFieldInput
+  paymentPlanTitle: String
+  paymentPlanNumber: String
+  paymentPlanSuffix: String
+  paymentPlanDescription: String
+  paymentPlanBullets: String
+  locationHeading: String
+  locationSubheading: String
   locationTitle: String
   locationDescription: String
-  locationItems: LocationItemRelateToManyForCreateInput
-  latitude: String
-  longitude: String
-  generalPlanTag: String
-  generalPlanTitle: String
-  generalPlanImage: FileFieldInput
-  floorPlans: FloorPlanRelateToManyForCreateInput
-  paymentPlanHeading: String
-  paymentPlanValue: String
-  downPaymentFinancial: String
-  installments: String
-  completion: String
-  developerHeadingTag: String
-  developerHeadingTitle: String
-  developerContent1: String
-  developerContent2: String
-  developerVideoUrl: String
-  materials: MaterialRelateToManyForCreateInput
-  faqs: FAQRelateToManyForCreateInput
-  contact2HeadingTag: String
-  contact2Title: String
-  contact2Name: String
-  contact2Occupation: String
-  contact2PhoneNumber: String
-  contact2EmailAddress: String
-  contact2Website: String
-  contact2CompanyLogo: FileFieldInput
-  contact2Image: FileFieldInput
-  similarProjects: SimilarProjectRelateToManyForCreateInput
-  footerText: String
-  privacyLink: String
-  termsLink: String
-  sitemapLink: String
-  companyDetailsLink: String
-  languageText: String
-  currencyText: String
-  facebookLink: String
-  twitterLink: String
-  instagramLink: String
-  callbackRequests: CallbackRequestRelateToManyForCreateInput
-  unitInfoRequests: UnitInfoRequestRelateToManyForCreateInput
+  locationDescription2: String
+  locationBullets: String
+  locationMapImage: FileFieldInput
+  developerTitle: String
+  developerParagraph1: String
+  developerParagraph2: String
+  developerRedParagraph: String
+  developerRedBoldText: String
+  developerImage1: FileFieldInput
+  developerImage2: FileFieldInput
+  contactHeading: String
+  contactProfilePic: FileFieldInput
+  contactProfileName: String
+  contactProfileDescription: String
+  contactBullets: String
+  contactMap: FileFieldInput
+  faq: FAQRelateToManyForCreateInput
+  amenitiesSectionHeading: String
+  amenitiesCards: AmenityCardRelateToManyForCreateInput
+  amenityFilters: AmenityFilterRelateToManyForCreateInput
+  units: UnitRelateToManyForCreateInput
+  unitFilters: UnitFilterRelateToManyForCreateInput
+  materials: MaterialCardRelateToManyForCreateInput
+}
+
+input AgentRelateToManyForCreateInput {
+  create: [AgentCreateInput!]
+  connect: [AgentWhereUniqueInput!]
 }
 
 input GalleryImageRelateToManyForCreateInput {
@@ -717,39 +553,87 @@ input GalleryImageRelateToManyForCreateInput {
   connect: [GalleryImageWhereUniqueInput!]
 }
 
-input LocationItemRelateToManyForCreateInput {
-  create: [LocationItemCreateInput!]
-  connect: [LocationItemWhereUniqueInput!]
-}
-
-input FloorPlanRelateToManyForCreateInput {
-  create: [FloorPlanCreateInput!]
-  connect: [FloorPlanWhereUniqueInput!]
-}
-
-input MaterialRelateToManyForCreateInput {
-  create: [MaterialCreateInput!]
-  connect: [MaterialWhereUniqueInput!]
-}
-
 input FAQRelateToManyForCreateInput {
   create: [FAQCreateInput!]
   connect: [FAQWhereUniqueInput!]
 }
 
-input SimilarProjectRelateToManyForCreateInput {
-  create: [SimilarProjectCreateInput!]
-  connect: [SimilarProjectWhereUniqueInput!]
+input AmenityCardRelateToManyForCreateInput {
+  create: [AmenityCardCreateInput!]
+  connect: [AmenityCardWhereUniqueInput!]
 }
 
-input CallbackRequestRelateToManyForCreateInput {
-  create: [CallbackRequestCreateInput!]
-  connect: [CallbackRequestWhereUniqueInput!]
+input AmenityFilterRelateToManyForCreateInput {
+  create: [AmenityFilterCreateInput!]
+  connect: [AmenityFilterWhereUniqueInput!]
 }
 
-input UnitInfoRequestRelateToManyForCreateInput {
-  create: [UnitInfoRequestCreateInput!]
-  connect: [UnitInfoRequestWhereUniqueInput!]
+input UnitRelateToManyForCreateInput {
+  create: [UnitCreateInput!]
+  connect: [UnitWhereUniqueInput!]
+}
+
+input UnitFilterRelateToManyForCreateInput {
+  create: [UnitFilterCreateInput!]
+  connect: [UnitFilterWhereUniqueInput!]
+}
+
+input MaterialCardRelateToManyForCreateInput {
+  create: [MaterialCardCreateInput!]
+  connect: [MaterialCardWhereUniqueInput!]
+}
+
+type Agent {
+  id: ID!
+  name: String
+  photo: FileFieldOutput
+  project: Project
+}
+
+input AgentWhereUniqueInput {
+  id: ID
+}
+
+input AgentWhereInput {
+  AND: [AgentWhereInput!]
+  OR: [AgentWhereInput!]
+  NOT: [AgentWhereInput!]
+  id: IDFilter
+  name: StringFilter
+  project: ProjectWhereInput
+}
+
+input AgentOrderByInput {
+  id: OrderDirection
+  name: OrderDirection
+}
+
+input AgentUpdateInput {
+  name: String
+  photo: FileFieldInput
+  project: ProjectRelateToOneForUpdateInput
+}
+
+input ProjectRelateToOneForUpdateInput {
+  create: ProjectCreateInput
+  connect: ProjectWhereUniqueInput
+  disconnect: Boolean
+}
+
+input AgentUpdateArgs {
+  where: AgentWhereUniqueInput!
+  data: AgentUpdateInput!
+}
+
+input AgentCreateInput {
+  name: String
+  photo: FileFieldInput
+  project: ProjectRelateToOneForCreateInput
+}
+
+input ProjectRelateToOneForCreateInput {
+  create: ProjectCreateInput
+  connect: ProjectWhereUniqueInput
 }
 
 type GalleryImage {
@@ -779,12 +663,6 @@ input GalleryImageUpdateInput {
   project: ProjectRelateToOneForUpdateInput
 }
 
-input ProjectRelateToOneForUpdateInput {
-  create: ProjectCreateInput
-  connect: ProjectWhereUniqueInput
-  disconnect: Boolean
-}
-
 input GalleryImageUpdateArgs {
   where: GalleryImageWhereUniqueInput!
   data: GalleryImageUpdateInput!
@@ -795,163 +673,10 @@ input GalleryImageCreateInput {
   project: ProjectRelateToOneForCreateInput
 }
 
-input ProjectRelateToOneForCreateInput {
-  create: ProjectCreateInput
-  connect: ProjectWhereUniqueInput
-}
-
-type LocationItem {
-  id: ID!
-  image: FileFieldOutput
-  distance: String
-  place: String
-  project: Project
-}
-
-input LocationItemWhereUniqueInput {
-  id: ID
-}
-
-input LocationItemWhereInput {
-  AND: [LocationItemWhereInput!]
-  OR: [LocationItemWhereInput!]
-  NOT: [LocationItemWhereInput!]
-  id: IDFilter
-  distance: StringFilter
-  place: StringFilter
-  project: ProjectWhereInput
-}
-
-input LocationItemOrderByInput {
-  id: OrderDirection
-  distance: OrderDirection
-  place: OrderDirection
-}
-
-input LocationItemUpdateInput {
-  image: FileFieldInput
-  distance: String
-  place: String
-  project: ProjectRelateToOneForUpdateInput
-}
-
-input LocationItemUpdateArgs {
-  where: LocationItemWhereUniqueInput!
-  data: LocationItemUpdateInput!
-}
-
-input LocationItemCreateInput {
-  image: FileFieldInput
-  distance: String
-  place: String
-  project: ProjectRelateToOneForCreateInput
-}
-
-type FloorPlan {
-  id: ID!
-  title: String
-  type: String
-  measurement: String
-  image: FileFieldOutput
-  floorPlanDocument: FileFieldOutput
-  project: Project
-}
-
-input FloorPlanWhereUniqueInput {
-  id: ID
-}
-
-input FloorPlanWhereInput {
-  AND: [FloorPlanWhereInput!]
-  OR: [FloorPlanWhereInput!]
-  NOT: [FloorPlanWhereInput!]
-  id: IDFilter
-  title: StringFilter
-  type: StringFilter
-  measurement: StringFilter
-  project: ProjectWhereInput
-}
-
-input FloorPlanOrderByInput {
-  id: OrderDirection
-  title: OrderDirection
-  type: OrderDirection
-  measurement: OrderDirection
-}
-
-input FloorPlanUpdateInput {
-  title: String
-  type: String
-  measurement: String
-  image: FileFieldInput
-  floorPlanDocument: FileFieldInput
-  project: ProjectRelateToOneForUpdateInput
-}
-
-input FloorPlanUpdateArgs {
-  where: FloorPlanWhereUniqueInput!
-  data: FloorPlanUpdateInput!
-}
-
-input FloorPlanCreateInput {
-  title: String
-  type: String
-  measurement: String
-  image: FileFieldInput
-  floorPlanDocument: FileFieldInput
-  project: ProjectRelateToOneForCreateInput
-}
-
-type Material {
-  id: ID!
-  title: String
-  image: FileFieldOutput
-  downloadLink: FileFieldOutput
-  project: Project
-}
-
-input MaterialWhereUniqueInput {
-  id: ID
-}
-
-input MaterialWhereInput {
-  AND: [MaterialWhereInput!]
-  OR: [MaterialWhereInput!]
-  NOT: [MaterialWhereInput!]
-  id: IDFilter
-  title: StringFilter
-  project: ProjectWhereInput
-}
-
-input MaterialOrderByInput {
-  id: OrderDirection
-  title: OrderDirection
-}
-
-input MaterialUpdateInput {
-  title: String
-  image: FileFieldInput
-  downloadLink: FileFieldInput
-  project: ProjectRelateToOneForUpdateInput
-}
-
-input MaterialUpdateArgs {
-  where: MaterialWhereUniqueInput!
-  data: MaterialUpdateInput!
-}
-
-input MaterialCreateInput {
-  title: String
-  image: FileFieldInput
-  downloadLink: FileFieldInput
-  project: ProjectRelateToOneForCreateInput
-}
-
 type FAQ {
   id: ID!
   question: String
   answer: String
-  order: String
   project: Project
 }
 
@@ -966,7 +691,6 @@ input FAQWhereInput {
   id: IDFilter
   question: StringFilter
   answer: StringFilter
-  order: StringFilter
   project: ProjectWhereInput
 }
 
@@ -974,13 +698,11 @@ input FAQOrderByInput {
   id: OrderDirection
   question: OrderDirection
   answer: OrderDirection
-  order: OrderDirection
 }
 
 input FAQUpdateInput {
   question: String
   answer: String
-  order: String
   project: ProjectRelateToOneForUpdateInput
 }
 
@@ -992,65 +714,381 @@ input FAQUpdateArgs {
 input FAQCreateInput {
   question: String
   answer: String
-  order: String
   project: ProjectRelateToOneForCreateInput
 }
 
-type SimilarProject {
+type AmenityCard {
   id: ID!
-  similarProject_title: String
-  similarProject_developer: String
-  similarProject_handoverDate: String
-  similarProject_link: String
-  similarProject_image: FileFieldOutput
+  title: String
+  description: String
+  image: FileFieldOutput
+  categories: String
   project: Project
 }
 
-input SimilarProjectWhereUniqueInput {
+input AmenityCardWhereUniqueInput {
   id: ID
 }
 
-input SimilarProjectWhereInput {
-  AND: [SimilarProjectWhereInput!]
-  OR: [SimilarProjectWhereInput!]
-  NOT: [SimilarProjectWhereInput!]
+input AmenityCardWhereInput {
+  AND: [AmenityCardWhereInput!]
+  OR: [AmenityCardWhereInput!]
+  NOT: [AmenityCardWhereInput!]
   id: IDFilter
-  similarProject_title: StringFilter
-  similarProject_developer: StringFilter
-  similarProject_handoverDate: StringFilter
-  similarProject_link: StringFilter
+  title: StringFilter
+  description: StringFilter
+  categories: StringFilter
   project: ProjectWhereInput
 }
 
-input SimilarProjectOrderByInput {
+input AmenityCardOrderByInput {
   id: OrderDirection
-  similarProject_title: OrderDirection
-  similarProject_developer: OrderDirection
-  similarProject_handoverDate: OrderDirection
-  similarProject_link: OrderDirection
+  title: OrderDirection
+  description: OrderDirection
+  categories: OrderDirection
 }
 
-input SimilarProjectUpdateInput {
-  similarProject_title: String
-  similarProject_developer: String
-  similarProject_handoverDate: String
-  similarProject_link: String
-  similarProject_image: FileFieldInput
+input AmenityCardUpdateInput {
+  title: String
+  description: String
+  image: FileFieldInput
+  categories: String
   project: ProjectRelateToOneForUpdateInput
 }
 
-input SimilarProjectUpdateArgs {
-  where: SimilarProjectWhereUniqueInput!
-  data: SimilarProjectUpdateInput!
+input AmenityCardUpdateArgs {
+  where: AmenityCardWhereUniqueInput!
+  data: AmenityCardUpdateInput!
 }
 
-input SimilarProjectCreateInput {
-  similarProject_title: String
-  similarProject_developer: String
-  similarProject_handoverDate: String
-  similarProject_link: String
-  similarProject_image: FileFieldInput
+input AmenityCardCreateInput {
+  title: String
+  description: String
+  image: FileFieldInput
+  categories: String
   project: ProjectRelateToOneForCreateInput
+}
+
+type AmenityFilter {
+  id: ID!
+  name: String
+  project: Project
+}
+
+input AmenityFilterWhereUniqueInput {
+  id: ID
+}
+
+input AmenityFilterWhereInput {
+  AND: [AmenityFilterWhereInput!]
+  OR: [AmenityFilterWhereInput!]
+  NOT: [AmenityFilterWhereInput!]
+  id: IDFilter
+  name: StringFilter
+  project: ProjectWhereInput
+}
+
+input AmenityFilterOrderByInput {
+  id: OrderDirection
+  name: OrderDirection
+}
+
+input AmenityFilterUpdateInput {
+  name: String
+  project: ProjectRelateToOneForUpdateInput
+}
+
+input AmenityFilterUpdateArgs {
+  where: AmenityFilterWhereUniqueInput!
+  data: AmenityFilterUpdateInput!
+}
+
+input AmenityFilterCreateInput {
+  name: String
+  project: ProjectRelateToOneForCreateInput
+}
+
+type Unit {
+  id: ID!
+  type: String
+  title: String
+  price: String
+  image: FileFieldOutput
+  tag: String
+  cityView: Boolean
+  sqft: String
+  project: Project
+}
+
+input UnitWhereUniqueInput {
+  id: ID
+}
+
+input UnitWhereInput {
+  AND: [UnitWhereInput!]
+  OR: [UnitWhereInput!]
+  NOT: [UnitWhereInput!]
+  id: IDFilter
+  type: StringFilter
+  title: StringFilter
+  price: StringFilter
+  tag: StringFilter
+  cityView: BooleanFilter
+  sqft: StringFilter
+  project: ProjectWhereInput
+}
+
+input BooleanFilter {
+  equals: Boolean
+  not: BooleanFilter
+}
+
+input UnitOrderByInput {
+  id: OrderDirection
+  type: OrderDirection
+  title: OrderDirection
+  price: OrderDirection
+  tag: OrderDirection
+  cityView: OrderDirection
+  sqft: OrderDirection
+}
+
+input UnitUpdateInput {
+  type: String
+  title: String
+  price: String
+  image: FileFieldInput
+  tag: String
+  cityView: Boolean
+  sqft: String
+  project: ProjectRelateToOneForUpdateInput
+}
+
+input UnitUpdateArgs {
+  where: UnitWhereUniqueInput!
+  data: UnitUpdateInput!
+}
+
+input UnitCreateInput {
+  type: String
+  title: String
+  price: String
+  image: FileFieldInput
+  tag: String
+  cityView: Boolean
+  sqft: String
+  project: ProjectRelateToOneForCreateInput
+}
+
+type UnitFilter {
+  id: ID!
+  name: String
+  project: Project
+}
+
+input UnitFilterWhereUniqueInput {
+  id: ID
+}
+
+input UnitFilterWhereInput {
+  AND: [UnitFilterWhereInput!]
+  OR: [UnitFilterWhereInput!]
+  NOT: [UnitFilterWhereInput!]
+  id: IDFilter
+  name: StringFilter
+  project: ProjectWhereInput
+}
+
+input UnitFilterOrderByInput {
+  id: OrderDirection
+  name: OrderDirection
+}
+
+input UnitFilterUpdateInput {
+  name: String
+  project: ProjectRelateToOneForUpdateInput
+}
+
+input UnitFilterUpdateArgs {
+  where: UnitFilterWhereUniqueInput!
+  data: UnitFilterUpdateInput!
+}
+
+input UnitFilterCreateInput {
+  name: String
+  project: ProjectRelateToOneForCreateInput
+}
+
+type MaterialCard {
+  id: ID!
+  title: String
+  description: String
+  image: FileFieldOutput
+  document: FileFieldOutput
+  project: Project
+}
+
+input MaterialCardWhereUniqueInput {
+  id: ID
+}
+
+input MaterialCardWhereInput {
+  AND: [MaterialCardWhereInput!]
+  OR: [MaterialCardWhereInput!]
+  NOT: [MaterialCardWhereInput!]
+  id: IDFilter
+  title: StringFilter
+  description: StringFilter
+  project: ProjectWhereInput
+}
+
+input MaterialCardOrderByInput {
+  id: OrderDirection
+  title: OrderDirection
+  description: OrderDirection
+}
+
+input MaterialCardUpdateInput {
+  title: String
+  description: String
+  image: FileFieldInput
+  document: FileFieldInput
+  project: ProjectRelateToOneForUpdateInput
+}
+
+input MaterialCardUpdateArgs {
+  where: MaterialCardWhereUniqueInput!
+  data: MaterialCardUpdateInput!
+}
+
+input MaterialCardCreateInput {
+  title: String
+  description: String
+  image: FileFieldInput
+  document: FileFieldInput
+  project: ProjectRelateToOneForCreateInput
+}
+
+type SiteSetting {
+  id: ID!
+  logo: FileFieldOutput
+  footerLogo: FileFieldOutput
+  footerSocialLinks(where: SocialLinkWhereInput! = {}, orderBy: [SocialLinkOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: SocialLinkWhereUniqueInput): [SocialLink!]
+  footerSocialLinksCount(where: SocialLinkWhereInput! = {}): Int
+  footerCopyright: String
+}
+
+input SiteSettingWhereUniqueInput {
+  id: ID
+}
+
+input SiteSettingWhereInput {
+  AND: [SiteSettingWhereInput!]
+  OR: [SiteSettingWhereInput!]
+  NOT: [SiteSettingWhereInput!]
+  id: IDFilter
+  footerSocialLinks: SocialLinkManyRelationFilter
+  footerCopyright: StringFilter
+}
+
+input SocialLinkManyRelationFilter {
+  every: SocialLinkWhereInput
+  some: SocialLinkWhereInput
+  none: SocialLinkWhereInput
+}
+
+input SiteSettingOrderByInput {
+  id: OrderDirection
+  footerCopyright: OrderDirection
+}
+
+input SiteSettingUpdateInput {
+  logo: FileFieldInput
+  footerLogo: FileFieldInput
+  footerSocialLinks: SocialLinkRelateToManyForUpdateInput
+  footerCopyright: String
+}
+
+input SocialLinkRelateToManyForUpdateInput {
+  disconnect: [SocialLinkWhereUniqueInput!]
+  set: [SocialLinkWhereUniqueInput!]
+  create: [SocialLinkCreateInput!]
+  connect: [SocialLinkWhereUniqueInput!]
+}
+
+input SiteSettingUpdateArgs {
+  where: SiteSettingWhereUniqueInput!
+  data: SiteSettingUpdateInput!
+}
+
+input SiteSettingCreateInput {
+  logo: FileFieldInput
+  footerLogo: FileFieldInput
+  footerSocialLinks: SocialLinkRelateToManyForCreateInput
+  footerCopyright: String
+}
+
+input SocialLinkRelateToManyForCreateInput {
+  create: [SocialLinkCreateInput!]
+  connect: [SocialLinkWhereUniqueInput!]
+}
+
+type SocialLink {
+  id: ID!
+  name: String
+  icon: FileFieldOutput
+  url: String
+  siteSetting: SiteSetting
+}
+
+input SocialLinkWhereUniqueInput {
+  id: ID
+}
+
+input SocialLinkWhereInput {
+  AND: [SocialLinkWhereInput!]
+  OR: [SocialLinkWhereInput!]
+  NOT: [SocialLinkWhereInput!]
+  id: IDFilter
+  name: StringFilter
+  url: StringFilter
+  siteSetting: SiteSettingWhereInput
+}
+
+input SocialLinkOrderByInput {
+  id: OrderDirection
+  name: OrderDirection
+  url: OrderDirection
+}
+
+input SocialLinkUpdateInput {
+  name: String
+  icon: FileFieldInput
+  url: String
+  siteSetting: SiteSettingRelateToOneForUpdateInput
+}
+
+input SiteSettingRelateToOneForUpdateInput {
+  create: SiteSettingCreateInput
+  connect: SiteSettingWhereUniqueInput
+  disconnect: Boolean
+}
+
+input SocialLinkUpdateArgs {
+  where: SocialLinkWhereUniqueInput!
+  data: SocialLinkUpdateInput!
+}
+
+input SocialLinkCreateInput {
+  name: String
+  icon: FileFieldInput
+  url: String
+  siteSetting: SiteSettingRelateToOneForCreateInput
+}
+
+input SiteSettingRelateToOneForCreateInput {
+  create: SiteSettingCreateInput
+  connect: SiteSettingWhereUniqueInput
 }
 
 type CallbackRequest {
@@ -1058,8 +1096,9 @@ type CallbackRequest {
   name: String
   email: String
   phone: String
+  pageUrl: String
+  ipAddress: String
   project: Project
-  createdAt: DateTime
 }
 
 input CallbackRequestWhereUniqueInput {
@@ -1074,8 +1113,9 @@ input CallbackRequestWhereInput {
   name: StringFilter
   email: StringFilter
   phone: StringFilter
+  pageUrl: StringFilter
+  ipAddress: StringFilter
   project: ProjectWhereInput
-  createdAt: DateTimeNullableFilter
 }
 
 input CallbackRequestOrderByInput {
@@ -1083,15 +1123,17 @@ input CallbackRequestOrderByInput {
   name: OrderDirection
   email: OrderDirection
   phone: OrderDirection
-  createdAt: OrderDirection
+  pageUrl: OrderDirection
+  ipAddress: OrderDirection
 }
 
 input CallbackRequestUpdateInput {
   name: String
   email: String
   phone: String
+  pageUrl: String
+  ipAddress: String
   project: ProjectRelateToOneForUpdateInput
-  createdAt: DateTime
 }
 
 input CallbackRequestUpdateArgs {
@@ -1103,77 +1145,9 @@ input CallbackRequestCreateInput {
   name: String
   email: String
   phone: String
+  pageUrl: String
+  ipAddress: String
   project: ProjectRelateToOneForCreateInput
-  createdAt: DateTime
-}
-
-type UnitInfoRequest {
-  id: ID!
-  unitType: String
-  details: String
-  contactMethod: String
-  name: String
-  phone: String
-  email: String
-  project: Project
-  createdAt: DateTime
-}
-
-input UnitInfoRequestWhereUniqueInput {
-  id: ID
-}
-
-input UnitInfoRequestWhereInput {
-  AND: [UnitInfoRequestWhereInput!]
-  OR: [UnitInfoRequestWhereInput!]
-  NOT: [UnitInfoRequestWhereInput!]
-  id: IDFilter
-  unitType: StringFilter
-  details: StringFilter
-  contactMethod: StringFilter
-  name: StringFilter
-  phone: StringFilter
-  email: StringFilter
-  project: ProjectWhereInput
-  createdAt: DateTimeNullableFilter
-}
-
-input UnitInfoRequestOrderByInput {
-  id: OrderDirection
-  unitType: OrderDirection
-  details: OrderDirection
-  contactMethod: OrderDirection
-  name: OrderDirection
-  phone: OrderDirection
-  email: OrderDirection
-  createdAt: OrderDirection
-}
-
-input UnitInfoRequestUpdateInput {
-  unitType: String
-  details: String
-  contactMethod: String
-  name: String
-  phone: String
-  email: String
-  project: ProjectRelateToOneForUpdateInput
-  createdAt: DateTime
-}
-
-input UnitInfoRequestUpdateArgs {
-  where: UnitInfoRequestWhereUniqueInput!
-  data: UnitInfoRequestUpdateInput!
-}
-
-input UnitInfoRequestCreateInput {
-  unitType: String
-  details: String
-  contactMethod: String
-  name: String
-  phone: String
-  email: String
-  project: ProjectRelateToOneForCreateInput
-  createdAt: DateTime
 }
 
 """
@@ -1200,54 +1174,72 @@ type Mutation {
   updateProjects(data: [ProjectUpdateArgs!]!): [Project]
   deleteProject(where: ProjectWhereUniqueInput!): Project
   deleteProjects(where: [ProjectWhereUniqueInput!]!): [Project]
+  createAgent(data: AgentCreateInput!): Agent
+  createAgents(data: [AgentCreateInput!]!): [Agent]
+  updateAgent(where: AgentWhereUniqueInput!, data: AgentUpdateInput!): Agent
+  updateAgents(data: [AgentUpdateArgs!]!): [Agent]
+  deleteAgent(where: AgentWhereUniqueInput!): Agent
+  deleteAgents(where: [AgentWhereUniqueInput!]!): [Agent]
   createGalleryImage(data: GalleryImageCreateInput!): GalleryImage
   createGalleryImages(data: [GalleryImageCreateInput!]!): [GalleryImage]
   updateGalleryImage(where: GalleryImageWhereUniqueInput!, data: GalleryImageUpdateInput!): GalleryImage
   updateGalleryImages(data: [GalleryImageUpdateArgs!]!): [GalleryImage]
   deleteGalleryImage(where: GalleryImageWhereUniqueInput!): GalleryImage
   deleteGalleryImages(where: [GalleryImageWhereUniqueInput!]!): [GalleryImage]
-  createLocationItem(data: LocationItemCreateInput!): LocationItem
-  createLocationItems(data: [LocationItemCreateInput!]!): [LocationItem]
-  updateLocationItem(where: LocationItemWhereUniqueInput!, data: LocationItemUpdateInput!): LocationItem
-  updateLocationItems(data: [LocationItemUpdateArgs!]!): [LocationItem]
-  deleteLocationItem(where: LocationItemWhereUniqueInput!): LocationItem
-  deleteLocationItems(where: [LocationItemWhereUniqueInput!]!): [LocationItem]
-  createFloorPlan(data: FloorPlanCreateInput!): FloorPlan
-  createFloorPlans(data: [FloorPlanCreateInput!]!): [FloorPlan]
-  updateFloorPlan(where: FloorPlanWhereUniqueInput!, data: FloorPlanUpdateInput!): FloorPlan
-  updateFloorPlans(data: [FloorPlanUpdateArgs!]!): [FloorPlan]
-  deleteFloorPlan(where: FloorPlanWhereUniqueInput!): FloorPlan
-  deleteFloorPlans(where: [FloorPlanWhereUniqueInput!]!): [FloorPlan]
-  createMaterial(data: MaterialCreateInput!): Material
-  createMaterials(data: [MaterialCreateInput!]!): [Material]
-  updateMaterial(where: MaterialWhereUniqueInput!, data: MaterialUpdateInput!): Material
-  updateMaterials(data: [MaterialUpdateArgs!]!): [Material]
-  deleteMaterial(where: MaterialWhereUniqueInput!): Material
-  deleteMaterials(where: [MaterialWhereUniqueInput!]!): [Material]
   createFAQ(data: FAQCreateInput!): FAQ
   createFAQS(data: [FAQCreateInput!]!): [FAQ]
   updateFAQ(where: FAQWhereUniqueInput!, data: FAQUpdateInput!): FAQ
   updateFAQS(data: [FAQUpdateArgs!]!): [FAQ]
   deleteFAQ(where: FAQWhereUniqueInput!): FAQ
   deleteFAQS(where: [FAQWhereUniqueInput!]!): [FAQ]
-  createSimilarProject(data: SimilarProjectCreateInput!): SimilarProject
-  createSimilarProjects(data: [SimilarProjectCreateInput!]!): [SimilarProject]
-  updateSimilarProject(where: SimilarProjectWhereUniqueInput!, data: SimilarProjectUpdateInput!): SimilarProject
-  updateSimilarProjects(data: [SimilarProjectUpdateArgs!]!): [SimilarProject]
-  deleteSimilarProject(where: SimilarProjectWhereUniqueInput!): SimilarProject
-  deleteSimilarProjects(where: [SimilarProjectWhereUniqueInput!]!): [SimilarProject]
+  createAmenityCard(data: AmenityCardCreateInput!): AmenityCard
+  createAmenityCards(data: [AmenityCardCreateInput!]!): [AmenityCard]
+  updateAmenityCard(where: AmenityCardWhereUniqueInput!, data: AmenityCardUpdateInput!): AmenityCard
+  updateAmenityCards(data: [AmenityCardUpdateArgs!]!): [AmenityCard]
+  deleteAmenityCard(where: AmenityCardWhereUniqueInput!): AmenityCard
+  deleteAmenityCards(where: [AmenityCardWhereUniqueInput!]!): [AmenityCard]
+  createAmenityFilter(data: AmenityFilterCreateInput!): AmenityFilter
+  createAmenityFilters(data: [AmenityFilterCreateInput!]!): [AmenityFilter]
+  updateAmenityFilter(where: AmenityFilterWhereUniqueInput!, data: AmenityFilterUpdateInput!): AmenityFilter
+  updateAmenityFilters(data: [AmenityFilterUpdateArgs!]!): [AmenityFilter]
+  deleteAmenityFilter(where: AmenityFilterWhereUniqueInput!): AmenityFilter
+  deleteAmenityFilters(where: [AmenityFilterWhereUniqueInput!]!): [AmenityFilter]
+  createUnit(data: UnitCreateInput!): Unit
+  createUnits(data: [UnitCreateInput!]!): [Unit]
+  updateUnit(where: UnitWhereUniqueInput!, data: UnitUpdateInput!): Unit
+  updateUnits(data: [UnitUpdateArgs!]!): [Unit]
+  deleteUnit(where: UnitWhereUniqueInput!): Unit
+  deleteUnits(where: [UnitWhereUniqueInput!]!): [Unit]
+  createUnitFilter(data: UnitFilterCreateInput!): UnitFilter
+  createUnitFilters(data: [UnitFilterCreateInput!]!): [UnitFilter]
+  updateUnitFilter(where: UnitFilterWhereUniqueInput!, data: UnitFilterUpdateInput!): UnitFilter
+  updateUnitFilters(data: [UnitFilterUpdateArgs!]!): [UnitFilter]
+  deleteUnitFilter(where: UnitFilterWhereUniqueInput!): UnitFilter
+  deleteUnitFilters(where: [UnitFilterWhereUniqueInput!]!): [UnitFilter]
+  createMaterialCard(data: MaterialCardCreateInput!): MaterialCard
+  createMaterialCards(data: [MaterialCardCreateInput!]!): [MaterialCard]
+  updateMaterialCard(where: MaterialCardWhereUniqueInput!, data: MaterialCardUpdateInput!): MaterialCard
+  updateMaterialCards(data: [MaterialCardUpdateArgs!]!): [MaterialCard]
+  deleteMaterialCard(where: MaterialCardWhereUniqueInput!): MaterialCard
+  deleteMaterialCards(where: [MaterialCardWhereUniqueInput!]!): [MaterialCard]
+  createSiteSetting(data: SiteSettingCreateInput!): SiteSetting
+  createSiteSettings(data: [SiteSettingCreateInput!]!): [SiteSetting]
+  updateSiteSetting(where: SiteSettingWhereUniqueInput!, data: SiteSettingUpdateInput!): SiteSetting
+  updateSiteSettings(data: [SiteSettingUpdateArgs!]!): [SiteSetting]
+  deleteSiteSetting(where: SiteSettingWhereUniqueInput!): SiteSetting
+  deleteSiteSettings(where: [SiteSettingWhereUniqueInput!]!): [SiteSetting]
+  createSocialLink(data: SocialLinkCreateInput!): SocialLink
+  createSocialLinks(data: [SocialLinkCreateInput!]!): [SocialLink]
+  updateSocialLink(where: SocialLinkWhereUniqueInput!, data: SocialLinkUpdateInput!): SocialLink
+  updateSocialLinks(data: [SocialLinkUpdateArgs!]!): [SocialLink]
+  deleteSocialLink(where: SocialLinkWhereUniqueInput!): SocialLink
+  deleteSocialLinks(where: [SocialLinkWhereUniqueInput!]!): [SocialLink]
   createCallbackRequest(data: CallbackRequestCreateInput!): CallbackRequest
   createCallbackRequests(data: [CallbackRequestCreateInput!]!): [CallbackRequest]
   updateCallbackRequest(where: CallbackRequestWhereUniqueInput!, data: CallbackRequestUpdateInput!): CallbackRequest
   updateCallbackRequests(data: [CallbackRequestUpdateArgs!]!): [CallbackRequest]
   deleteCallbackRequest(where: CallbackRequestWhereUniqueInput!): CallbackRequest
   deleteCallbackRequests(where: [CallbackRequestWhereUniqueInput!]!): [CallbackRequest]
-  createUnitInfoRequest(data: UnitInfoRequestCreateInput!): UnitInfoRequest
-  createUnitInfoRequests(data: [UnitInfoRequestCreateInput!]!): [UnitInfoRequest]
-  updateUnitInfoRequest(where: UnitInfoRequestWhereUniqueInput!, data: UnitInfoRequestUpdateInput!): UnitInfoRequest
-  updateUnitInfoRequests(data: [UnitInfoRequestUpdateArgs!]!): [UnitInfoRequest]
-  deleteUnitInfoRequest(where: UnitInfoRequestWhereUniqueInput!): UnitInfoRequest
-  deleteUnitInfoRequests(where: [UnitInfoRequestWhereUniqueInput!]!): [UnitInfoRequest]
   endSession: Boolean!
   authenticateUserWithPassword(email: String!, password: String!): UserAuthenticationWithPasswordResult
   createInitialUser(data: CreateInitialUserInput!): UserAuthenticationWithPasswordSuccess!
@@ -1280,30 +1272,39 @@ type Query {
   project(where: ProjectWhereUniqueInput!): Project
   projects(where: ProjectWhereInput! = {}, orderBy: [ProjectOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: ProjectWhereUniqueInput): [Project!]
   projectsCount(where: ProjectWhereInput! = {}): Int
+  agent(where: AgentWhereUniqueInput!): Agent
+  agents(where: AgentWhereInput! = {}, orderBy: [AgentOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: AgentWhereUniqueInput): [Agent!]
+  agentsCount(where: AgentWhereInput! = {}): Int
   galleryImage(where: GalleryImageWhereUniqueInput!): GalleryImage
   galleryImages(where: GalleryImageWhereInput! = {}, orderBy: [GalleryImageOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: GalleryImageWhereUniqueInput): [GalleryImage!]
   galleryImagesCount(where: GalleryImageWhereInput! = {}): Int
-  locationItem(where: LocationItemWhereUniqueInput!): LocationItem
-  locationItems(where: LocationItemWhereInput! = {}, orderBy: [LocationItemOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: LocationItemWhereUniqueInput): [LocationItem!]
-  locationItemsCount(where: LocationItemWhereInput! = {}): Int
-  floorPlan(where: FloorPlanWhereUniqueInput!): FloorPlan
-  floorPlans(where: FloorPlanWhereInput! = {}, orderBy: [FloorPlanOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: FloorPlanWhereUniqueInput): [FloorPlan!]
-  floorPlansCount(where: FloorPlanWhereInput! = {}): Int
-  material(where: MaterialWhereUniqueInput!): Material
-  materials(where: MaterialWhereInput! = {}, orderBy: [MaterialOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: MaterialWhereUniqueInput): [Material!]
-  materialsCount(where: MaterialWhereInput! = {}): Int
   fAQ(where: FAQWhereUniqueInput!): FAQ
   fAQS(where: FAQWhereInput! = {}, orderBy: [FAQOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: FAQWhereUniqueInput): [FAQ!]
   fAQSCount(where: FAQWhereInput! = {}): Int
-  similarProject(where: SimilarProjectWhereUniqueInput!): SimilarProject
-  similarProjects(where: SimilarProjectWhereInput! = {}, orderBy: [SimilarProjectOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: SimilarProjectWhereUniqueInput): [SimilarProject!]
-  similarProjectsCount(where: SimilarProjectWhereInput! = {}): Int
+  amenityCard(where: AmenityCardWhereUniqueInput!): AmenityCard
+  amenityCards(where: AmenityCardWhereInput! = {}, orderBy: [AmenityCardOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: AmenityCardWhereUniqueInput): [AmenityCard!]
+  amenityCardsCount(where: AmenityCardWhereInput! = {}): Int
+  amenityFilter(where: AmenityFilterWhereUniqueInput!): AmenityFilter
+  amenityFilters(where: AmenityFilterWhereInput! = {}, orderBy: [AmenityFilterOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: AmenityFilterWhereUniqueInput): [AmenityFilter!]
+  amenityFiltersCount(where: AmenityFilterWhereInput! = {}): Int
+  unit(where: UnitWhereUniqueInput!): Unit
+  units(where: UnitWhereInput! = {}, orderBy: [UnitOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: UnitWhereUniqueInput): [Unit!]
+  unitsCount(where: UnitWhereInput! = {}): Int
+  unitFilter(where: UnitFilterWhereUniqueInput!): UnitFilter
+  unitFilters(where: UnitFilterWhereInput! = {}, orderBy: [UnitFilterOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: UnitFilterWhereUniqueInput): [UnitFilter!]
+  unitFiltersCount(where: UnitFilterWhereInput! = {}): Int
+  materialCard(where: MaterialCardWhereUniqueInput!): MaterialCard
+  materialCards(where: MaterialCardWhereInput! = {}, orderBy: [MaterialCardOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: MaterialCardWhereUniqueInput): [MaterialCard!]
+  materialCardsCount(where: MaterialCardWhereInput! = {}): Int
+  siteSetting(where: SiteSettingWhereUniqueInput!): SiteSetting
+  siteSettings(where: SiteSettingWhereInput! = {}, orderBy: [SiteSettingOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: SiteSettingWhereUniqueInput): [SiteSetting!]
+  siteSettingsCount(where: SiteSettingWhereInput! = {}): Int
+  socialLink(where: SocialLinkWhereUniqueInput!): SocialLink
+  socialLinks(where: SocialLinkWhereInput! = {}, orderBy: [SocialLinkOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: SocialLinkWhereUniqueInput): [SocialLink!]
+  socialLinksCount(where: SocialLinkWhereInput! = {}): Int
   callbackRequest(where: CallbackRequestWhereUniqueInput!): CallbackRequest
   callbackRequests(where: CallbackRequestWhereInput! = {}, orderBy: [CallbackRequestOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: CallbackRequestWhereUniqueInput): [CallbackRequest!]
   callbackRequestsCount(where: CallbackRequestWhereInput! = {}): Int
-  unitInfoRequest(where: UnitInfoRequestWhereUniqueInput!): UnitInfoRequest
-  unitInfoRequests(where: UnitInfoRequestWhereInput! = {}, orderBy: [UnitInfoRequestOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: UnitInfoRequestWhereUniqueInput): [UnitInfoRequest!]
-  unitInfoRequestsCount(where: UnitInfoRequestWhereInput! = {}): Int
   keystone: KeystoneMeta!
   authenticatedItem: AuthenticatedItem
 }

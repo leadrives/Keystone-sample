@@ -1,614 +1,714 @@
-// Get the slug from the URL
-const slug = window.location.pathname.split('/').pop();
-
-// Fetch the landing page content from the API using the slug
-fetch(`/api/project/${slug}`)
-  .then(response => {
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
-    return response.json();
-  })
-  .then(data => {
-    console.log('API Response:', JSON.stringify(data, null, 2)); // Log the data to inspect the structure
-
-    // Check if the response contains valid data
-    if (data) {
-      // Safely update the text content if elements exist
-      const titleElement = document.getElementById('post-title');
-      const descriptionElement = document.getElementById('post-description');
-      const requestCallbackElement = document.getElementById('request-callback');
-      const priceElement = document.getElementById('price');
-      const paymentPlanElement = document.getElementById('payment-plan');
-      const areaElement = document.getElementById('area');
-      const handoverDateElement = document.getElementById('handover-date');
-      const tag1Element = document.getElementById('tag1');
-      const tag2Element = document.getElementById('tag2');
-      const bannerImageElement = document.querySelector('.banner');
-      const projectLogoElement = document.querySelector('.banner-project-logo img');
-      const developerLogoElement = document.querySelector('.banner-developer-logo img');
-
-      // Update title and description if elements exist
-      if (titleElement) titleElement.textContent = data.title;
-      if (descriptionElement) descriptionElement.textContent = data.description;
-      if (requestCallbackElement) requestCallbackElement.textContent = data.requestCallbackText;
-      if (priceElement) priceElement.textContent = data.startingPrice;
-      if (paymentPlanElement) paymentPlanElement.textContent = data.paymentPlan;
-      if (areaElement) areaElement.textContent = data.area;
-      if (handoverDateElement) handoverDateElement.textContent = data.handoverDate;
-      if (tag1Element) tag1Element.textContent = data.projectTag1;
-      if (tag2Element) tag2Element.textContent = data.projectTag2;
-
-      // Set the header logo dynamically if it exists
-      if (data.headerLogo && data.headerLogo.url) {
-        document.getElementById('header-logo').src = data.headerLogo.url;
+document.addEventListener('DOMContentLoaded', () => {
+  // --- Fetch global settings (for header and footer) ---
+  fetch('/api/settings')
+    .then(response => {
+      if (!response.ok) {
+        throw new Error(`Settings fetch error: ${response.status}`);
       }
-
-      // Update the banner background image
-      if (bannerImageElement && data.bannerImage && data.bannerImage.url) {
-        bannerImageElement.style.backgroundImage = `url(${data.bannerImage.url})`;
+      return response.json();
+    })
+    .then(settingsData => {
+      console.log('Settings:', settingsData);
+      // Update header logo
+      const headerLogoImg = document.getElementById('dynamic_img_logo');
+      if (headerLogoImg && settingsData.logo && settingsData.logo.url) {
+        headerLogoImg.src = settingsData.logo.url;
       }
-
-      // Update the project and developer logos
-      if (projectLogoElement && data.projectLogo && data.projectLogo.url) {
-        projectLogoElement.src = data.projectLogo.url;
+      // Update footer logo
+      const footerLogoImg = document.getElementById('dynamic_img_footer-logo');
+      if (footerLogoImg && settingsData.footerLogo && settingsData.footerLogo.url) {
+        footerLogoImg.src = settingsData.footerLogo.url;
       }
-
-      if (developerLogoElement && data.developerLogo && data.developerLogo.url) {
-        developerLogoElement.src = data.developerLogo.url;
-      }
-      // Set the feature values dynamically
-      document.getElementById('payment-structure').textContent = data.paymentStructure || 'N/A';
-      document.getElementById('down-payment').textContent = data.downPayment || 'N/A';
-      document.getElementById('developer-name').textContent = data.developerName || 'N/A';
-      document.getElementById('bedrooms').textContent = data.bedrooms || 'N/A';
-      document.getElementById('number-of-units').textContent = data.numberOfUnits || 'N/A';
-
-      // About Section
-      document.getElementById('about-heading').textContent = data.aboutHeading || 'N/A';
-      document.getElementById('about-description').textContent = data.aboutDescription || 'N/A';
-
-      // Features
-      document.getElementById('feature-price').textContent = data.featurePrice || 'N/A';
-      document.getElementById('feature-down-payment').textContent = data.featureDownPayment || 'N/A';
-      document.getElementById('feature-handover-date').textContent = data.featureHandoverDate || 'N/A';
-
-      // Buttons
-      document.getElementById('btn-availability').textContent = data.availabilityButtonText || 'N/A';
-      document.getElementById('btn-brochure').textContent = data.brochureButtonText || 'N/A';
-
-      // Load gallery images
-      if (data.galleryImages && data.galleryImages.length > 0) {
-        const galleryContainer = document.getElementById('gallery-images');
-        galleryContainer.innerHTML = ''; // Clear any existing content
-
-        data.galleryImages.forEach((image, index) => {
-          // Create a wrapper div for each image
-          const wrapperDiv = document.createElement('div');
-          wrapperDiv.classList.add('gallery-image-wrapper');
-
-          // Add the 'large-image' class for the first image
-          if (index === 0) {
-            wrapperDiv.classList.add('large-image');
-          }
-
-          // Create the image element
-          const imgElement = document.createElement('img');
-          imgElement.src = image.image.url;
-          imgElement.alt = `Gallery Image ${index + 1}`;
-          imgElement.classList.add('gallery-image'); // Add class for styling
-
-          // Append the image to the wrapper div
-          wrapperDiv.appendChild(imgElement);
-
-          // Append the wrapper div to the gallery container
-          galleryContainer.appendChild(wrapperDiv);
+      // Update footer social links (iterate over the relationship array)
+      const footerSocialContainer = document.getElementById('dynamic_div_footer-social-links');
+      if (footerSocialContainer && settingsData.footerSocialLinks) {
+        footerSocialContainer.innerHTML = '';
+        settingsData.footerSocialLinks.forEach(link => {
+          const a = document.createElement('a');
+          a.href = link.url || '#';
+          a.setAttribute('aria-label', link.name || 'Social Link');
+          const img = document.createElement('img');
+          // Use the icon's URL from the relationship; make sure the key matches exactly
+          img.src = link.icon?.url || '';
+          img.alt = link.name || '';
+          a.appendChild(img);
+          footerSocialContainer.appendChild(a);
         });
       }
+      // Update footer copyright
+      const footerCopyrightEl = document.getElementById('dynamic_p_copyright');
+      if (footerCopyrightEl) {
+        footerCopyrightEl.textContent =
+          settingsData.footerCopyright || '© 2025 SMY Real Estate. All rights reserved.';
+      }
+    })
+    .catch(error => {
+      console.error('Error fetching site settings:', error);
+    });
 
+  // --- Modal: Open/Close Logic and Callback Submission ---
+  const openModalBtn = document.getElementById("openModalBtn");
+  const closeModalBtn = document.getElementById("closeModal");
+  const modal = document.getElementById("callbackModal");
+  const overlay = document.getElementById("overlay");
 
-      // Handle YouTube Video Embed
-      if (data.videoUrl) {
-        const videoUrl = data.videoUrl.replace("watch?v=", "embed/"); // Convert to embeddable URL
-        const videoIframe = document.querySelector('.property-video-iframe');
-        if (videoIframe) {
-          videoIframe.src = videoUrl;
+  // Open modal when button is clicked
+  openModalBtn.addEventListener("click", () => {
+    modal.style.display = "block";
+    overlay.style.display = "block";
+  });
+
+  // Close modal when close button or overlay is clicked
+  closeModalBtn.addEventListener("click", () => {
+    modal.style.display = "none";
+    overlay.style.display = "none";
+  });
+  overlay.addEventListener("click", () => {
+    modal.style.display = "none";
+    overlay.style.display = "none";
+  });
+
+  // Initialize intl-tel-input for phone field
+  const phoneInput = document.getElementById("phone");
+  intlTelInput(phoneInput, {
+    initialCountry: "ae",  // Default to UAE
+    separateDialCode: true,
+    preferredCountries: ["ae", "sa", "us", "gb"]
+  });
+
+  // Callback form submission event listener
+  const modalSubmitBtn = document.querySelector('#callbackModal .modal-btn');
+  if (modalSubmitBtn) {
+    modalSubmitBtn.addEventListener('click', () => {
+      // Select input fields within the modal
+      const nameInput = document.querySelector('#callbackModal input[type="text"]');
+      const emailInput = document.querySelector('#callbackModal input[type="email"]');
+      // 'phoneInput' already has an id
+
+      if (!nameInput || !emailInput || !phoneInput) {
+        console.error("Missing input fields in the callback modal");
+        return;
+      }
+      const name = nameInput.value.trim();
+      const email = emailInput.value.trim();
+      const phone = phoneInput.value.trim();
+      const pageUrl = window.location.href;
+      const parts = window.location.pathname.split('/').filter(Boolean);
+      const slug = parts.pop();
+
+      // Basic validations
+      if (!name || !email || !phone) {
+        alert("Please fill in all fields.");
+        return;
+      }
+      const emailRegex = /\S+@\S+\.\S+/;
+      if (!emailRegex.test(email)) {
+        alert("Please enter a valid email address.");
+        return;
+      }
+
+      const payload = { name, email, phone, slug, pageUrl };
+
+      fetch('/api/submit-callback', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      })
+        .then(response => {
+          if (!response.ok) {
+            throw new Error(`HTTP error: ${response.status}`);
+          }
+          return response.json();
+        })
+        .then(result => {
+          console.log("Callback request saved:", result);
+          alert("Your callback request has been submitted!");
+          // Clear the form fields (optional)
+          nameInput.value = "";
+          emailInput.value = "";
+          phoneInput.value = "";
+          // Close modal and overlay
+          modal.style.display = "none";
+          overlay.style.display = "none";
+        })
+        .catch(err => {
+          console.error("Error submitting callback:", err);
+          alert("There was an error submitting your callback request.");
+        });
+    });
+  }
+
+  // --- Fetch project data (existing dynamic sections) ---
+  const parts2 = window.location.pathname.split('/').filter(Boolean);
+  const projectSlug = parts2.pop();
+
+  fetch(`/api/project/${projectSlug}`)
+    .then(response => {
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      return response.json();
+    })
+    .then(data => {
+      console.log('API Response:', JSON.stringify(data, null, 2));
+
+      if (data) {
+        // === HERO SECTION ===
+        const heroImageElement = document.getElementById('dynamic_img_hero-image');
+        if (heroImageElement && data.heroImage && data.heroImage.url) {
+          heroImageElement.src = data.heroImage.url;
+        } else if (heroImageElement) {
+          heroImageElement.src = '/path/to/default-hero-image.jpg';
+        }
+        const mainHeadingElement = document.getElementById('dynamic_h1_main-heading');
+        if (mainHeadingElement) {
+          mainHeadingElement.textContent = data.mainHeading || 'Default Main Heading';
+        }
+        const subHeadingElement = document.getElementById('dynamic_h2_sub-heading');
+        if (subHeadingElement) {
+          subHeadingElement.textContent = data.subHeading || 'Default Sub Heading';
+        }
+
+        // === AGENTS SECTION ===
+        const agentPhotoContainer = document.getElementById('dynamic_div_agentPhoto');
+        if (agentPhotoContainer && data.agents && data.agents.length > 0) {
+          agentPhotoContainer.innerHTML = '';
+          const agentsToShow = data.agents.slice(0, 5);
+          agentsToShow.forEach(agent => {
+            const imgElement = document.createElement('img');
+            imgElement.src = agent.photo?.url || '/path/to/default-agent-photo.jpg';
+            imgElement.alt = agent.name || 'Agent Photo';
+            agentPhotoContainer.appendChild(imgElement);
+          });
+          if (data.agents.length > 5) {
+            const spanElement = document.createElement('span');
+            spanElement.id = 'dynamic_span_agent_count';
+            spanElement.className = 'manager-count';
+            spanElement.textContent = `+${data.agents.length - 5}`;
+            agentPhotoContainer.appendChild(spanElement);
+          }
+        }
+
+        // === GALLERY SECTION ===
+        const galleryMainHeading = document.getElementById('dynamic_h2_gallery-main-heading');
+        if (galleryMainHeading) {
+          galleryMainHeading.textContent = data.galleryMainHeading || galleryMainHeading.textContent;
+        }
+        const galleryTitle = document.getElementById('dynamic_h3_gallery-title');
+        if (galleryTitle) {
+          galleryTitle.textContent = data.galleryTitle || galleryTitle.textContent;
+        }
+        const galleryParagraph = document.getElementById('dynamic_p_gallery-paragraph');
+        if (galleryParagraph) {
+          galleryParagraph.textContent = data.galleryParagraph || galleryParagraph.textContent;
+        }
+        const amenitiesListElement = document.getElementById('dynamic_ul_amenities-list');
+        if (amenitiesListElement && data.amenitiesList) {
+          const items = data.amenitiesList.split('\n').map(item => item.trim()).filter(item => item);
+          amenitiesListElement.innerHTML = items.map(item => `<li>${item}</li>`).join('');
+        }
+        let sliderImages = [];
+        if (data.galleryImages && data.galleryImages.length > 0) {
+          sliderImages = data.galleryImages
+            .map(item => item.image?.url)
+            .filter(url => !!url);
         } else {
-          console.error('Video iframe not found');
+          sliderImages = [
+            '/assets/images/projectsGalary/slide1.jpg',
+            '/assets/images/projectsGalary/slide2.jpg',
+            '/assets/images/projectsGalary/slide3.jpg'
+          ];
+        }
+        let currentIndex = 0;
+        const galleryImageElement = document.getElementById('dynamic_img_galary-slider');
+        function showImage(index) {
+          if (galleryImageElement) {
+            galleryImageElement.src = sliderImages[index];
+          }
+        }
+        showImage(currentIndex);
+        const prevBtn = document.querySelector('.arrow-left');
+        const nextBtn = document.querySelector('.arrow-right');
+        function nextImage() {
+          currentIndex = (currentIndex + 1) % sliderImages.length;
+          showImage(currentIndex);
+        }
+        function prevImage() {
+          currentIndex = (currentIndex - 1 + sliderImages.length) % sliderImages.length;
+          showImage(currentIndex);
+        }
+        if (prevBtn && nextBtn) {
+          prevBtn.addEventListener('click', prevImage);
+          nextBtn.addEventListener('click', nextImage);
+        }
+
+        // === PAYMENT PLAN SECTION ===
+        const paymentPlanHeadingEl = document.getElementById('dynamic_h2_payment-plan-heading');
+        if (paymentPlanHeadingEl) {
+          paymentPlanHeadingEl.textContent = data.paymentPlanHeading || paymentPlanHeadingEl.textContent;
+        }
+        const paymentPlanImageEl = document.getElementById('dynamic_img_payment-image');
+        if (paymentPlanImageEl && data.paymentPlanImage && data.paymentPlanImage.url) {
+          paymentPlanImageEl.src = data.paymentPlanImage.url;
+        }
+        const paymentPlanTitleEl = document.getElementById('dynamic_h3_payment-title');
+        if (paymentPlanTitleEl) {
+          const title = data.paymentPlanTitle || "";
+          const number = data.paymentPlanNumber || "";
+          const suffix = data.paymentPlanSuffix || "";
+          paymentPlanTitleEl.innerHTML = `${title} <span id="dynamic_span_payment-number">${number}</span><br/>${suffix}`;
+        }
+        const paymentPlanDescriptionEl = document.getElementById('dynamic_p_payment-description');
+        if (paymentPlanDescriptionEl) {
+          paymentPlanDescriptionEl.textContent = data.paymentPlanDescription || paymentPlanDescriptionEl.textContent;
+        }
+        const paymentPlanBulletsEl = document.getElementById('dynamic_ul_payment-bullets');
+        if (paymentPlanBulletsEl && data.paymentPlanBullets) {
+          const bullets = data.paymentPlanBullets.split('\n').map(item => item.trim()).filter(item => item);
+          paymentPlanBulletsEl.innerHTML = bullets.map(item => `<li>${item}</li>`).join('');
+        }
+
+        // === LOCATION SECTION ===
+        const locationHeadingEl = document.getElementById('dynamic_h2_location-heading');
+        if (locationHeadingEl) {
+          locationHeadingEl.textContent = data.locationHeading || locationHeadingEl.textContent;
+        }
+        const locationSubheadingEl = document.getElementById('dynamic_p_location-subheading');
+        if (locationSubheadingEl) {
+          locationSubheadingEl.textContent = data.locationSubheading || locationSubheadingEl.textContent;
+        }
+        const locationTitleEl = document.getElementById('dynamic_h3_location-title');
+        if (locationTitleEl) {
+          locationTitleEl.textContent = data.locationTitle || locationTitleEl.textContent;
+        }
+        const locationDescriptionEl = document.getElementById('dynamic_p_location-description');
+        if (locationDescriptionEl) {
+          locationDescriptionEl.textContent = data.locationDescription || locationDescriptionEl.textContent;
+        }
+        const locationDescription2El = document.getElementById('dynamic_p_location-description-paragraph2');
+        if (locationDescription2El) {
+          locationDescription2El.textContent = data.locationDescription2 || locationDescription2El.textContent;
+        }
+        const locationBulletsEl = document.getElementById('dynamic_ul_location-bullets');
+        if (locationBulletsEl && data.locationBullets) {
+          const locationBullets = data.locationBullets.split('\n').map(item => item.trim()).filter(item => item);
+          locationBulletsEl.innerHTML = locationBullets.map(item => `<li>${item}</li>`).join('');
+        }
+        const locationMapImageEl = document.getElementById('dynamic_img_location-map-image');
+        if (locationMapImageEl && data.locationMapImage && data.locationMapImage.url) {
+          locationMapImageEl.src = data.locationMapImage.url;
+        }
+
+        // === DEVELOPER SECTION ===
+        const developerTitleEl = document.getElementById('dynamic_h2_About-title');
+        if (developerTitleEl) {
+          developerTitleEl.textContent = data.developerTitle || developerTitleEl.textContent;
+        }
+        const developerParagraph1El = document.getElementById('dynamic_p_About-description-paragraph1');
+        if (developerParagraph1El) {
+          developerParagraph1El.textContent = data.developerParagraph1 || developerParagraph1El.textContent;
+        }
+        const developerParagraph2El = document.getElementById('dynamic_p_description-paragraph2');
+        if (developerParagraph2El) {
+          developerParagraph2El.textContent = data.developerParagraph2 || developerParagraph2El.textContent;
+        }
+        const developerRedParagraphEl = document.getElementById('dynamic_p_red-paragraph3');
+        if (developerRedParagraphEl) {
+          const strongEl = developerRedParagraphEl.querySelector('#dynamic_strong_red-paragraph-bold-text');
+          if (strongEl) {
+            strongEl.textContent = data.developerRedBoldText || strongEl.textContent;
+          }
+        }
+        const developerImage1El = document.getElementById('dynamic_img_Developer-first-image');
+        if (developerImage1El && data.developerImage1 && data.developerImage1.url) {
+          developerImage1El.src = data.developerImage1.url;
+        }
+        const developerImage2El = document.getElementById('dynamic_img_Developer-second-image');
+        if (developerImage2El && data.developerImage2 && data.developerImage2.url) {
+          developerImage2El.src = data.developerImage2.url;
+        }
+
+        // === CONTACT SECTION ===
+        const contactHeadingEl = document.getElementById('dynamic_h2_contactUs-heading');
+        if (contactHeadingEl) {
+          contactHeadingEl.textContent = data.contactHeading || contactHeadingEl.textContent;
+        }
+        const contactProfilePicEl = document.getElementById('dynamic_img_contact-profile-pic');
+        if (contactProfilePicEl && data.contactProfilePic && data.contactProfilePic.url) {
+          contactProfilePicEl.src = data.contactProfilePic.url;
+        }
+        const contactProfileNameEl = document.getElementById('dynamic_h3_contact-profile-name');
+        if (contactProfileNameEl) {
+          contactProfileNameEl.textContent = data.contactProfileName || contactProfileNameEl.textContent;
+        }
+        const contactProfileDescriptionEl = document.getElementById('dynamic_p_profile-description');
+        if (contactProfileDescriptionEl) {
+          contactProfileDescriptionEl.textContent = data.contactProfileDescription || contactProfileDescriptionEl.textContent;
+        }
+        const contactBulletsEl = document.getElementById('dynamic_ul_contact-bullets');
+        if (contactBulletsEl && data.contactBullets) {
+          const contactBullets = data.contactBullets.split('\n').map(item => item.trim()).filter(item => item);
+          contactBulletsEl.innerHTML = contactBullets.map(item => `<li>${item}</li>`).join('');
+        }
+        const contactMapEl = document.getElementById('dynamic_img_contact-map');
+        if (contactMapEl && data.contactMap && data.contactMap.url) {
+          contactMapEl.src = data.contactMap.url;
+        }
+
+        // === FAQ SECTION ===
+        const faqContainer = document.querySelector('.faq-container');
+        if (faqContainer) {
+          faqContainer.innerHTML = '';
+          if (data.faq && data.faq.length > 0) {
+            data.faq.forEach(faq => {
+              const faqItem = document.createElement('div');
+              faqItem.className = 'faq-item';
+              faqItem.setAttribute('data-open', 'false');
+              faqItem.innerHTML = `
+                <div class="faq-question">
+                  <span class="question-text">${faq.question}</span>
+                  <button class="toggle-btn" aria-label="Expand FAQ" data-icon="+"></button>
+                </div>
+                <div class="faq-answer" style="display: none;">
+                  <p>${faq.answer}</p>
+                </div>
+              `;
+              faqContainer.appendChild(faqItem);
+            });
+            const faqItems = faqContainer.querySelectorAll('.faq-item');
+            faqItems.forEach(item => {
+              const toggleBtn = item.querySelector('.toggle-btn');
+              toggleBtn.addEventListener('click', () => {
+                const isOpen = item.getAttribute('data-open') === 'true';
+                item.setAttribute('data-open', (!isOpen).toString());
+                toggleBtn.setAttribute('data-icon', isOpen ? '+' : 'x');
+                const answerDiv = item.querySelector('.faq-answer');
+                answerDiv.style.display = isOpen ? 'none' : 'block';
+              });
+            });
+          }
+        }
+
+        // === AMENITIES SECTION (Cards with Filter Buttons) ===
+        const amenitiesHeadingEl = document.getElementById('dynamic_h2_amenities-heading');
+        if (amenitiesHeadingEl) {
+          amenitiesHeadingEl.textContent = data.amenitiesSectionHeading || amenitiesHeadingEl.textContent;
+        }
+        const filtersContainer = document.getElementById('dynamic_div_amenities-filters');
+        if (filtersContainer) {
+          filtersContainer.innerHTML = '';
+          const allBtn = document.createElement('button');
+          allBtn.className = 'filter-btn active';
+          allBtn.setAttribute('data-filter', 'All');
+          allBtn.textContent = 'All';
+          filtersContainer.appendChild(allBtn);
+          if (data.amenityFilters && data.amenityFilters.length > 0) {
+            data.amenityFilters.forEach(filter => {
+              const btn = document.createElement('button');
+              btn.className = 'filter-btn';
+              btn.setAttribute('data-filter', filter.name);
+              btn.textContent = filter.name;
+              filtersContainer.appendChild(btn);
+            });
+          }
+        }
+        const cardsContainer = document.getElementById('amenities-cards');
+        if (!cardsContainer) {
+          console.error('Amenities cards container not found');
+        } else {
+          const amenitiesCardsData = (data.amenitiesCards && data.amenitiesCards.length > 0)
+            ? data.amenitiesCards.map(card => {
+                let cats = [];
+                if (card.categories) {
+                  cats = card.categories.split(',').map(c => c.trim());
+                }
+                return { ...card, categories: cats };
+              })
+            : [];
+          let selectedFilters = ['All'];
+          let currentPage = 1;
+          const pageSize = 5;
+          function cardMatchesFilters(card) {
+            if (selectedFilters.includes('All')) return true;
+            return card.categories.some(cat => selectedFilters.includes(cat));
+          }
+          function renderCards() {
+            if (!cardsContainer) return;
+            const filtered = amenitiesCardsData.filter(cardMatchesFilters);
+            const totalPages = Math.ceil(filtered.length / pageSize);
+            if (currentPage > totalPages) currentPage = totalPages;
+            if (currentPage < 1) currentPage = 1;
+            const startIndex = (currentPage - 1) * pageSize;
+            const endIndex = startIndex + pageSize;
+            const pageItems = filtered.slice(startIndex, endIndex);
+            cardsContainer.innerHTML = '';
+            pageItems.forEach(item => {
+              const card = document.createElement('div');
+              card.classList.add('amenity-card');
+              card.innerHTML = `
+                <img src="${item.image?.url || ''}" alt="${item.title}" class="amenity-card-image" />
+                <div class="amenity-card-content">
+                  <h3 class="amenity-title">${item.title}</h3>
+                  <p class="amenity-description">${item.description}</p>
+                </div>
+              `;
+              cardsContainer.appendChild(card);
+            });
+            const prevBtn2 = document.getElementById('prev-btn');
+            const nextBtn2 = document.getElementById('next-btn');
+            if (prevBtn2) prevBtn2.disabled = (currentPage <= 1);
+            if (nextBtn2) nextBtn2.disabled = (currentPage >= totalPages);
+          }
+          const prevBtn2 = document.getElementById('prev-btn');
+          const nextBtn2 = document.getElementById('next-btn');
+          if (prevBtn2 && nextBtn2) {
+            prevBtn2.addEventListener('click', () => {
+              currentPage--;
+              renderCards();
+            });
+            nextBtn2.addEventListener('click', () => {
+              currentPage++;
+              renderCards();
+            });
+          }
+          const filterBtns = document.querySelectorAll('#dynamic_div_amenities-filters .filter-btn');
+          filterBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+              const filterName = btn.dataset.filter;
+              console.log("Filter button clicked:", filterName, "Before toggle:", selectedFilters);
+              if (selectedFilters.includes(filterName)) {
+                selectedFilters = selectedFilters.filter(f => f !== filterName);
+                btn.classList.remove('active');
+              } else {
+                selectedFilters.push(filterName);
+                btn.classList.add('active');
+              }
+              if (filterName === 'All' && selectedFilters.includes('All')) {
+                selectedFilters = ['All'];
+                filterBtns.forEach(b => {
+                  if (b.dataset.filter !== 'All') {
+                    b.classList.remove('active');
+                  }
+                });
+              } else {
+                if (selectedFilters.includes('All') && selectedFilters.length > 1) {
+                  selectedFilters = selectedFilters.filter(f => f !== 'All');
+                  const allBtn = document.querySelector('#dynamic_div_amenities-filters .filter-btn[data-filter="All"]');
+                  if (allBtn) allBtn.classList.remove('active');
+                }
+              }
+              console.log("Selected filters after toggle:", selectedFilters);
+              currentPage = 1;
+              renderCards();
+            });
+          });
+          renderCards();
+        }
+
+        // === UNITS SECTION ===
+        const unitsFiltersContainer = document.getElementById('dynamic_div_units-filters');
+        const unitsCarousel = document.getElementById('units-carousel');
+        if (unitsFiltersContainer) {
+          unitsFiltersContainer.innerHTML = '';
+          const allUnitBtn = document.createElement('button');
+          allUnitBtn.className = 'filter-btn active';
+          allUnitBtn.setAttribute('data-filter', 'All');
+          allUnitBtn.textContent = 'All';
+          unitsFiltersContainer.appendChild(allUnitBtn);
+          if (data.unitFilters && data.unitFilters.length > 0) {
+            data.unitFilters.forEach(filter => {
+              const btn = document.createElement('button');
+              btn.className = 'filter-btn';
+              btn.setAttribute('data-filter', filter.name);
+              btn.textContent = filter.name;
+              unitsFiltersContainer.appendChild(btn);
+            });
+          } else {
+            const defaultFilters = ['One Bedroom', 'Two Bedroom', 'Three Bedroom', 'Four Bedroom', 'Penthouse'];
+            defaultFilters.forEach(f => {
+              const btn = document.createElement('button');
+              btn.className = 'filter-btn';
+              btn.setAttribute('data-filter', f);
+              btn.textContent = f;
+              unitsFiltersContainer.appendChild(btn);
+            });
+          }
+        }
+        let selectedUnitFilters = ['All'];
+        function renderUnits() {
+          let unitsData = [];
+          if (data.units && data.units.length > 0) {
+            unitsData = data.units;
+          } else {
+            unitsData = [
+              {
+                id: 1,
+                type: 'One Bedroom',
+                title: 'Dubai Harbour One Bedroom Apartments',
+                price: 'from AED 2.6m',
+                image: 'assets/images/units/plan1.jpg',
+                tag: 'ONE',
+                cityView: true,
+                sqft: '2,412 sqft'
+              },
+              {
+                id: 2,
+                type: 'One Bedroom',
+                title: 'Dubai Harbour One Bedroom Apartments',
+                price: 'from AED 3.4m',
+                image: 'assets/images/units/plan2.jpg',
+                tag: 'TWO',
+                cityView: true,
+                sqft: '3,620 sqft'
+              },
+              {
+                id: 3,
+                type: 'One Bedroom',
+                title: 'Dubai Harbour One Bedroom Apartments',
+                price: 'from AED 4.5m',
+                image: 'assets/images/units/plan3.png',
+                tag: 'THREE',
+                cityView: true,
+                sqft: '4,500 sqft'
+              },
+              {
+                id: 4,
+                type: 'Penthouse',
+                title: 'Dubai Harbour Penthouse',
+                price: 'from AED 12m',
+                image: 'assets/images/units/plan1.png',
+                tag: 'PENT',
+                cityView: true,
+                sqft: '8,000 sqft'
+              }
+            ];
+          }
+          let filteredUnits = [];
+          if (selectedUnitFilters.includes('All')) {
+            filteredUnits = unitsData;
+          } else {
+            filteredUnits = unitsData.filter(u => selectedUnitFilters.includes(u.type));
+          }
+          if (unitsCarousel) {
+            unitsCarousel.innerHTML = '';
+            filteredUnits.forEach(unit => {
+              const card = document.createElement('div');
+              card.classList.add('unit-card');
+              card.innerHTML = `
+                <div class="unit-image-wrapper">
+                  <img src="${unit.image?.url || unit.image}" alt="${unit.title}" class="unit-image" />
+                  <div class="tag-badge">${unit.tag}</div>
+                </div>
+                <div class="unit-content">
+                  <h3 class="unit-title">${unit.title}</h3>
+                  <p class="unit-price">${unit.price}</p>
+                  <div class="unit-icons">
+                    ${unit.cityView ? '<div class="icon-item"><i class="icon-city"></i> City View</div>' : ''}
+                    <div class="icon-item"><i class="icon-size"></i> ${unit.sqft}</div>
+                  </div>
+                </div>
+              `;
+              unitsCarousel.appendChild(card);
+            });
+          }
+        }
+        const unitFilterBtns = document.querySelectorAll('#dynamic_div_units-filters .filter-btn');
+        unitFilterBtns.forEach(btn => {
+          btn.addEventListener('click', () => {
+            const filterName = btn.dataset.filter;
+            if (filterName === 'All') {
+              selectedUnitFilters = ['All'];
+              unitFilterBtns.forEach(b => {
+                if (b.dataset.filter !== 'All') {
+                  b.classList.remove('active');
+                } else {
+                  b.classList.add('active');
+                }
+              });
+            } else {
+              if (selectedUnitFilters.includes('All')) {
+                selectedUnitFilters = [];
+                unitFilterBtns.forEach(b => {
+                  if (b.dataset.filter === 'All') b.classList.remove('active');
+                });
+              }
+              if (selectedUnitFilters.includes(filterName)) {
+                selectedUnitFilters = selectedUnitFilters.filter(f => f !== filterName);
+                btn.classList.remove('active');
+              } else {
+                selectedUnitFilters.push(filterName);
+                btn.classList.add('active');
+              }
+              if (selectedUnitFilters.length === 0) {
+                selectedUnitFilters = ['All'];
+                const allBtn = document.querySelector('#dynamic_div_units-filters .filter-btn[data-filter="All"]');
+                if (allBtn) {
+                  allBtn.classList.add('active');
+                }
+              }
+            }
+            renderUnits();
+          });
+        });
+        const leftArrowUnits = document.querySelector('.left-arrow');
+        const rightArrowUnits = document.querySelector('.right-arrow');
+        if (leftArrowUnits) {
+          leftArrowUnits.addEventListener('click', () => {
+            unitsCarousel.scrollBy({ left: -300, behavior: 'smooth' });
+          });
+        }
+        if (rightArrowUnits) {
+          rightArrowUnits.addEventListener('click', () => {
+            unitsCarousel.scrollBy({ left: 300, behavior: 'smooth' });
+          });
+        }
+        renderUnits();
+
+        // === MATERIALS SECTION ===
+        const materialsGrid = document.querySelector('.materials-grid');
+        if (materialsGrid && data.materials && data.materials.length > 0) {
+          materialsGrid.innerHTML = '';
+          data.materials.forEach(material => {
+            const card = document.createElement('div');
+            card.className = 'material-card';
+            card.innerHTML = `
+              <div class="material-image-wrapper">
+                <img src="${material.image?.url || ''}" alt="${material.title}" class="material-image" />
+              </div>
+              <div class="material-content">
+                <h3 class="material-title">
+                  ${material.title}
+                  <span class="arrow-icon download-btn" data-file-url="${material.document?.url || ''}">&#x2197;</span>
+                </h3>
+                <p class="material-description">
+                  ${material.description}
+                </p>
+              </div>
+            `;
+            materialsGrid.appendChild(card);
+          });
+          const downloadBtns = document.querySelectorAll('.download-btn');
+          downloadBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+              const fileUrl = btn.getAttribute('data-file-url');
+              if (fileUrl) {
+                const a = document.createElement('a');
+                a.href = fileUrl;
+                a.download = '';
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+              }
+            });
+          });
+        } else {
+          console.warn('No materials found');
         }
       } else {
-        console.error('No video URL found');
+        console.error('No project data found');
       }
-
-      // Populate Contact Section
-      // document.getElementById('contact-header').innerHTML = data.contactFormHeaderText || 'Get Project materials and info on';
-      //document.getElementById('contact-header-bold').innerHTML = data.contactFormBoldText || 'Available Units';
-
-      document.getElementById('manager-name').textContent = data.agentName || 'Not Available';
-      document.getElementById('manager-occupation').textContent = data.agentOccupation || 'Not Available';
-      document.getElementById('manager-phone').href = `tel:${data.agentPhone || ''}`;
-      document.getElementById('manager-phone').textContent = data.agentPhone || '+971 50 123 4567';
-
-      // Assign the agent photo URL correctly
-      const agentPhotoElement = document.getElementById('agent-photo');
-      console.log('Agent Photo URL:', data.agentPhoto ? data.agentPhoto.url : 'No Photo URL provided'); // Log to check if the URL exists
-      if (data.agentPhoto && data.agentPhoto.url) {
-        agentPhotoElement.src = data.agentPhoto.url;
-      } else {
-        agentPhotoElement.src = '/path/to/default-picture.jpg';  // Fallback in case no image is provided
-      }
-
-      // Check and update the full-width image
-      const fullwidthImageElement = document.getElementById('fullwidth-image');
-      if (data.fullwidthImage && data.fullwidthImage.url) {
-        fullwidthImageElement.src = data.fullwidthImage.url;
-      } else {
-        fullwidthImageElement.src = '/path/to/default-fullwidth-image.jpg'; // Fallback image
-      }
-
-      // Assuming the API response contains `amenitiesImage`
-      if (data.amenitiesImage && data.amenitiesImage.url) {
-        document.getElementById('amenities-image').src = data.amenitiesImage.url;
-      } else {
-        document.getElementById('amenities-image').src = '/path/to/default-amenities-image.jpg'; // Default image fallback
-      }
-
-      // Update location title
-      document.getElementById('location-title').textContent = data.locationTitle || 'Location';
-
-      // Update location description (split into two paragraphs if needed)
-      const locationDescription = data.locationDescription || 'Loading description...';
-      const paragraphs = locationDescription.split('\n\n'); // Assuming paragraphs are split by double newlines
-      const locationDescriptionElement = document.getElementById('location-description');
-
-      // Clear existing content
-      locationDescriptionElement.innerHTML = '';
-
-      // Add paragraphs
-      paragraphs.forEach(paragraph => {
-        const p = document.createElement('p');
-        p.textContent = paragraph;
-        locationDescriptionElement.appendChild(p);
-      });
-
-      // Populate location items
-      const locationItemsContainer = document.getElementById('location-items');
-      locationItemsContainer.innerHTML = ''; // Clear any existing content
-
-      if (data.locationItems && data.locationItems.length > 0) {
-        data.locationItems.forEach(item => {
-          const locationItem = document.createElement('div');
-          locationItem.classList.add('location-item');
-          locationItem.innerHTML = `
-          <img src="${item.image ? item.image.url : '/path/to/default-image.jpg'}" 
-               alt="${item.place}" class="location-image">
-          <div class="location-item-wrapper">
-            ${item.distance} <br> to ${item.place}
-          </div>
-        `;
-          locationItemsContainer.appendChild(locationItem);
-        });
-      }
-      // Store latitude and longitude for map initialization
-      projectLatitude = parseFloat(data.latitude) || -25.363;
-      projectLongitude = parseFloat(data.longitude) || 131.044;
-
-      // Fetching the Google Maps script and ensuring callback to initMap
-      var script = document.createElement('script');
-      script.src = "https://maps.googleapis.com/maps/api/js?key=AIzaSyCvfYNuZy5x4nYFZI0t3rCY6ePdU2ss9nk&callback=initMap";
-      script.defer = true;
-      document.head.appendChild(script);
-
-    } else {
-      console.error('No project data found');
-    }
-
-    // Update General Plan Section
-    document.getElementById('generalPlanTag').textContent = data.generalPlanTag || 'Cluster';
-    document.getElementById('generalPlanTitle').textContent = data.generalPlanTitle || 'General Plan';
-
-    const generalPlanImageElement = document.getElementById('generalPlanImage');
-    if (data.generalPlanImage && data.generalPlanImage.url) {
-      generalPlanImageElement.src = data.generalPlanImage.url;
-    } else {
-      generalPlanImageElement.src = '/path/to/default-image.jpg';  // Fallback in case no image is provided
-    }
-
-    // Ensure floorPlans exists and is an array
-    const floorPlans = data.floorPlans || [];
-
-    if (!Array.isArray(floorPlans) || floorPlans.length === 0) {
-      console.error('No floor plans found or invalid format');
-      return; // Exit early if there's no valid floor plan data
-    }
-
-    // Unique types (for filtering)
-    const types = [...new Set(floorPlans.map(plan => plan.type))];
-
-    // Populate filters dynamically
-    const filtersContainer = document.getElementById('unit-filters');
-    filtersContainer.innerHTML = ''; // Clear existing content
-
-    types.forEach((type, index) => {
-      const filterElement = document.createElement('div');
-      filterElement.classList.add('unit-filter');
-      if (index === 0) filterElement.classList.add('active'); // Make the first filter active
-      filterElement.textContent = type.charAt(0).toUpperCase() + type.slice(1);
-      filterElement.dataset.type = type;
-
-      filterElement.addEventListener('click', () => {
-        // Remove 'active' class from all filters
-        document.querySelectorAll('.unit-filter').forEach(el => el.classList.remove('active'));
-        // Add 'active' to the clicked filter
-        filterElement.classList.add('active');
-        // Show units of the selected type
-        showUnitsOfType(type);
-      });
-
-      filtersContainer.appendChild(filterElement);
+    })
+    .catch(error => {
+      console.error('Error fetching project data:', error);
     });
-
-    // Show the first type of units by default
-    showUnitsOfType(types[0]);
-
-    function showUnitsOfType(type) {
-      const unitsBody = document.getElementById('units-body');
-      unitsBody.innerHTML = ''; // Clear existing content
-
-      floorPlans
-        .filter(plan => plan.type === type)
-        .forEach((plan, index) => {
-          const unitCard = document.createElement('div');
-          unitCard.classList.add('unit-card');
-          unitCard.id = `unit-${index + 1}`;
-
-          unitCard.innerHTML = `
-  <div class="d-flex align-items-center">
-    <span>
-      <div class="unit-title">${plan.title}</div>
-      <div class="unit-size">
-        <div class="unit-icon">
-          <img src="images/ruler_icon.svg" alt="">
-        </div>
-        <div class="unit-size-description">Total square:<br> ${plan.measurement}</div>
-      </div>
-      <div class="unit-button-wrapper">
-        <a class="download-brochure-button black-border-btn" 
-   onclick="handleMaterialDownload('${plan.floorPlanDocument?.url || '#'}')">
-          Download Brochure
-          <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="download"
-            class="download-icon" viewBox="0 0 512 512">
-            <path fill="currentColor"
-              d="M288 32c0-17.7-14.3-32-32-32s-32 14.3-32 32V274.7l-73.4-73.4c-12.5-12.5-32.8-12.5-45.3
-              0s-12.5 32.8 0 45.3l128 128c12.5 12.5 32.8 12.5 45.3 0l128-128c12.5-12.5
-              12.5-32.8 0-45.3s-32.8-12.5-45.3 0L288 274.7V32zM64 352c-35.3 0-64
-              28.7-64 64v32c0 35.3 28.7 64 64 64H448c35.3 0 64-28.7 64-64V416c0-35.3-28.7-64-64-
-              64H346.5l-45.3 45.3c-25 25-65.5 25-90.5 0L165.5 352H64zm368 56a24 24 0 1 1 0 48 24 24 0 1 1 0-
-              48z"></path>
-          </svg>
-        </a>
-      </div>
-    </span>
-  </div>
-  <div id="unit-image-${index + 1}" class="unit-right"
-    style="background-image: url('${plan.image?.url || '/path/to/default-image.jpg'}');"></div>
-`;
-
-
-          unitsBody.appendChild(unitCard);
-        });
-    }
-
-
-
-
-    // Update the Financial Section Header
-    document.getElementById('headingTitle').textContent = 'Financial Information';
-    document.getElementById('headingTag').textContent = 'Financial';
-
-    // Update the Payment Plan Heading
-    const paymentPlanHeadingElement = document.getElementById('paymentPlan');
-    if (paymentPlanHeadingElement && data.paymentPlanHeading && data.paymentPlanValue) {
-      paymentPlanHeadingElement.innerHTML = `${data.paymentPlanHeading} <span id="paymentPlanValue" class="text-danger">${data.paymentPlanValue}</span> Payment Plan`;
-    }
-
-    // Update the Features (Down Payment, Installments, Completion)
-    document.getElementById('featureValue1').textContent = data.downPaymentFinancial || '10%';
-    document.getElementById('featureDescription1').textContent = 'Down Payment';
-
-    document.getElementById('featureValue2').textContent = data.installments || '70%';
-    document.getElementById('featureDescription2').textContent = 'Installments';
-
-    document.getElementById('featureValue3').textContent = data.completion || '20%';
-    document.getElementById('featureDescription3').textContent = 'Completion';
-
-    // Developer Section
-    document.getElementById('headingTagDeveloperSection').textContent = data.developerHeadingTag || 'Developer';
-    document.getElementById('headingTitleDeveloperSection').textContent = data.developerHeadingTitle || 'About EMAAR Properties';
-    document.getElementById('developerContent').innerHTML = `
-        <p>${data.developerContent1}</p>
-        <p>${data.developerContent2}</p>
-      `;
-
-
-    // Update the Developer Video URL
-    const developerVideo = document.getElementById('developerVideo');
-    if (developerVideo && data.developerVideoUrl) {
-      developerVideo.src = data.developerVideoUrl;
-    }
-
-
-    // Reference to the materials container
-    const materialsContainer = document.getElementById('materialsBoxes');
-
-    // Clear existing content
-    materialsContainer.innerHTML = '';
-
-    // Check if materials data is available
-    if (data.materials && Array.isArray(data.materials)) {
-      data.materials.forEach((material) => {
-        const materialBox = document.createElement('div');
-        materialBox.classList.add('col-md-4', 'mb-4');
-
-        materialBox.innerHTML = `
-      <div class="card h-100 project-met shadow material-box">
-        <div class="material-image-container position-relative">
-          <img
-            src="${material.image.url}"
-            alt="${material.title}"
-            class="card-img-top"
-            style="height: 350px; object-fit: cover;"
-          />
-        </div>
-        <div class="card-body d-flex justify-content-center align-items-center">
-          <a href="#" class="btn-request-callback" onclick="handleMaterialDownload('${material.downloadLink.url}')">
-              Download ${material.title}
-              <i class="fas fa-download ms-3"></i>
-          </a>
-        </div>
-      </div>
-    `;
-
-        materialsContainer.appendChild(materialBox);
-      });
-    } else {
-      // Handle the case where materials data is not available
-      materialsContainer.innerHTML = '<p>No materials available at this time.</p>';
-    }
-
-
-    // Handle FAQ Section
-    if (data.faqs && data.faqs.length > 0) {
-      const faqAccordion = document.getElementById('faqAccordion');
-      faqAccordion.innerHTML = ''; // Clear existing content
-
-      // Loop through each FAQ item in the data
-      data.faqs.forEach((faq, index) => {
-        const faqItem = document.createElement('div');
-        faqItem.classList.add('accordion-item', 'mb-3');
-
-        const faqHeadingId = `question${index + 1}Heading`;
-        const faqAnswerId = `faqAnswer${index + 1}`;
-
-        faqItem.innerHTML = `
-      <h2 id="${faqHeadingId}" class="accordion-header">
-        <button class="accordion-button ${index === 0 ? '' : 'collapsed'}" type="button" data-bs-toggle="collapse"
-          data-bs-target="#${faqAnswerId}" aria-expanded="${index === 0 ? 'true' : 'false'}" aria-controls="${faqAnswerId}">
-          ${faq.question}
-        </button>
-      </h2>
-      <div id="${faqAnswerId}" class="accordion-collapse collapse ${index === 0 ? 'show' : ''}" aria-labelledby="${faqHeadingId}" data-bs-parent="#faqAccordion">
-        <div class="accordion-body">
-          ${faq.answer}
-        </div>
-      </div>
-    `;
-
-        faqAccordion.appendChild(faqItem);
-      });
-    } else {
-      console.warn('No FAQs found for this project.');
-    }
-
-    // Contact Section 2 Header
-    document.getElementById('contact2HeadingTag').textContent = data.contact2HeadingTag || 'Contact Us';
-    document.getElementById('contact2Title').textContent = data.contact2Title || 'Our expert will help you to buy the Best Property in Dubai';
-
-    // Contact Section 2 Details
-    document.getElementById('contact2Name').textContent = data.contact2Name || 'Sharmeen Akhtar';
-    document.getElementById('contact2Occupation').textContent = data.contact2Occupation || 'Sales Director';
-    document.getElementById('contact2PhoneNumber').textContent = data.contact2PhoneNumber || '+971 58 388 2908';
-    document.getElementById('contact2EmailAddress').textContent = data.contact2EmailAddress || 'sharmeen@dubaidunes.ae';
-    document.getElementById('contact2Website').textContent = data.contact2Website || 'dubaidunesproperties.com';
-
-    // Set the company logo if exists
-    if (data.contact2CompanyLogo && data.contact2CompanyLogo.url) {
-      document.getElementById('contact2CompanyLogoimg').src = data.contact2CompanyLogo.url;
-    }
-
-    // Set the contact image if exists
-    const contactImageElement = document.getElementById('contact2ImageImg');
-    if (data.contact2Image && data.contact2Image.url) {
-      contactImageElement.src = data.contact2Image.url;
-    } else {
-      contactImageElement.src = '/path/to/default-image.jpg'; // Fallback image
-    }
-
-
-    // Clear the grid before rendering new data
-    similarProjectsGrid.innerHTML = '';
-
-    // Loop through each similar project and create the HTML structure dynamically
-    data.similarProjects.forEach((project, index) => {
-      // Create the HTML elements for each similar project
-      const projectBox = document.createElement('a');
-      projectBox.setAttribute('id', `similarProject${index + 1}`);
-      projectBox.setAttribute('class', 'similarProjectBox');
-      projectBox.setAttribute('href', project.similarProject_link);
-
-      const imageContainer = document.createElement('div');
-      imageContainer.setAttribute('id', `similarProjectImageContainer${index + 1}`);
-      imageContainer.setAttribute('class', 'similarProjectImageContainer');
-
-      const img = document.createElement('img');
-      img.setAttribute('id', `similarProjectImage${index + 1}`);
-      img.setAttribute('alt', project.similarProject_title);
-      img.setAttribute('src', project.similarProject_image.url || 'path_to_default_image.jpg');
-
-      const tagsContainer = document.createElement('div');
-      tagsContainer.setAttribute('id', `similarProjectTagsContainer${index + 1}`);
-      tagsContainer.setAttribute('class', 'similarProjectTagsContainer');
-
-      const developerTag = document.createElement('div');
-      developerTag.setAttribute('id', `similarProjectTagDeveloper${index + 1}`);
-      developerTag.setAttribute('class', 'similarProjectTag');
-      developerTag.textContent = `By ${project.similarProject_developer}`;
-
-      const handoverTag = document.createElement('div');
-      handoverTag.setAttribute('id', `similarProjectTagHandover${index + 1}`);
-      handoverTag.setAttribute('class', 'similarProjectTag');
-      handoverTag.textContent = `Handover ${project.similarProject_handoverDate}`;
-
-      // Append tags to tags container
-      tagsContainer.appendChild(developerTag);
-      tagsContainer.appendChild(handoverTag);
-
-      // Append image and tags container to image container
-      imageContainer.appendChild(img);
-      imageContainer.appendChild(tagsContainer);
-
-      const textContainer = document.createElement('div');
-      textContainer.setAttribute('id', `similarProjectTextContainer${index + 1}`);
-      textContainer.setAttribute('class', 'similarProjectTextContainer');
-
-      const projectName = document.createElement('div');
-      projectName.setAttribute('id', `similarProjectName${index + 1}`);
-      projectName.setAttribute('class', 'similarProjectName');
-      projectName.textContent = project.similarProject_title;
-
-      // Append the project name to the text container
-      textContainer.appendChild(projectName);
-
-      // Append image container and text container to the project box
-      projectBox.appendChild(imageContainer);
-      projectBox.appendChild(textContainer);
-
-      // Finally, append the project box to the grid
-      similarProjectsGrid.appendChild(projectBox);
-    });
-
-
-    // Update Footer Text and Links
-    const footer = data;  // Use data (API response) for footer
-
-    if (footer) {
-      document.querySelector('.footer-left p').textContent = footer.footerText || '© 2024 Your Company';
-      document.querySelector('.footer-left a[href="/terms/privacy_policy"]').setAttribute('href', footer.privacyLink || '/terms/privacy_policy');
-      document.querySelector('.footer-left a[href="/terms"]').setAttribute('href', footer.termsLink || '/terms');
-      document.querySelector('.footer-left a[href="/sitemaps/v2"]').setAttribute('href', footer.sitemapLink || '/sitemaps/v2');
-      document.querySelector('.footer-left a[href="/about/company-details"]').setAttribute('href', footer.companyDetailsLink || '/about/company-details');
-
-      // Update Language and Currency
-      document.querySelector('.footer-button .button-text').textContent = footer.languageText || 'English (IN)';
-      document.querySelector('.footer-right .footer-button:nth-of-type(2) .button-text').textContent = footer.currencyText || '₹ INR';
-
-      // Update Social Media Links (with fallback)
-      const facebookLinkElement = document.querySelector('.social-media-links a[href="https://www.facebook.com/AirbnbIndia"]');
-      if (footer.facebookLink) {
-        facebookLinkElement.setAttribute('href', footer.facebookLink);
-      } else {
-        facebookLinkElement.style.display = 'none'; // Hide if no link
-      }
-
-      const twitterLinkElement = document.querySelector('.social-media-links a[href="https://twitter.com/airbnb_in"]');
-      if (footer.twitterLink) {
-        twitterLinkElement.setAttribute('href', footer.twitterLink);
-      } else {
-        twitterLinkElement.style.display = 'none'; // Hide if no link
-      }
-
-      const instagramLinkElement = document.querySelector('.social-media-links a[href="https://instagram.com/airbnb"]');
-      if (footer.instagramLink) {
-        instagramLinkElement.setAttribute('href', footer.instagramLink);
-      } else {
-        instagramLinkElement.style.display = 'none'; // Hide if no link
-      }
-    } else {
-      console.error('No footer data found');
-    }
-
-    /* document.getElementById('callback-form').addEventListener('click', async function (event) {
-       event.preventDefault(); // Prevent default form submission behavior
-       alert(1);
-       // Gather form data from the updated IDs
-       const name = document.getElementById('callback-name').value.trim();
-       const email = document.getElementById('callback-email').value.trim();
-       const phone = iti.getNumber(); // Use intlTelInput to get the formatted phone number
-       const slug = window.location.pathname.split('/').pop(); // Extract the slug from the current URL
-     
-       console.log({ name, email, phone }); // Check what values are being captured
-     
-       // Check if all fields are filled
-       if (!name || !email || !phone) {
-         alert('Please fill out all fields.');
-         return; // Stop the form from submitting if validation fails
-       }
-     
-       // Prepare form data for submission
-       const formData = {
-         name,
-         email,
-         phone,
-         slug,
-       };
-     
-       try {
-         console.log("Submitting form data:", formData); // Add logging to inspect the data
-         // Send a POST request to the API
-         const response = await fetch('/api/submit-callback', {
-           method: 'POST',
-           headers: {
-             'Content-Type': 'application/json',
-           },
-           body: JSON.stringify(formData),
-         });
-     
-         const result = await response.json();
-         console.log("API response:", result); // Log the API response
-     
-         if (result.success) {
-           alert('Callback request submitted successfully!');
-           // Optionally reset the form or close the modal
-           document.getElementById('callback-form').reset(); // Reset the form
-           hidePopup(); // Close the modal after successful submission
-         } else {
-           alert('Error submitting request: ' + result.error);
-         }
-       } catch (error) {
-         console.error('Error submitting callback request:', error);
-         alert('Failed to submit request. Please try again.');
-       }
-     });*/
-
-
-
-
-  })
-  .catch(error => {
-    console.error('Error fetching project data:', error);
-  });
-
-// Initialize Google Map with dynamic location
-function initMap() {
-  const location = { lat: projectLatitude, lng: projectLongitude };
-  const map = new google.maps.Map(document.getElementById('map'), {
-    zoom: 15,
-    center: location,
-    mapTypeId: 'roadmap'
-  });
-
-  const marker = new google.maps.Marker({
-    position: location,
-    map: map
-  });
-}
+});

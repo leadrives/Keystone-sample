@@ -32,95 +32,69 @@ model Post {
 
 model Project {
   id                           String            @id @default(cuid())
-  title                        String            @default("")
-  description                  String            @default("")
   slug                         String            @unique @default("")
-  requestCallbackText          String            @default("Request Callback")
-  headerLogo_filesize          Int?
-  headerLogo_filename          String?
-  bannerImage_filesize         Int?
-  bannerImage_filename         String?
-  projectLogo_filesize         Int?
-  projectLogo_filename         String?
-  developerLogo_filesize       Int?
-  developerLogo_filename       String?
-  startingPrice                String            @default("AED 4.48M")
-  paymentPlan                  String            @default("80/20")
-  area                         String            @default("4,016 sq. ft.")
-  handoverDate                 String            @default("Q4 2028")
-  projectTag1                  String            @default("Townhouses")
-  projectTag2                  String            @default("Villas")
-  paymentStructure             String            @default("")
-  downPayment                  String            @default("")
-  developerName                String            @default("")
-  bedrooms                     String            @default("")
-  numberOfUnits                String            @default("")
-  aboutHeading                 String            @default("")
-  aboutDescription             String            @default("")
-  featurePrice                 String            @default("")
-  featureDownPayment           String            @default("")
-  featureHandoverDate          String            @default("")
-  availabilityButtonText       String            @default("")
-  brochureButtonText           String            @default("")
+  heroImage_filesize           Int?
+  heroImage_filename           String?
+  mainHeading                  String            @default("")
+  subHeading                   String            @default("")
+  agents                       Agent[]           @relation("Agent_project")
+  galleryMainHeading           String            @default("")
+  galleryTitle                 String            @default("")
+  galleryParagraph             String            @default("")
   galleryImages                GalleryImage[]    @relation("GalleryImage_project")
-  videoUrl                     String            @default("")
-  agentName                    String            @default("")
-  agentOccupation              String            @default("")
-  agentPhone                   String            @default("")
-  agentPhoto_filesize          Int?
-  agentPhoto_filename          String?
-  contactFormHeaderText        String            @default("")
-  contactFormBoldText          String            @default("")
-  fullwidthImage_filesize      Int?
-  fullwidthImage_filename      String?
-  amenitiesImage_filesize      Int?
-  amenitiesImage_filename      String?
+  amenitiesList                String            @default("")
+  paymentPlanHeading           String            @default("")
+  paymentPlanImage_filesize    Int?
+  paymentPlanImage_filename    String?
+  paymentPlanTitle             String            @default("")
+  paymentPlanNumber            String            @default("")
+  paymentPlanSuffix            String            @default("")
+  paymentPlanDescription       String            @default("")
+  paymentPlanBullets           String            @default("")
+  locationHeading              String            @default("")
+  locationSubheading           String            @default("")
   locationTitle                String            @default("")
   locationDescription          String            @default("")
-  locationItems                LocationItem[]    @relation("LocationItem_project")
-  latitude                     String            @default("")
-  longitude                    String            @default("")
-  generalPlanTag               String            @default("")
-  generalPlanTitle             String            @default("")
-  generalPlanImage_filesize    Int?
-  generalPlanImage_filename    String?
-  floorPlans                   FloorPlan[]       @relation("FloorPlan_project")
-  paymentPlanHeading           String            @default("Attractive Payment Plan")
-  paymentPlanValue             String            @default("80/20")
-  downPaymentFinancial         String            @default("10%")
-  installments                 String            @default("70%")
-  completion                   String            @default("20%")
-  developerHeadingTag          String            @default("Developer")
-  developerHeadingTitle        String            @default("About EMAAR Properties")
-  developerContent1            String            @default("With a net asset value of AED 177.5 Billion, Emaar Properties is among the most admired and valuable real estate development companies in the world.")
-  developerContent2            String            @default("Emaar, which has established competencies in real estate, retail and shopping malls, hospitality, and leisure, shapes new lifestyles through its commitment to design excellence, build quality, and timely delivery.")
-  developerVideoUrl            String            @default("https://www.youtube.com/embed/mTaA2an7_us")
-  materials                    Material[]        @relation("Material_project")
-  faqs                         FAQ[]             @relation("FAQ_project")
-  contact2HeadingTag           String            @default("Contact Us")
-  contact2Title                String            @default("Our expert will help you to buy the Best Property in Dubai")
-  contact2Name                 String            @default("Sharmeen Akhtar")
-  contact2Occupation           String            @default("Sales Director")
-  contact2PhoneNumber          String            @default("+971 58 388 2908")
-  contact2EmailAddress         String            @default("sharmeen@dubaidunes.ae")
-  contact2Website              String            @default("dubaidunesproperties.com")
-  contact2CompanyLogo_filesize Int?
-  contact2CompanyLogo_filename String?
-  contact2Image_filesize       Int?
-  contact2Image_filename       String?
-  similarProjects              SimilarProject[]  @relation("SimilarProject_project")
-  footerText                   String            @default("© 2024 Airbnb, Inc.")
-  privacyLink                  String            @default("/terms/privacy_policy")
-  termsLink                    String            @default("/terms")
-  sitemapLink                  String            @default("/sitemaps/v2")
-  companyDetailsLink           String            @default("/about/company-details")
-  languageText                 String            @default("English (IN)")
-  currencyText                 String            @default("₹ INR")
-  facebookLink                 String            @default("https://www.facebook.com/AirbnbIndia")
-  twitterLink                  String            @default("https://twitter.com/airbnb_in")
-  instagramLink                String            @default("https://instagram.com/airbnb")
-  callbackRequests             CallbackRequest[] @relation("CallbackRequest_project")
-  unitInfoRequests             UnitInfoRequest[] @relation("UnitInfoRequest_project")
+  locationDescription2         String            @default("")
+  locationBullets              String            @default("")
+  locationMapImage_filesize    Int?
+  locationMapImage_filename    String?
+  developerTitle               String            @default("")
+  developerParagraph1          String            @default("")
+  developerParagraph2          String            @default("")
+  developerRedParagraph        String            @default("")
+  developerRedBoldText         String            @default("")
+  developerImage1_filesize     Int?
+  developerImage1_filename     String?
+  developerImage2_filesize     Int?
+  developerImage2_filename     String?
+  contactHeading               String            @default("")
+  contactProfilePic_filesize   Int?
+  contactProfilePic_filename   String?
+  contactProfileName           String            @default("")
+  contactProfileDescription    String            @default("")
+  contactBullets               String            @default("")
+  contactMap_filesize          Int?
+  contactMap_filename          String?
+  faq                          FAQ[]             @relation("FAQ_project")
+  amenitiesSectionHeading      String            @default("")
+  amenitiesCards               AmenityCard[]     @relation("AmenityCard_project")
+  amenityFilters               AmenityFilter[]   @relation("AmenityFilter_project")
+  units                        Unit[]            @relation("Unit_project")
+  unitFilters                  UnitFilter[]      @relation("UnitFilter_project")
+  materials                    MaterialCard[]    @relation("MaterialCard_project")
+  from_CallbackRequest_project CallbackRequest[] @relation("CallbackRequest_project")
+}
+
+model Agent {
+  id             String   @id @default(cuid())
+  name           String   @default("")
+  photo_filesize Int?
+  photo_filename String?
+  project        Project? @relation("Agent_project", fields: [projectId], references: [id])
+  projectId      String?  @map("project")
+
+  @@index([projectId])
 }
 
 model GalleryImage {
@@ -133,94 +107,108 @@ model GalleryImage {
   @@index([projectId])
 }
 
-model LocationItem {
-  id             String   @id @default(cuid())
-  image_filesize Int?
-  image_filename String?
-  distance       String   @default("")
-  place          String   @default("")
-  project        Project? @relation("LocationItem_project", fields: [projectId], references: [id])
-  projectId      String?  @map("project")
-
-  @@index([projectId])
-}
-
-model FloorPlan {
-  id                         String   @id @default(cuid())
-  title                      String   @default("")
-  type                       String
-  measurement                String   @default("")
-  image_filesize             Int?
-  image_filename             String?
-  floorPlanDocument_filesize Int?
-  floorPlanDocument_filename String?
-  project                    Project? @relation("FloorPlan_project", fields: [projectId], references: [id])
-  projectId                  String?  @map("project")
-
-  @@index([projectId])
-}
-
-model Material {
-  id                    String   @id @default(cuid())
-  title                 String   @default("")
-  image_filesize        Int?
-  image_filename        String?
-  downloadLink_filesize Int?
-  downloadLink_filename String?
-  project               Project? @relation("Material_project", fields: [projectId], references: [id])
-  projectId             String?  @map("project")
-
-  @@index([projectId])
-}
-
 model FAQ {
   id        String   @id @default(cuid())
   question  String   @default("")
   answer    String   @default("")
-  order     String   @default("1")
   project   Project? @relation("FAQ_project", fields: [projectId], references: [id])
   projectId String?  @map("project")
 
   @@index([projectId])
 }
 
-model SimilarProject {
-  id                            String   @id @default(cuid())
-  similarProject_title          String   @default("")
-  similarProject_developer      String   @default("")
-  similarProject_handoverDate   String   @default("")
-  similarProject_link           String   @default("")
-  similarProject_image_filesize Int?
-  similarProject_image_filename String?
-  project                       Project? @relation("SimilarProject_project", fields: [projectId], references: [id])
-  projectId                     String?  @map("project")
+model AmenityCard {
+  id             String   @id @default(cuid())
+  title          String   @default("")
+  description    String   @default("")
+  image_filesize Int?
+  image_filename String?
+  categories     String   @default("")
+  project        Project? @relation("AmenityCard_project", fields: [projectId], references: [id])
+  projectId      String?  @map("project")
 
   @@index([projectId])
+}
+
+model AmenityFilter {
+  id        String   @id @default(cuid())
+  name      String   @default("")
+  project   Project? @relation("AmenityFilter_project", fields: [projectId], references: [id])
+  projectId String?  @map("project")
+
+  @@index([projectId])
+}
+
+model Unit {
+  id             String   @id @default(cuid())
+  type           String   @default("")
+  title          String   @default("")
+  price          String   @default("")
+  image_filesize Int?
+  image_filename String?
+  tag            String   @default("")
+  cityView       Boolean  @default(false)
+  sqft           String   @default("")
+  project        Project? @relation("Unit_project", fields: [projectId], references: [id])
+  projectId      String?  @map("project")
+
+  @@index([projectId])
+}
+
+model UnitFilter {
+  id        String   @id @default(cuid())
+  name      String   @default("")
+  project   Project? @relation("UnitFilter_project", fields: [projectId], references: [id])
+  projectId String?  @map("project")
+
+  @@index([projectId])
+}
+
+model MaterialCard {
+  id                String   @id @default(cuid())
+  title             String   @default("")
+  description       String   @default("")
+  image_filesize    Int?
+  image_filename    String?
+  document_filesize Int?
+  document_filename String?
+  project           Project? @relation("MaterialCard_project", fields: [projectId], references: [id])
+  projectId         String?  @map("project")
+
+  @@index([projectId])
+}
+
+model SiteSetting {
+  id                  String       @id @default(cuid())
+  logo_filesize       Int?
+  logo_filename       String?
+  footerLogo_filesize Int?
+  footerLogo_filename String?
+  footerSocialLinks   SocialLink[] @relation("SocialLink_siteSetting")
+  footerCopyright     String       @default("")
+}
+
+model SocialLink {
+  id            String       @id @default(cuid())
+  name          String       @default("")
+  icon_filesize Int?
+  icon_filename String?
+  url           String       @default("")
+  siteSetting   SiteSetting? @relation("SocialLink_siteSetting", fields: [siteSettingId], references: [id])
+  siteSettingId String?      @map("siteSetting")
+
+  @@index([siteSettingId])
 }
 
 model CallbackRequest {
-  id        String    @id @default(cuid())
-  name      String    @default("")
-  email     String    @default("")
-  phone     String    @default("")
-  project   Project?  @relation("CallbackRequest_project", fields: [projectId], references: [id])
-  projectId String?   @map("project")
-  createdAt DateTime? @default(now())
-
-  @@index([projectId])
-}
-
-model UnitInfoRequest {
-  id            String    @id @default(cuid())
-  unitType      String    @default("")
-  details       String    @default("")
-  contactMethod String    @default("")
-  name          String    @default("")
-  phone         String    @default("")
-  email         String    @default("")
-  project       Project?  @relation("UnitInfoRequest_project", fields: [projectId], references: [id])
-  projectId     String?   @map("project")
-  createdAt     DateTime? @default(now())
+  id        String   @id @default(cuid())
+  name      String   @default("")
+  email     String   @default("")
+  phone     String   @default("")
+  pageUrl   String   @default("")
+  ipAddress String   @default("")
+  project   Project? @relation("CallbackRequest_project", fields: [projectId], references: [id])
+  projectId String?  @map("project")
 
   @@index([projectId])
 }

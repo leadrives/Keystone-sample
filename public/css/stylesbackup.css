@@ -1,0 +1,2167 @@
+/*************************************************
+  RESET & BASE
+**************************************************/
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  
+  html {
+    /* Smooth scrolling, so sticky nav doesn't feel abrupt */
+    scroll-behavior: smooth;
+  }
+  
+  body {
+    font-family: "Roboto", sans-serif;
+    background-color: #ffffff;
+    line-height: 1.6;
+  }
+  
+  /*************************************************
+    HEADER & NAVIGATION (Sticky Header, Burger Menu)
+  **************************************************/
+  header {
+    position: sticky;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 999; /* Ensure nav is above other elements when scrolling */
+    background-color: #ffffff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Container for the site’s main header content */
+  .container {
+    max-width: 1439px;
+    margin: 0 auto;
+    padding: 20px 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap; /* allows the CTA or nav to wrap if space is tight */
+  }
+  
+  /* LOGO + NAV container */
+  .logo-nav-container {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    flex-grow: 1; /* let this stretch, so CTA is pushed right */
+  }
+  
+  .logo img {
+    height: 50px;
+    width: auto;
+  }
+  
+  /* Request Callback Button (Header CTA) */
+  .cta {
+    white-space: nowrap;
+  }
+  
+  .cta button {
+    background-color: #ff0000;
+    color: #ffffff;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 25px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    white-space: nowrap;
+  }
+  
+  .cta button:hover {
+    background-color: #e60000;
+  }
+  
+  /*** BURGER MENU (hidden on desktop, shown on mobile) ***/
+  .burger {
+    display: none; /* hidden on desktop */
+    flex-direction: column;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 5px;
+    transition: transform 0.3s ease;
+  }
+  
+  .burger:focus {
+    outline: none;
+  }
+  
+  .burger .line {
+    width: 25px;
+    height: 3px;
+    background-color: #666666;
+    margin: 4px 0;
+    transition: all 0.3s ease;
+  }
+  
+  /* Animate lines to an 'X' when open */
+  .burger.open .line1 {
+    transform: translateY(7px) rotate(45deg);
+  }
+  .burger.open .line2 {
+    opacity: 0;
+  }
+  .burger.open .line3 {
+    transform: translateY(-7px) rotate(-45deg);
+  }
+  
+  /*** NAV ***/
+  nav ul {
+    list-style: none;
+    display: flex; /* horizontal layout on desktop */
+    flex-wrap: wrap;
+    margin: 0;
+    padding: 0;
+  }
+  
+  nav li {
+    margin: 0 15px;
+  }
+  
+  nav a {
+    text-decoration: none;
+    color: #666666;
+    font-size: 16px;
+    transition: color 0.3s ease;
+  }
+  
+  nav a:hover {
+    color: #ff0000;
+  }
+  
+  /* HEADER MOBILE FIX */
+  @media (max-width: 767px) {
+    /* Show burger on mobile */
+    .burger {
+      display: flex;
+    }
+  
+    /* By default, hide the nav menu on mobile */
+    nav ul {
+      display: none; /* hidden until toggled open */
+      flex-direction: column; /* vertical layout for mobile nav */
+      gap: 10px;
+      margin-top: 10px;
+    }
+  
+    /* When burger is open OR nav has .open, show nav */
+    .burger.open ~ nav ul,
+    nav.open ul {
+      display: flex;
+    }
+  
+    /* Container can switch to column layout if needed */
+    .container {
+      flex-direction: column;
+      align-items: flex-start; /* keep everything left-aligned on mobile */
+    }
+  
+    /* Keep logo & burger in one row, CTA can move below if no space */
+    .logo-nav-container {
+      width: 100%;
+      justify-content: space-between;
+      margin-bottom: 10px;
+    }
+  
+    /* CTA on its own row if needed */
+    .cta {
+      margin: 10px 0 0 0;
+    }
+  }
+  
+  /*************************************************
+    HERO SECTION
+  **************************************************/
+  .hero {
+    margin: 20px 0; /* top/bottom spacing so it aligns nicely */
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    position: relative;
+  }
+  
+  .hero-image {
+    position: relative;
+    width: 100%;
+    max-height: 600px; /* optional limit on hero's height */
+    overflow: hidden;
+    border-radius: 20px;
+  }
+  
+  .hero-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: brightness(0.8);
+    border-radius: 20px;
+  }
+  
+  .hero-content {
+    position: absolute; /* So content sits over image */
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: #ffffff;
+    max-width: 600px;
+    padding: 20px;
+  }
+  
+  .decorative-element {
+    margin-bottom: 15px;
+    font-size: 20px;
+  }
+  
+  h1 {
+    font-size: 46px;
+    font-weight: bold;
+    margin-bottom: 10px;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+  }
+  
+  h2 {
+    font-size: 36px;
+    margin-bottom: 20px;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+  }
+  
+  .buttons {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    margin-bottom: 30px;
+  }
+  
+  /* Hero Buttons */
+  .check-availability,
+  .explore-units {
+    padding: 12px 24px;
+    border-radius: 25px;
+    font-size: 26px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .check-availability {
+    background-color: #cccccc70;
+    color: #ffffff;
+    cursor: not-allowed;
+  }
+  
+  .explore-units {
+    background-color: #ffffff;
+    color: #333;
+    border: 1px solid #ccc;
+  }
+  
+  .explore-units:hover {
+    background-color: #f0f0f0;
+  }
+  
+  /* Contact section (managers, rating) */
+  .contact-section {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+  }
+  
+  .managers {
+    display: flex;
+    align-items: center;
+    gap: 2px; /* slightly smaller gap if needed */
+    perspective: 1000px; /* 3D perspective for hover animation */
+  }
+  
+  .managers img {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    border: 2px solid #ffffff;
+    transform-style: preserve-3d;
+    transition: transform 0.4s ease, box-shadow 0.4s ease;
+  }
+  
+  .managers img:hover {
+    transform: rotateY(15deg) scale(1.1);
+    box-shadow: 0 15px 25px rgba(0, 0, 0, 0.2);
+  }
+  
+  .manager-count {
+    font-weight: bold;
+    display: inline-block;
+    background-color: rgba(255, 255, 255, 0.3);
+    color: #333;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    line-height: 50px;
+    text-align: center;
+  }
+  
+  .rating {
+    font-size: 16px;
+    color: #ffd700; /* Gold star color */
+  }
+  
+  /*************************************************
+    FULL-WIDTH GALLERY SECTION
+  **************************************************/
+  .fullwidth-gallery {
+    width: 100vw;
+    margin-left: calc(50% - 50vw);
+    margin-right: calc(50% - 50vw);
+    background-color: #ffffff;
+    padding: 3rem 1rem; /* horizontal & vertical padding */
+  }
+  
+  /* Centered heading above the layout */
+  .gallery-header {
+    text-align: center;
+    margin-bottom: 2rem;
+  }
+  
+  .gallery-header h2 {
+    font-size: 2.6rem; 
+    font-weight: 400;
+    color: #666666;
+  }
+  
+  /* Outer container for the gallery content */
+  .gallery-inner {
+    display: flex;
+    /* We'll apply `flex-start` alignment only on larger screens 
+       so mobile doesn't break. (see media query below) */
+    justify-content: center;
+    gap: 50px;
+    max-width: 1440px;
+    margin: 0 auto;
+    padding: 0 1rem;
+  }
+  
+  /* Carousel Column */
+  .gallery-carousel {
+    flex: 1;
+    min-width: 400px; 
+  }
+  
+  .image-wrapper {
+    position: relative;
+    width: 100%;
+  }
+  
+  .gallery-image {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+    border-radius: 25px;
+    display: block;
+  }
+  
+  /* ARROWS */
+  .nav-arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background-color: #fff;
+    border: none;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.15);
+    color: #ff0000;
+    font-size: 1.4rem;
+    cursor: pointer;
+    outline: none;
+    transition: background-color 0.3s ease;
+    z-index: 2;
+  }
+  
+  .arrow-left {
+    left: -24px;
+  }
+  .arrow-right {
+    right: -24px;
+  }
+  
+  .nav-arrow:hover {
+    background-color: #f9f9f9;
+  }
+  
+  /* TEXT COLUMN */
+  .gallery-text {
+    flex: 1;
+    min-width: 350px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  
+  .section-title {
+    font-size: 50px;  /* large heading for desktop */
+    font-weight: 400;
+    color: #4f4f4f;
+    margin-bottom: 1rem;
+    line-height: 1.3;
+  }
+  
+  .gallery-text p {
+    font-size: 18px; 
+    color: #666666;
+    margin-bottom: 1.5rem;
+  }
+  
+  /* Tick bullets */
+  .amenities-list {
+    list-style: none;
+    margin-bottom: 1.5rem;
+  }
+  
+  .amenities-list li {
+    position: relative;
+    padding-left: 2rem;
+    margin-bottom: 0.75rem;
+    font-size: 18px;
+  }
+  .amenities-list li::before {
+    content: "✓"; /* ✓ */
+    position: absolute;
+    left: 0;
+    color: #40bf40;
+    font-size: 1.2rem;
+    
+    top: 0;
+  }
+  
+  /* Smaller, left-aligned button */
+  .check-availability-btn {
+    background-color: #ff0000;
+    color: #ffffff;
+    border: none;
+    padding: 0.6rem 1rem;
+    border-radius: 25px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    width: 180px;
+   
+  }
+  
+  .check-availability-btn:hover {
+    background-color: #e60000;
+  }
+  
+  /*************************************************
+    RESPONSIVE (Mobile) FOR GALLERY
+  **************************************************/
+  @media (max-width: 767px) {
+    /* Make the arrows fully visible on mobile (no negative offset) */
+    .arrow-left,
+    .arrow-right {
+      left: 10px;
+      right: auto;
+      top: 40%;
+      transform: translateY(0);
+      margin: 0.5rem;
+    }
+    .arrow-right {
+      left: auto;
+      right: 10px;
+    }
+  
+    /* Column layout becomes stacked */
+    .gallery-inner {
+      flex-direction: column;
+      /* We keep alignment center for stacked layout */
+    }
+  
+    .gallery-text {
+      margin-top: 2rem;
+      text-align: center; 
+    }
+  
+    .check-availability-btn {
+      margin: 0 auto; 
+      text-align: center;
+    }
+  
+    /* Make heading/text a bit smaller for narrow screens */
+    .section-title {
+      font-size: 32px; /* reduce from 50px */
+    }
+    .gallery-text p,
+    .amenities-list li {
+      font-size: 16px; /* slightly smaller body text */
+    }
+  }
+  
+  @media (min-width: 768px) {
+    /* Only top-align columns on tablets & desktops */
+    .gallery-inner {
+      align-items: flex-start;
+    }
+  }
+  
+  /*************************************************
+    FULL-WIDTH PAYMENT SECTION
+  **************************************************/
+  .fullwidth-payment {
+    width: 100vw;
+    margin-left: calc(50% - 50vw);
+    margin-right: calc(50% - 50vw);
+    background-color: #ffffff;
+    padding: 3rem 1rem; /* horizontal & vertical padding */
+  }
+  
+  /* Optional heading above the layout */
+  .payment-header {
+    text-align: center;
+    margin-bottom: 2rem;
+  }
+  
+  .payment-header h2 {
+    font-size: 2.6rem;
+    font-weight: 400;
+    color: #666666;
+  }
+  
+  /* Outer container for the payment plan content */
+  .payment-inner {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 50px;
+    max-width: 1440px; /* keeps content from being too wide on big screens */
+    margin: 0 auto;
+    padding: 0 1rem;
+  }
+  
+  /*** LEFT COLUMN: IMAGE ***/
+  .payment-image-wrapper {
+    flex: 1;
+    min-width: 400px; /* ensures some minimum space for the image on large screens */
+    position: relative;
+  }
+  
+  .payment-image {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+    border-radius: 25px;
+    display: block;
+  }
+  
+  /*** RIGHT COLUMN: TEXT ***/
+  .payment-text {
+    flex: 1;
+    min-width: 350px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    color: #666666;
+  }
+  
+  .payment-title {
+    font-size: 48px;  /* large heading for desktop */
+    font-weight: 400;
+    margin-bottom: 1rem;
+    line-height: 1.3;
+    color: #4f4f4f;
+  }
+  
+  .payment-title span {
+    color: #ff0000; /* Make the 60/40 part red, as in the screenshot */
+  }
+  
+  .payment-description {
+    font-size: 18px;
+    margin-bottom: 1.5rem;
+  }
+  
+  /*** Tick bullets ***/
+  .payment-bullets {
+    list-style: none;
+    margin-bottom: 1.5rem;
+    padding: 0;
+  }
+  
+  .payment-bullets li {
+    position: relative;
+    padding-left: 2rem;
+    margin-bottom: 0.75rem;
+    font-size: 18px; 
+  }
+  
+  .payment-bullets li::before {
+    content: "✓"; /* checkmark (unicode) */
+    position: absolute;
+    left: 0;
+    color: #40bf40; /* green tick */
+    font-size: 1.2rem;
+    
+    top: 0;
+  }
+  
+  /*** Button ***/
+  .payment-button {
+    background-color: #ff0000;
+    color: #ffffff;
+    border: none;
+    padding: 0.8rem 1.5rem;
+    border-radius: 25px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    width: 220px; /* slightly larger button width */
+    text-align: center;
+  }
+  
+  .payment-button:hover {
+    background-color: #e60000;
+  }
+  
+  /*************************************************
+    RESPONSIVE (Mobile) FOR PAYMENT
+  **************************************************/
+  @media (max-width: 767px) {
+    .payment-inner {
+      flex-direction: column;
+      gap: 1.5rem;
+      padding: 0 1rem;
+    }
+  
+    .payment-text {
+      text-align: center;
+    }
+  
+    /* Reduce heading & text sizes for small screens */
+    .payment-title {
+      font-size: 32px;
+    }
+    .payment-description,
+    .payment-bullets li {
+      font-size: 16px;
+    }
+  
+    .payment-button {
+      margin: 0 auto;
+    }
+  }
+  
+  /*************************************************
+    FULL-WIDTH CONTACT SECTION
+  **************************************************/
+  .fullwidth-contact {
+    width: 100vw;
+    margin-left: calc(55% - 50vw);
+    margin-right: calc(55% - 50vw);
+    background-color: #ffffff;
+    padding: 3rem 2rem;  /* plenty of horizontal space */
+    position: relative;  /* so we can position heading in top-right if needed */
+  }
+  
+  /* Heading in top-right corner of the whole section */
+  .contact-heading-wrapper {
+    text-align: center;  /* or right, if you want to push it to the far right */
+    margin-bottom: 2rem;
+  }
+  
+  .contact-heading-wrapper h2 {
+    display: inline-block; 
+    font-size: 2.6rem;
+    font-weight: 400;
+    color: #666666;
+    margin-right: 2rem; 
+  }
+  
+  /* Outer container for the contact content */
+  .contact-inner {
+    display: flex;
+    align-items: flex-start; 
+    justify-content: center;
+    gap: 50px;
+    max-width: 1440px;
+    margin: 0 auto;
+    padding: 0 2rem;
+  }
+  
+  /*** LEFT COLUMN: Profile ***/
+  .contact-profile {
+    flex: 1;
+    min-width: 400px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    color: #666666;
+  }
+  
+  /* Gently rounded photo */
+  .profile-pic-wrapper {
+    width: 120px;
+    height: 120px;
+    margin-bottom: 1rem;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  }
+  
+  .profile-pic {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+  
+  .profile-name {
+    font-size: 36px;
+    font-weight: 400;
+    color: #4f4f4f;
+    margin-bottom: 1rem;
+  }
+  
+  .profile-description {
+    font-size: 18px;
+    margin-bottom: 1.5rem;
+    line-height: 1.6;
+  }
+  
+  /* Tick bullets */
+  .contact-bullets {
+    list-style: none;
+    margin-bottom: 1.5rem;
+    padding: 0;
+  }
+  
+  .contact-bullets li {
+    position: relative;
+    padding-left: 2rem;
+    margin-bottom: 0.75rem;
+    font-size: 18px;
+  }
+  
+  .contact-bullets li::before {
+    content: "✓"; /* checkmark */
+    position: absolute;
+    left: 0;
+    color: #40bf40;
+    font-size: 1.2rem;
+    top: 0;
+  }
+  
+  /* Red CTA button */
+  .contact-btn {
+    background-color: #ff0000;
+    color: #ffffff;
+    border: none;
+    padding: 0.8rem 1.5rem;
+    border-radius: 25px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    width: 220px;
+    text-align: center;
+    margin-top: 1rem;
+  }
+  
+  .contact-btn:hover {
+    background-color: #e60000;
+  }
+  
+  /*** RIGHT COLUMN: Map ***/
+  .contact-map {
+    flex: 1;
+    min-width: 400px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .map-image {
+    width: 100%;
+    height: auto;
+    border-radius: 25px;
+    object-fit: cover;
+    display: block;
+  }
+  
+  /*************************************************
+    RESPONSIVE (Mobile) FOR CONTACT
+  **************************************************/
+  @media (max-width: 767px) {
+    .contact-heading-wrapper {
+      text-align: center;
+      margin-bottom: 1.5rem;
+    }
+  
+    .contact-heading-wrapper h2 {
+      margin-right: 0; 
+      font-size: 2rem; 
+    }
+  
+    .contact-inner {
+      flex-direction: column;
+      gap: 1.5rem;
+      padding: 0 1rem; 
+    }
+  
+    .contact-profile,
+    .contact-map {
+      min-width: auto;
+      width: 100%;
+    }
+  
+    .profile-pic-wrapper {
+      margin: 0 auto 1rem;
+    }
+  
+    .profile-name {
+      text-align: center;
+      font-size: 28px;
+    }
+  
+    .profile-description {
+      font-size: 16px;
+      text-align: center;
+    }
+  
+    .contact-bullets li {
+      font-size: 16px;
+    }
+  
+    .contact-btn {
+      margin: 1rem auto 0 auto;
+    }
+  }
+  
+  /*************************************************
+    END
+  **************************************************/
+  
+/*************************************************
+  FULL-WIDTH LOCATION SECTION
+**************************************************/
+.fullwidth-location {
+    width: 100vw;
+    margin-left: calc(50% - 50vw);
+    margin-right: calc(50% - 50vw);
+    background-color: #ffffff;
+    padding: 3rem 1rem; /* horizontal & vertical padding */
+    position: relative; /* needed for the absolute-positioned button */
+  }
+  
+  /* The floating Enquiry Now button */
+  .enquiry-now-btn {
+    position: absolute;
+    /* So it sits half in, half out; adjust the exact pixel values as needed */
+    top: -25px;  
+    right: 2rem;     /* or left: 50%; transform: translateX(-50%) to center it */
+    z-index: 10;     /* keep it above other elements */
+    background-color: #ff0000;
+    color: #ffffff;
+    border: none;
+    padding: 0.8rem 1.5rem;
+    border-radius: 25px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .enquiry-now-btn:hover {
+    background-color: #e60000;
+  }
+  
+  /* Heading top-right or center */
+  .location-heading-wrapper {
+    text-align: right;
+    margin-bottom: 2rem;
+  }
+  
+  .location-heading-wrapper h2 {
+    font-size: 2.6rem;
+    font-weight: 400;
+    color: #666666;
+    margin-right: 2rem;
+  }
+  
+  /* Outer container for text + image */
+  .location-inner {
+    display: flex;
+    align-items: flex-start; 
+    justify-content: center;
+    gap: 50px;
+    max-width: 1440px;
+    margin: 0 auto;
+    padding: 0 1rem;
+  }
+  
+  /*** LEFT COLUMN: text ***/
+  .location-text {
+    flex: 1;
+    min-width: 400px;
+    color: #666666;
+  }
+  
+  .subheading {
+    color: #ff0000; 
+    font-size: 16px;
+    font-weight: 400;
+    margin-bottom: 0.5rem;
+  }
+  
+  .location-title {
+    font-size: 40px;
+    font-weight: 400;
+    color: #4f4f4f;
+    margin-bottom: 1rem;
+    line-height: 1.3;
+  }
+  
+  .location-description {
+    font-size: 18px;
+    line-height: 1.6;
+    margin-bottom: 1.5rem;
+  }
+  
+  /* Tick bullet points */
+  .location-bullets {
+    list-style: none;
+    margin-bottom: 1.5rem;
+    padding: 0;
+  }
+  
+  .location-bullets li {
+    position: relative;
+    padding-left: 2rem;
+    margin-bottom: 0.75rem;
+    font-size: 18px;
+  }
+  
+  .location-bullets li::before {
+    content: "✓";
+    position: absolute;
+    left: 0;
+    color: #40bf40; 
+    font-size: 1.2rem;
+    top: 0;
+  }
+  
+  /*** RIGHT COLUMN: map image ***/
+  .location-image-wrapper {
+    flex: 1;
+    min-width: 400px;
+  }
+  
+  .location-image {
+    width: 100%;
+    height: 450px;
+    border-radius: 25px; 
+    object-fit: cover;
+    display: block;
+  }
+  
+  /*************************************************
+    RESPONSIVE (Mobile)
+  **************************************************/
+  @media (max-width: 767px) {
+    .location-heading-wrapper {
+      text-align: center;
+      margin-bottom: 1.5rem;
+    }
+  
+    .location-heading-wrapper h2 {
+      margin-right: 0;
+      font-size: 2rem;
+    }
+  
+    .location-inner {
+      flex-direction: column;
+      gap: 1.5rem;
+      padding: 0 1rem;
+    }
+  
+    .location-text,
+    .location-image-wrapper {
+      min-width: auto;
+      width: 100%;
+    }
+  
+    .subheading {
+      font-size: 14px;
+      text-align: center;
+    }
+  
+    .location-title {
+      font-size: 28px;
+      text-align: center;
+    }
+  
+    .location-description {
+      font-size: 16px;
+      text-align: center;
+    }
+  
+    .location-bullets li {
+      font-size: 16px;
+    }
+  
+    /* If you want the button to move so it's still half out on mobile, 
+       adjust the top or position further */
+    .enquiry-now-btn {
+      top: -20px; 
+      right: 1rem;
+      font-size: 14px;
+    }
+  }
+
+
+
+
+  /*************************************************
+  ABOUT SHAMAL SECTION
+**************************************************/
+.about-shamal {
+    /* Full-width background if needed */
+    width: 100vw;
+    margin-left: calc(60% - 50vw);
+    margin-right: calc(55% - 50vw);
+    background-color: #fff;
+    padding: 3rem 1rem;
+    box-sizing: border-box;
+  }
+  
+  /* ROW 1: TEXT ROW (two columns) */
+  .shamal-text-row {
+    display: flex;
+    gap: 50px;
+    max-width: 1440px;
+    margin: 0 auto 2rem auto; /* 2rem bottom margin to separate from images row */
+    align-items: flex-start;
+    /* optional horizontal padding: 
+       padding: 0 1rem;
+    */
+  }
+  
+  /* Left column for heading & paragraphs */
+  .shamal-left-col {
+    flex: 1;
+    color: #666;
+  }
+  
+  .shamal-left-col h2 {
+    font-size: 2.4rem;
+    font-weight: 400;
+    color: #666666;
+    margin-bottom: 1.5rem;
+  }
+  
+  .shamal-left-col p {
+    font-size: 18px;
+    line-height: 1.6;
+    margin-bottom: 1.5rem;
+  }
+  
+  /* Right column for red text */
+  .shamal-right-col {
+    flex: 1;
+  }
+  
+  .red-paragraph {
+    font-size: 26px;
+    line-height: 1.6;
+    color: #ff0000;
+    margin-bottom: 1.5rem;
+    margin-top: 98px;
+  }
+  
+  /* ROW 2: IMAGES ROW (two images side by side) */
+  .shamal-images-row {
+    display: flex;
+    gap: 30px; /* space between images */
+    max-width: 1440px;
+    margin: 0 auto;
+    /* optional horizontal padding:
+       padding: 0 1rem;
+    */
+  }
+  
+  /* Left image (often bigger) */
+  .shamal-image-left {
+    width: 100%;
+    max-width: 600px;  /* bigger image if you want it larger */
+    border-radius: 25px;
+    object-fit: cover;
+    display: block;
+    height: 300px;
+  }
+  
+  /* Right image (maybe smaller) */
+  .shamal-image-right {
+    width: 100%;
+    max-width: 350px;  /* smaller image on the right */
+    border-radius: 25px;
+    object-fit: cover;
+    display: block;
+    height: auto;
+  }
+  
+  /*************************************************
+    RESPONSIVE (Mobile)
+  **************************************************/
+  @media (max-width: 767px) {
+    .shamal-text-row {
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+  
+    .shamal-left-col p,
+    .red-paragraph {
+      font-size: 16px;
+    }
+  
+    .shamal-images-row {
+      flex-direction: column; /* stack images vertically on mobile */
+      gap: 1.5rem;
+    }
+  
+    .shamal-image-left,
+    .shamal-image-right {
+      max-width: 100%; /* allow them to shrink to mobile width */
+      margin-left: auto;
+      margin-right: auto;
+    }
+  }
+
+  /*************************************************
+  MATERIALS SECTION
+**************************************************/
+.materials-section {
+    /* Full-width “bleed” if matching other sections */
+    width: 100vw;
+    margin-left: calc(55% - 50vw);
+    margin-right: calc(55% - 50vw);
+    background-color: #ffffff;
+    padding: 3rem 1rem;
+    box-sizing: border-box;
+  }
+  
+  /* Section heading */
+  .materials-header {
+    max-width: 1440px;
+    margin: 0 auto;
+    padding: 0 1rem;
+    margin-bottom: 2rem;
+  }
+  
+  .materials-header h2 {
+    font-size: 2.4rem;
+    font-weight: 400;
+    color: #666666;
+  }
+  
+  /* Cards in a grid (2 columns on desktop) */
+  .materials-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr); /* 2 columns */
+    gap: 2rem; /* space between cards */
+    max-width: 1440px;
+    margin: 0 auto;
+    padding: 0 1rem;
+  }
+  
+  /* Each card */
+  .material-card {
+    display: flex;           /* image on left, text on right */
+    align-items: center;
+    gap: 1rem;               /* space between image and text */
+    background-color: #f9f9f9;
+    border-radius: 20px;     /* big rounding like screenshot */
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    padding: 1rem;
+  }
+  
+  /* Image container for consistent sizing */
+  .material-image-wrapper {
+    flex-shrink: 0; /* prevent image from shrinking */
+    width: 80px;     /* fixed image size, or adjust if you want bigger */
+    height: 80px;
+    border-radius: 15px;
+    overflow: hidden; /* ensure corners are clipped */
+  }
+  
+  /* The actual image */
+  .material-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+  
+  /* Card text content */
+  .material-content {
+    flex: 1; /* text takes remaining space */
+  }
+  
+  /* Title with arrow icon */
+  .material-title {
+    font-size: 1.1rem;
+    font-weight: 400;
+    color: #4f4f4f;
+    margin-bottom: 0.5rem;
+    line-height: 1.4;
+  }
+  
+  .arrow-icon {
+    font-size: 1.1rem; /* same size as text, you can adjust */
+    color: inherit;    /* match text color */
+    margin-left: 0.2rem;
+  }
+  
+  /* Smaller description text */
+  .material-description {
+    font-size: 0.95rem;
+    line-height: 1.5;
+    color: #666666;
+  }
+  
+  /*************************************************
+    RESPONSIVE (Mobile)
+  **************************************************/
+  @media (max-width: 767px) {
+    /* Switch to 1 column grid on mobile */
+    .materials-grid {
+      grid-template-columns: 1fr; 
+      gap: 1.5rem;
+      padding: 0 1rem;
+    }
+  
+    /* Slightly smaller texts if you like */
+    .material-title {
+      font-size: 1rem;
+    }
+  
+    .material-description {
+      font-size: 0.9rem;
+    }
+  }
+
+
+
+  /*************************************************
+  FAQ SECTION
+**************************************************/
+.faq-section {
+    /* If you want it full width, mimic your other sections: */
+    width: 100vw;
+    margin-left: calc(55% - 50vw);
+    margin-right: calc(55% - 50vw);
+    background-color: #ffffff;
+    padding: 3rem 1rem;
+    box-sizing: border-box;
+  }
+  
+  /* Heading + subheading */
+  .faq-header {
+    max-width: 1440px;
+    margin: 0 auto 2rem;
+    padding: 0 1rem;
+    text-align: left; /* or center, if desired */
+  }
+  
+  .faq-header h2 {
+    font-size: 2.4rem;
+    font-weight: 400;
+    color: #666666;
+    margin-bottom: 0.5rem;
+  }
+  
+  .faq-subtitle {
+    font-size: 20px;
+    color: #999999;
+  }
+  
+  /* FAQ container */
+  .faq-container {
+    max-width: 1440px;
+    margin: 0 auto;
+    padding: 0 1rem;
+  }
+  
+  /* Each FAQ item */
+  .faq-item {
+    border-bottom: 1px solid #e0e0e0; /* horizontal divider */
+    padding: 1rem 0;
+    transition: background-color 0.3s ease;
+  }
+  
+  /* The question row: question text + toggle button on right */
+  .faq-question {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    cursor: pointer; /* so it looks clickable if you want entire row clickable */
+  }
+  
+  /* The question text */
+  .question-text {
+    font-size: 30px;
+    color: #4f4f4f;
+    font-weight: 200;
+  }
+  
+  /* The toggle button (plus or x) aligned right */
+  .toggle-btn {
+    width: 40px;
+    height: 40px;
+    border: none;
+    border-radius: 50%;
+    background-color: #f9f9f9; /* a light circle background, matches screenshot */
+    color: #999999;
+    font-size: 1.25rem;
+    line-height: 40px;
+    text-align: center;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    flex-shrink: 0; /* never shrink the button smaller than 40px */
+  }
+  
+  .toggle-btn:hover {
+    background-color: #ececec;
+  }
+  
+  /* If open (displaying the answer) we can style the button differently */
+  .toggle-btn.open {
+    background-color: #000; /* black circle as in screenshot for open item */
+    color: #fff;            /* white 'x' icon */
+  }
+  
+  /* The answer text, hidden by default (controlled by JS) */
+  .faq-answer {
+    display: none; /* JS toggles this to block when open */
+    margin-top: 1rem;
+    font-size: 22px;
+    color: #666;
+    line-height: 1.6;
+  }
+  
+  /*************************************************
+    RESPONSIVE (Mobile)
+  **************************************************/
+  @media (max-width: 767px) {
+    .faq-header h2 {
+      font-size: 2rem;
+    }
+  
+    .faq-subtitle {
+      font-size: 0.9rem;
+    }
+  
+    .question-text {
+      font-size: 1rem;
+    }
+  
+    .toggle-btn {
+      width: 36px;
+      height: 36px;
+      line-height: 36px;
+    }
+  
+    .faq-answer {
+      font-size: 0.9rem;
+    }
+  }
+  
+/*************************************************
+  AMENITIES SECTION
+**************************************************/
+.amenities-section {
+    width: 100vw;
+    margin-left: calc(50% - 50vw);
+    margin-right: calc(50% - 50vw);
+    background-color: #f9f9f9;
+    padding: 3rem 1rem;
+    box-sizing: border-box;
+    position: relative;
+  }
+  
+  /* Top row: heading, filters, next/prev arrows side by side */
+  .amenities-top-row {
+    max-width: 1440px;
+    margin: 0 auto;
+    padding: 0 1rem;
+    display: flex;
+    align-items: center; /* vertically center everything */
+    justify-content: space-between; /* space them out: heading on left, arrows on right */
+    gap: 1rem;
+    margin-bottom: 2rem;
+  }
+  
+  /* The heading itself */
+  .amenities-top-row h2 {
+    font-size: 2.4rem;
+    font-weight: 400;
+    color: #666666;
+    margin: 0; /* so it vertically centers nicely */
+  }
+  
+  /* Filters row (center portion) */
+  .amenities-filters {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    justify-content: center; /* center them horizontally in this space */
+    flex: 1; /* so it grows and sits between heading and arrows */
+  }
+  
+  /* Filter button styling */
+  .filter-btn {
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 25px;
+    font-size: 0.95rem;
+    cursor: pointer;
+    background-color: #fff;
+    color: #666;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    transition: background-color 0.3s ease;
+    white-space: nowrap;
+  }
+  
+  .filter-btn:hover {
+    background-color: #f0f0f0;
+  }
+  
+  /* Active filter: red bg */
+  .filter-btn.active {
+    background-color: #ff0000;
+    color: #fff;
+  }
+  
+  /* Next/Prev arrow buttons */
+  .pagination-controls.top-row-arrows {
+    display: flex;
+    gap: 0.5rem;
+  }
+  
+  .amenities-arrow-btn {
+    width: 40px;
+    height: 40px;
+    border: none;
+    border-radius: 50%;
+    background-color: #fff;
+    color: #e60000;
+    font-size: 1.1rem;
+    cursor: pointer;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  }
+  
+  .amenities-arrow-btn:hover {
+    background-color: #ececec;
+  }
+  
+  .amenities-arrow-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+  
+  /* Cards grid below */
+  .amenities-cards {
+    max-width: 1440px;
+    margin: 0 auto;
+    padding: 0 1rem;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px,1fr));
+    gap: 1.5rem;
+  }
+  
+  /* Each card style */
+  .amenity-card {
+    background-color: #fff;
+    border-radius: 15px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .amenity-card-image {
+    width: 100%;
+    height: 400px;
+    object-fit: cover;
+    display: block;
+  }
+  
+  .amenity-card-content {
+    padding: 1rem;
+  }
+  
+  .amenity-title {
+    font-size: 1rem;
+    color: #4f4f4f;
+    margin-bottom: 0.5rem;
+  }
+  
+  .amenity-description {
+    font-size: 0.9rem;
+    color: #666;
+  }
+  
+  /* Enquiry Now bottom center */
+  .enquiry-btn {
+    position: absolute; 
+    bottom: -20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #ff0000;
+    color: #fff;
+    border: none;
+    padding: 0.8rem 1.5rem;
+    border-radius: 25px;
+    font-size: 1rem;
+    cursor: pointer;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+    transition: background-color 0.3s ease;
+  }
+  
+  .enquiry-btn:hover {
+    background-color: #e60000;
+  }
+  
+  /*************************************************
+    RESPONSIVE (Mobile)
+  **************************************************/
+  @media (max-width: 767px) {
+    .amenities-top-row {
+      flex-direction: column;
+      align-items: flex-start; 
+      gap: 1rem;
+    }
+  
+    .amenities-top-row h2 {
+      font-size: 2rem;
+    }
+  
+    .amenities-filters {
+      justify-content: flex-start;
+      gap: 0.5rem;
+    }
+  
+    .arrow-btn {
+      width: 36px;
+      height: 36px;
+      font-size: 1rem;
+    }
+    
+    .enquiry-btn {
+      font-size: 0.9rem;
+      bottom: -18px;
+    }
+  }
+  
+/*************************************************
+  UNITS SECTION
+**************************************************/
+.units-section {
+    width: 100vw;
+    margin-left: calc(50% - 50vw);
+    margin-right: calc(50% - 50vw);
+    background-color: #f9f9f9;
+    padding: 3rem 1rem;
+    box-sizing: border-box;
+    position: relative;
+  }
+  
+  /* Top row: one horizontal line with heading, filters, and 'Enquiry Now' */
+  .units-top-row {
+    max-width: 1440px;
+    margin: 0 auto;
+    padding: 0 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between; /* heading on left, button on right, filters fill middle */
+    gap: 1rem;
+    margin-bottom: 2rem;
+  }
+  
+  /* Heading on the far left */
+  .units-top-row h2 {
+    font-size: 2.4rem;
+    font-weight: 400;
+    color: #666666;
+    margin: 0;
+  }
+  
+  /* Middle: filter buttons row */
+  .units-filters {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    justify-content: center;
+    flex: 1; /* fill space between heading and 'Enquiry Now' */
+  }
+  
+  /* Filter button styling */
+  .filter-btn {
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 25px;
+    font-size: 0.95rem;
+    cursor: pointer;
+    background-color: #fff;
+    color: #666;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    transition: background-color 0.3s ease;
+    white-space: nowrap;
+  }
+  
+  .filter-btn:hover {
+    background-color: #f0f0f0;
+  }
+  
+  .filter-btn.active {
+    background-color: #ff0000;
+    color: #fff;
+  }
+  
+  /* Add new styles for the Units “Enquiry Now” */
+.units-enquiry-btn {
+    background-color: #ff0000;
+    color: #fff;
+    border: none;
+    padding: 0.8rem 1.5rem;
+    border-radius: 25px;
+    font-size: 1rem;
+    cursor: pointer;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+    transition: background-color 0.3s ease;
+    white-space: nowrap;
+  }
+  
+  .units-enquiry-btn:hover {
+    background-color: #e60000;
+  }
+  
+  
+  /*************************************************
+    CAROUSEL (Horizontal scroll)
+  **************************************************/
+  .units-carousel-wrapper {
+    max-width: 1440px;
+    margin: 0 auto;
+    padding: 0 1rem;
+    position: relative;
+  }
+  
+  .units-carousel {
+    display: flex;
+    gap: 1.5rem;
+    overflow-x: auto; /* horizontal scroll */
+    scroll-behavior: smooth;
+    padding: 1rem 0;
+    margin-bottom: 2rem;
+  }
+  
+  /* Optional hide default scrollbar */
+  /*.units-carousel::-webkit-scrollbar {
+    display: none;
+  }*/
+  
+  /* Arrow buttons */
+  .arrow-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 40px;
+    height: 40px;
+    border: none;
+    border-radius: 50%;
+    background-color: #fff;
+    color: #ff0000;
+    font-size: 1.2rem;
+    cursor: pointer;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    z-index: 2;
+  }
+  
+  .left-arrow {
+    left: 0;
+  }
+  
+  .right-arrow {
+    right: 0;
+  }
+  
+  /*************************************************
+    UNIT CARD STYLING
+  **************************************************/
+  .unit-card {
+    min-width: 220px; 
+    background-color: #fff;
+    border-radius: 25px;
+    box-shadow: 0 6px 15px rgba(0,0,0,0.07);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  
+  .unit-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+  }
+  
+  /* Image + Tag */
+  .unit-image-wrapper {
+    position: relative;
+    width: 100%;
+    height: 200px;
+    overflow: hidden;
+  }
+  
+  .unit-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+  
+  .tag-badge {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background-color: #000;
+    color: #fff;
+    font-size: 0.7rem;
+    font-weight: 500;
+    padding: 0.3rem 0.5rem;
+    border-radius: 10px;
+    text-transform: uppercase;
+  }
+  
+  /* Card text */
+  .unit-content {
+    padding: 1rem;
+  }
+  
+  .unit-title {
+    font-size: 1rem;
+    color: #4f4f4f;
+    margin-bottom: 0.5rem;
+    line-height: 1.3;
+  }
+  
+  .unit-price {
+    font-size: 1rem;
+    color: #000;
+    margin-bottom: 0.5rem;
+  }
+  
+  /* Row of icons below price */
+  .unit-icons {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+  
+  .icon-item {
+    font-size: 0.85rem;
+    color: #666;
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+  }
+  
+  .icon-item i {
+    width: 16px;
+    height: 16px;
+    background-color: #ccc;
+    display: inline-block;
+    border-radius: 3px;
+  }
+  
+  /*************************************************
+    RESPONSIVE
+  **************************************************/
+  @media (max-width: 767px) {
+    .units-top-row {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 1rem;
+    }
+  
+    .units-top-row h2 {
+      font-size: 2rem;
+    }
+  
+    .units-filters {
+      justify-content: flex-start;
+    }
+  
+    .arrow-btn {
+      width: 36px;
+      height: 36px;
+      font-size: 1rem;
+    }
+  
+   
+    .units-enquiry-btn {
+        font-size: 0.9rem;
+      }
+  
+    .unit-card {
+      min-width: 180px;
+    }
+  
+    .unit-image-wrapper {
+      height: 160px;
+    }
+  
+    .unit-title, .unit-price {
+      font-size: 0.95rem;
+    }
+  
+    .icon-item {
+      font-size: 0.8rem;
+    }
+  }
+
+  /*************************************************
+  DARK FOOTER
+**************************************************/
+.footer-dark {
+    background-color: #000; /* black background */
+    color: #ccc; /* light gray text */
+    padding: 2rem 1rem; /* top/bottom, left/right padding */
+    box-sizing: border-box;
+    position: relative;
+  }
+  
+  /* MAIN CONTAINER: 3 columns (left, middle, right) */
+  .footer-container {
+    max-width: 1440px;
+    margin: 0 auto;
+    display: flex;
+    flex-wrap: wrap; /* allow wrapping on mobile */
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 2rem; /* space between columns */
+  }
+  
+  /* LEFT COLUMN */
+  .footer-left {
+    flex: 1;
+    min-width: 200px; /* ensure the column doesn’t get too narrow */
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start; /* logo, icons, copyright stacked */
+    gap: 1rem;
+  }
+  
+  /* White logo: adjust size as needed */
+  .footer-logo img {
+    width: 120px; /* or another width */
+    height: auto;
+    display: block;
+  }
+  
+  /* Social icons row */
+  .social-icons {
+    display: flex;
+    gap: 0.5rem;
+  }
+  
+  .social-icons a img {
+    width: 32px;
+    height: 32px;
+    object-fit: contain;
+    display: block;
+  }
+  
+  /* Copy text */
+  .copyright {
+    font-size: 0.9rem;
+    color: #888;
+  }
+  
+  /* MIDDLE COLUMN */
+  .footer-middle {
+    flex: 1;
+    min-width: 200px; 
+  }
+  
+  .footer-middle h3 {
+    font-size: 1.1rem;
+    color: #fff;
+    margin-bottom: 1rem;
+  }
+  
+  .footer-middle ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  .footer-middle li a {
+    color: #ccc;
+    text-decoration: none;
+    font-size: 0.95rem;
+    display: block;
+    margin-bottom: 0.5rem;
+  }
+  
+  .footer-middle li a:hover {
+    color: #fff; /* highlight on hover */
+  }
+  
+  /* RIGHT COLUMN */
+  .footer-right {
+    flex: 1;
+    min-width: 200px; 
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 1rem;
+  }
+  
+  .footer-enquiry-btn {
+    background-color: #fff;
+    color: #000;
+    border: none;
+    padding: 0.8rem 1.5rem;
+    border-radius: 25px;
+    font-size: 1rem;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: background-color 0.3s ease;
+    box-shadow: 0 2px 8px rgba(255,255,255,0.2);
+  }
+  
+  .footer-enquiry-btn:hover {
+    background-color: #ddd;
+  }
+  
+  /* Language switcher */
+  .footer-lang-switch {
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+    color: #ccc;
+    font-size: 0.95rem;
+  }
+  
+  .footer-lang-switch img {
+    width: 20px;
+    height: 20px;
+  }
+  
+  /* BOTTOM ROW (Terms, Privacy) */
+  .footer-bottom {
+    max-width: 1440px;
+    margin: 2rem auto 0 auto; /* space above it */
+    padding: 0 1rem;
+    display: flex;
+    gap: 1rem;
+    justify-content: flex-end; /* right side */
+  }
+  
+  .footer-bottom a {
+    font-size: 0.85rem;
+    color: #666;
+    text-decoration: none;
+  }
+  
+  .footer-bottom a:hover {
+    color: #fff;
+  }
+  
+  /*************************************************
+    RESPONSIVE (Mobile)
+  **************************************************/
+  @media (max-width: 767px) {
+    .footer-container {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+  
+    .footer-left,
+    .footer-middle,
+    .footer-right {
+      align-items: flex-start; /* so they all left-align on mobile */
+    }
+  
+    .footer-right {
+      margin-top: 1rem;
+    }
+  
+    .footer-bottom {
+      justify-content: flex-start; /* or center if you prefer */
+      margin-top: 1rem;
+    }
+  }
+
+  /*************************************************
+  FULL-WIDTH SINGLE IMAGE SECTION
+**************************************************/
+.fullwidth-image-section {
+    width: 100vw;
+    /* Force the section to truly span full browser width, 
+       ignoring any container constraints. */
+    margin-left: calc(50% - 50vw);
+    margin-right: calc(50% - 50vw);
+    overflow: hidden; /* ensure nothing sticks outside */
+  }
+  
+  .fullwidth-image {
+    display: block;
+    width: 100%;
+    height: auto; /* preserves aspect ratio */
+    object-fit: cover; /* if you want it to cover any set height, 
+                          but here we're just letting it scale */
+  }
+
+
+ /*************************************************
+  FULL-SCREEN PARALLAX SECTION
+**************************************************/
+/*
+   This covers the entire viewport width (100vw)
+   and height (100vh), with a background image
+   fixed for parallax effect.
+*/
+
+.full-parallax-section {
+    width: 100vw;  /* Full viewport width */
+    margin-left: calc(50% - 50vw);
+    margin-right: calc(50% - 50vw);
+  
+    height: 100vh; /* Full viewport height */
+    position: relative; /* needed if we add an overlay */
+  
+    /* The background image with parallax */
+    background-image: url('assets/images/fullscreen-bg.jpg');
+    background-position: center center;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-attachment: fixed; /* parallax effect on desktop */
+    overflow: hidden; /* ensure no overflow from children */
+  }
+  
+  /* Optional overlay with centered text */
+  .parallax-overlay {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    color: #fff;
+    width: 100%;  /* or narrower/wider if you want */
+    /* If you want a slight tinted overlay behind text, do something like:
+       background-color: rgba(0, 0, 0, 0.4);
+       padding: 2rem;
+       border-radius: 10px;
+    */
+  }
+  
+  /*************************************************
+    RESPONSIVE (Mobile)
+  **************************************************/
+  @media (max-width: 767px) {
+    /*
+       Many mobile browsers ignore or poorly support
+       background-attachment: fixed. If you want to avoid
+       “jumpy” behavior, revert to non-fixed for mobile.
+    */
+    .full-parallax-section {
+      background-attachment: scroll;
+      height: 100vh; /* still fill screen height on mobile */
+    }
+  
+    .parallax-overlay h2 {
+      font-size: 1.5rem;
+    }
+    .parallax-overlay p {
+      font-size: 0.95rem;
+    }
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+/* The overlay behind the modal */
+.overlay {
+    display: none; /* hidden by default */
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+  }
+
+  /* The modal container */
+  .modal {
+    display: none; /* hidden by default */
+    position: fixed;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    background: #fff;
+    width: 400px;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.2);
+    text-align: center;
+    z-index: 1001; /* above overlay */
+  }
+
+  .modal h2 {
+    font-size: 22px;
+    margin-bottom: 15px;
+  }
+
+  .modal input {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+  }
+
+  /* intl-tel-input occupies full width in the modal */
+  .modal .intl-tel-input {
+    width: 100%;
+  }
+
+  /* The gradient button inside the modal */
+  .modal-btn {
+    width: 100%;
+    padding: 12px;
+    background: linear-gradient(to right, #ff0055, #ff3366);
+    color: white;
+    font-size: 18px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    box-shadow: 0px 4px 10px rgba(255, 0, 85, 0.3);
+    transition: 0.3s;
+  }
+  .modal-btn:hover {
+    background: linear-gradient(to right, #e6004c, #ff1a5c);
+  }
+
+  /* Close button (X) in top-right corner */
+  .close-btn {
+    position: absolute;
+    top: 10px; right: 10px;
+    font-size: 20px;
+    cursor: pointer;
+    background: none;
+    border: none;
+  }
+  
+  

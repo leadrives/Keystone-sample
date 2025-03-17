@@ -1,9 +1,10 @@
 import { list } from '@keystone-6/core';
 import { allowAll } from '@keystone-6/core/access';
-import { text, relationship, password, timestamp, file, select } from '@keystone-6/core/fields';
-import { type Lists } from '.keystone/types'; // Import types (optional but useful when using TypeScript)
+import { text, relationship, password, timestamp, file, checkbox, json } from '@keystone-6/core/fields';
+import { type Lists } from '.keystone/types';
 
 export const lists: Lists = {
+  // User list remains unchanged
   User: list({
     access: allowAll,
     fields: {
@@ -15,6 +16,7 @@ export const lists: Lists = {
     },
   }),
 
+  // Post list remains unchanged
   Post: list({
     access: allowAll,
     fields: {
@@ -24,412 +26,276 @@ export const lists: Lists = {
     },
   }),
 
-  // Project Model for CMS
+  // Updated Project list with fields for all sections including Units
   Project: list({
     access: allowAll,
     fields: {
-      // Title of the Project
-      title: text({ validation: { isRequired: true } }),
-
-      // Description or Overview
-      description: text({ ui: { displayMode: 'textarea' } }),
-
-      // Slug for custom URLs
       slug: text({ validation: { isRequired: true }, isIndexed: 'unique' }),
-
-      // Header elements
-      requestCallbackText: text({ defaultValue: 'Request Callback' }), // Button text
-      // Allow uploading of the header logo from the admin panel
-      // New field for the header logo
-      headerLogo: file({
-        storage: 'local_images', // Use the storage config for storing local files
+      heroImage: file({ storage: 'local_images' }),
+      mainHeading: text({ validation: { isRequired: true } }),
+      subHeading: text({ validation: { isRequired: true } }),
+      agents: relationship({
+        ref: 'Agent.project',
+        many: true,
+        ui: {
+          displayMode: 'cards',
+          cardFields: ['name', 'photo'],
+          inlineCreate: { fields: ['name', 'photo'] },
+          inlineEdit: { fields: ['name', 'photo'] },
+        },
       }),
 
-      // Hero Image and Logos
-      bannerImage: file({ storage: 'local_images' }), // Banner background image
-      projectLogo: file({ storage: 'local_images' }), // Project logo
-      developerLogo: file({ storage: 'local_images' }), // Developer logo
-
-      // Pricing and Details
-      startingPrice: text({ validation: { isRequired: true }, defaultValue: 'AED 4.48M' }), // Starting price text
-      paymentPlan: text({ defaultValue: '80/20' }), // Payment plan
-      area: text({ defaultValue: '4,016 sq. ft.' }), // Area size
-      handoverDate: text({ defaultValue: 'Q4 2028' }), // Handover date
-
-      // Project Tags
-      projectTag1: text({ defaultValue: 'Townhouses' }), // First project tag
-      projectTag2: text({ defaultValue: 'Villas' }), // Second project tag
-
-      // Add new fields for the features section
-      paymentStructure: text({ validation: { isRequired: false } }), // 80/20, for example
-      downPayment: text({ validation: { isRequired: false } }), // 10%, for example
-      developerName: text({ validation: { isRequired: false } }), // Developer name
-      bedrooms: text({ validation: { isRequired: false } }), // 4-5, for example
-      numberOfUnits: text({ validation: { isRequired: false } }), // 574, for example
-
-      // New Fields for About Section
-      aboutHeading: text({ validation: { isRequired: true } }), // For heading
-      aboutDescription: text({ ui: { displayMode: 'textarea' } }), // Description
-      featurePrice: text(), // Price Feature
-      featureDownPayment: text(), // Down Payment Feature
-      featureHandoverDate: text(), // Handover Date Feature
-      availabilityButtonText: text(), // Text for the "Get Availability" button
-      brochureButtonText: text(), // Text for the "Download Brochure" button
-
-      // New fields for gallery and video URL
+      // Gallery fields
+      galleryMainHeading: text({ validation: { isRequired: false } }),
+      galleryTitle: text({ validation: { isRequired: false } }),
+      galleryParagraph: text({ ui: { displayMode: 'textarea' } }),
       galleryImages: relationship({
         ref: 'GalleryImage.project',
         many: true,
         ui: {
           displayMode: 'cards',
           cardFields: ['image'],
-          inlineEdit: { fields: ['image'] },
           inlineCreate: { fields: ['image'] },
+          inlineEdit: { fields: ['image'] },
         },
       }),
-      videoUrl: text({ validation: { isRequired: false } }), // YouTube video URL
+      amenitiesList: text({ ui: { displayMode: 'textarea' } }),
 
-      // Dynamic fields for contact form
-      agentName: text({ validation: { isRequired: true } }),
-      agentOccupation: text(),
-      agentPhone: text(),
-      agentPhoto: file({ storage: 'local_images' }),
+      // Payment Plan fields
+      paymentPlanHeading: text({ validation: { isRequired: false } }),
+      paymentPlanImage: file({ storage: 'local_images' }),
+      paymentPlanTitle: text({ validation: { isRequired: false } }),
+      paymentPlanNumber: text({ validation: { isRequired: false } }),
+      paymentPlanSuffix: text({ validation: { isRequired: false } }),
+      paymentPlanDescription: text({ ui: { displayMode: 'textarea' } }),
+      paymentPlanBullets: text({ ui: { displayMode: 'textarea' } }),
 
-      contactFormHeaderText: text({ ui: { displayMode: 'textarea' } }),
-      contactFormBoldText: text(),
-      // Adding the new full-width image field
-      fullwidthImage: file({
-        storage: 'local_images', // Ensure proper storage config
-      }),
-
-      amenitiesImage: file({
-        storage: 'local_images', // Reference to the storage config
-      }),
-
-      locationTitle: text({ validation: { isRequired: true } }),
+      // Location fields
+      locationHeading: text({ validation: { isRequired: false } }),
+      locationSubheading: text({ validation: { isRequired: false } }),
+      locationTitle: text({ validation: { isRequired: false } }),
       locationDescription: text({ ui: { displayMode: 'textarea' } }),
-      locationItems: relationship({
-        ref: 'LocationItem.project',
-        many: true,
-        ui: {
-          displayMode: 'cards',
-          cardFields: ['image', 'distance', 'place'],
-          inlineCreate: { fields: ['image', 'distance', 'place'] },
-          inlineEdit: { fields: ['image', 'distance', 'place'] },
-        },
-      }),
-      latitude: text({ validation: { isRequired: true } }), // Add this for latitude
-      longitude: text({ validation: { isRequired: true } }), // Add this for longitude
+      locationDescription2: text({ ui: { displayMode: 'textarea' } }),
+      locationBullets: text({ ui: { displayMode: 'textarea' } }),
+      locationMapImage: file({ storage: 'local_images' }),
 
-      generalPlanTag: text({ validation: { isRequired: true } }),
-      generalPlanTitle: text({ validation: { isRequired: true } }),
-      generalPlanImage: file({
-        storage: 'local_images', // File storage configuration for the general plan image
-      }),
+      // Developer fields
+      developerTitle: text({ validation: { isRequired: false } }),
+      developerParagraph1: text({ ui: { displayMode: 'textarea' } }),
+      developerParagraph2: text({ ui: { displayMode: 'textarea' } }),
+      developerRedParagraph: text({ ui: { displayMode: 'textarea' } }),
+      developerRedBoldText: text({ validation: { isRequired: false } }),
+      developerImage1: file({ storage: 'local_images' }),
+      developerImage2: file({ storage: 'local_images' }),
 
-      // Relationship to the FloorPlan model
-      floorPlans: relationship({
-        ref: 'FloorPlan.project',
-        many: true,
-        ui: {
-          displayMode: 'cards',
-          cardFields: ['title', 'type', 'measurement', 'image', 'floorPlanDocument'], // Added image and floorPlanDocument
-          inlineCreate: { fields: ['title', 'type', 'measurement', 'image', 'floorPlanDocument'] },
-          inlineEdit: { fields: ['title', 'type', 'measurement', 'image', 'floorPlanDocument'] },
-        },
-      }),
-      // Add field for the Payment Plan Heading Text
-      paymentPlanHeading: text({
-        validation: { isRequired: true },
-        defaultValue: 'Attractive Payment Plan', // Static text
-      }),
+      // Contact fields
+      contactHeading: text({ validation: { isRequired: false } }),
+      contactProfilePic: file({ storage: 'local_images' }),
+      contactProfileName: text({ validation: { isRequired: false } }),
+      contactProfileDescription: text({ ui: { displayMode: 'textarea' } }),
+      contactBullets: text({ ui: { displayMode: 'textarea' } }),
+      contactMap: file({ storage: 'local_images' }),
 
-      // Separate field for the Payment Plan value (e.g., 80/20)
-      paymentPlanValue: text({
-        validation: { isRequired: true },
-        defaultValue: '80/20', // Default value
-      }),
-
-      // Fields for the Financial Section
-      downPaymentFinancial: text({ validation: { isRequired: true }, defaultValue: '10%' }), // Down Payment
-      installments: text({ validation: { isRequired: true }, defaultValue: '70%' }), // Installments
-      completion: text({ validation: { isRequired: true }, defaultValue: '20%' }), // Completion
-
-      // Developer Section Fields
-      developerHeadingTag: text({ validation: { isRequired: true }, defaultValue: 'Developer' }),
-      developerHeadingTitle: text({ validation: { isRequired: true }, defaultValue: 'About EMAAR Properties' }),
-      developerContent1: text({ ui: { displayMode: 'textarea' }, validation: { isRequired: true }, defaultValue: 'With a net asset value of AED 177.5 Billion, Emaar Properties is among the most admired and valuable real estate development companies in the world.' }),
-      developerContent2: text({ ui: { displayMode: 'textarea' }, validation: { isRequired: true }, defaultValue: 'Emaar, which has established competencies in real estate, retail and shopping malls, hospitality, and leisure, shapes new lifestyles through its commitment to design excellence, build quality, and timely delivery.' }),
-
-      developerVideoUrl: text({ defaultValue: 'https://www.youtube.com/embed/mTaA2an7_us' }),
-      materials: relationship({
-        ref: 'Material.project',
-        many: true,
-        ui: {
-          displayMode: 'cards',
-          cardFields: ['title', 'image'],
-          inlineCreate: { fields: ['title', 'image', 'downloadLink'] },
-          inlineEdit: { fields: ['title', 'image', 'downloadLink'] },
-        },
-      }),
-      faqs: relationship({
+      // FAQ field (relationship to many FAQ items)
+      faq: relationship({
         ref: 'FAQ.project',
-        many: true,  // One-to-many relationship
+        many: true,
         ui: {
           displayMode: 'cards',
           cardFields: ['question', 'answer'],
-          inlineCreate: { fields: ['question', 'answer', 'order'] },
-          inlineEdit: { fields: ['question', 'answer', 'order'] },
+          inlineCreate: { fields: ['question', 'answer'] },
+          inlineEdit: { fields: ['question', 'answer'] },
         },
       }),
 
-      // Fields for the Second Contact Us Section
-      contact2HeadingTag: text({
-        validation: { isRequired: true },
-        defaultValue: 'Contact Us',
-      }),
-      contact2Title: text({
-        validation: { isRequired: true },
-        defaultValue: 'Our expert will help you to buy the Best Property in Dubai',
-      }),
-      contact2Name: text({
-        validation: { isRequired: true },
-        defaultValue: 'Sharmeen Akhtar',
-      }),
-      contact2Occupation: text({
-        validation: { isRequired: true },
-        defaultValue: 'Sales Director',
-      }),
-      contact2PhoneNumber: text({
-        validation: { isRequired: true },
-        defaultValue: '+971 58 388 2908',
-      }),
-      contact2EmailAddress: text({
-        validation: { isRequired: true },
-        defaultValue: 'sharmeen@dubaidunes.ae',
-      }),
-      contact2Website: text({
-        validation: { isRequired: true },
-        defaultValue: 'dubaidunesproperties.com',
-      }),
-      contact2CompanyLogo: file({
-        storage: 'local_images',
-      }),
-      contact2Image: file({
-        storage: 'local_images',
-      }),
-
-      similarProjects: relationship({
-        ref: 'SimilarProject.project',
-        many: true,
-        ui: {
-          displayMode: 'cards', // Use cards for better visibility in the admin panel
-          cardFields: ['similarProject_title', 'similarProject_developer', 'similarProject_handoverDate', 'similarProject_link'],
-          inlineCreate: {
-            fields: [
-              'similarProject_title',
-              'similarProject_developer',
-              'similarProject_handoverDate',
-              'similarProject_link',
-              'similarProject_image',
-            ], // Include all necessary fields for inline creation
-          },
-          inlineEdit: {
-            fields: [
-              'similarProject_title',
-              'similarProject_developer',
-              'similarProject_handoverDate',
-              'similarProject_link',
-              'similarProject_image',
-            ], // Include all necessary fields for inline editing
-          },
-        },
-      }),
-
-      footerText: text({ validation: { isRequired: true }, defaultValue: '© 2024 Airbnb, Inc.' }), // Main footer text
-      privacyLink: text({ validation: { isRequired: true }, defaultValue: '/terms/privacy_policy' }), // Privacy policy link
-      termsLink: text({ validation: { isRequired: true }, defaultValue: '/terms' }), // Terms link
-      sitemapLink: text({ validation: { isRequired: true }, defaultValue: '/sitemaps/v2' }), // Sitemap link
-      companyDetailsLink: text({ validation: { isRequired: true }, defaultValue: '/about/company-details' }), // Company details link
-      languageText: text({ validation: { isRequired: true }, defaultValue: 'English (IN)' }), // Language text
-      currencyText: text({ validation: { isRequired: true }, defaultValue: '₹ INR' }), // Currency text
-
-      // Social Media Links
-      facebookLink: text({ validation: { isRequired: true }, defaultValue: 'https://www.facebook.com/AirbnbIndia' }),
-      twitterLink: text({ validation: { isRequired: true }, defaultValue: 'https://twitter.com/airbnb_in' }),
-      instagramLink: text({ validation: { isRequired: true }, defaultValue: 'https://instagram.com/airbnb' }),
-
-      callbackRequests: relationship({
-        ref: 'CallbackRequest.project',
-        many: true,  // One project can have multiple callback requests
-        ui: {
-          displayMode: 'cards',
-          cardFields: ['name', 'email', 'phone'],
-          inlineEdit: { fields: ['name', 'email', 'phone'] },
-        },
-      }),
-
-      unitInfoRequests: relationship({
-        ref: 'UnitInfoRequest.project',
+      // Amenities Section fields
+      amenitiesSectionHeading: text({ validation: { isRequired: false } }),
+      amenitiesCards: relationship({
+        ref: 'AmenityCard.project',
         many: true,
         ui: {
           displayMode: 'cards',
-          cardFields: ['name', 'contactMethod'],
-          inlineEdit: { fields: ['name', 'contactMethod'] },
+          cardFields: ['title', 'description', 'image', 'categories'],
+          inlineCreate: { fields: ['title', 'description', 'image', 'categories'] },
+          inlineEdit: { fields: ['title', 'description', 'image', 'categories'] },
+        },
+      }),
+      amenityFilters: relationship({
+        ref: 'AmenityFilter.project',
+        many: true,
+        ui: {
+          displayMode: 'cards',
+          cardFields: ['name'],
+          inlineCreate: { fields: ['name'] },
+          inlineEdit: { fields: ['name'] },
+        },
+      }),
+
+      // UNITS SECTION fields
+      units: relationship({
+        ref: 'Unit.project',
+        many: true,
+        ui: {
+          displayMode: 'cards',
+          cardFields: ['type', 'title', 'price', 'tag', 'cityView', 'sqft', 'image'],
+          inlineCreate: { fields: ['type', 'title', 'price', 'tag', 'cityView', 'sqft', 'image'] },
+          inlineEdit: { fields: ['type', 'title', 'price', 'tag', 'cityView', 'sqft', 'image'] },
+        },
+      }),
+      unitFilters: relationship({
+        ref: 'UnitFilter.project',
+        many: true,
+        ui: {
+          displayMode: 'cards',
+          cardFields: ['name'],
+          inlineCreate: { fields: ['name'] },
+          inlineEdit: { fields: ['name'] },
+        },
+      }),
+      // MATERIALS SECTION fields
+      materials: relationship({
+        ref: 'MaterialCard.project',
+        many: true,
+        ui: {
+          displayMode: 'cards',
+          cardFields: ['title', 'description', 'image', 'document'],
+          inlineCreate: { fields: ['title', 'description', 'image', 'document'] },
+          inlineEdit: { fields: ['title', 'description', 'image', 'document'] },
         },
       }),
 
     },
   }),
 
-  // Gallery Image Model for project
+  // New Agent list
+  Agent: list({
+    access: allowAll,
+    fields: {
+      name: text({ validation: { isRequired: true } }),
+      photo: file({ storage: 'local_images' }),
+      project: relationship({ ref: 'Project.agents', many: false }),
+    },
+  }),
+
+  // New GalleryImage list
   GalleryImage: list({
     access: allowAll,
     fields: {
-      image: file({
-        storage: 'local_images',
-      }),
-      project: relationship({ ref: 'Project.galleryImages' }),
-    },
-  }),
-
-  LocationItem: list({
-    access: allowAll,
-    fields: {
       image: file({ storage: 'local_images' }),
-      distance: text({ validation: { isRequired: true } }),
-      place: text({ validation: { isRequired: true } }),
-      project: relationship({ ref: 'Project.locationItems' }),
+      project: relationship({ ref: 'Project.galleryImages', many: false }),
     },
   }),
 
-  FloorPlan: list({
-    access: allowAll,
-    fields: {
-      title: text({ validation: { isRequired: true } }),
-      type: select({
-        options: [
-          { label: 'Villa', value: 'villa' },
-          { label: 'Penthouse', value: 'penthouse' },
-          { label: 'Townhouse', value: 'townhouse' },
-          { label: 'Shopping Mall', value: 'shoppingmall' },
-        ],
-        ui: {
-          displayMode: 'segmented-control',
-        },
-        validation: { isRequired: true },
-      }),
-      measurement: text({ validation: { isRequired: true } }), // e.g., '4,043.36 sq. ft.'
-      image: file({
-        storage: 'local_images',
-      }),
-      floorPlanDocument: file({
-        storage: 'local_images', // You can have a separate storage option for documents if needed.
-      }),
-      project: relationship({ ref: 'Project.floorPlans' }), // Added this field to link floor plans to projects
-    },
-  }),
-
-  Material: list({
-    access: allowAll,
-    fields: {
-      title: text({ validation: { isRequired: true } }), // e.g., "Brochure", "Price List"
-      image: file({
-        storage: 'local_images', // Storage configuration for images
-      }),
-      downloadLink: file({
-        storage: 'local_documents', // Storage configuration for documents
-      }),
-      project: relationship({
-        ref: 'Project.materials',
-      }),
-    },
-  }),
-
-  // Add FAQ Model
+  // New FAQ list
   FAQ: list({
     access: allowAll,
     fields: {
-      question: text({ validation: { isRequired: true } }),  // FAQ Question
-      answer: text({ ui: { displayMode: 'textarea' }, validation: { isRequired: true } }),  // FAQ Answer
-      order: text({ defaultValue: '1' }),  // Optional order for sorting FAQs
-      project: relationship({ ref: 'Project.faqs' }),  // Relationship to Project model
+      question: text({ validation: { isRequired: true } }),
+      answer: text({ ui: { displayMode: 'textarea' } }),
+      project: relationship({ ref: 'Project.faq', many: false }),
     },
   }),
 
-  SimilarProject: list({
+  // New AmenityCard list
+  AmenityCard: list({
     access: allowAll,
     fields: {
-      similarProject_title: text({ validation: { isRequired: true } }),
-      similarProject_developer: text({ validation: { isRequired: true } }),
-      similarProject_handoverDate: text({ validation: { isRequired: true } }),
-      similarProject_link: text({ validation: { isRequired: true } }),
-      similarProject_image: file({
-        storage: 'local_images',
-      }),
-      project: relationship({
-        ref: 'Project.similarProjects',
-      }),
-    },
-    ui: {
-      labelField: 'similarProject_title', // Display title in the admin UI
-      listView: {
-        initialColumns: ['similarProject_title', 'similarProject_developer', 'similarProject_handoverDate'],
-      },
+      title: text({ validation: { isRequired: true } }),
+      description: text({ ui: { displayMode: 'textarea' } }),
+      image: file({ storage: 'local_images' }),
+      // Categories stored as a comma-separated string
+      categories: text({ validation: { isRequired: false } }),
+      project: relationship({ ref: 'Project.amenitiesCards', many: false }),
     },
   }),
 
-  CallbackRequest: list({
-    access: allowAll,  // You can later set specific access controls if needed
-    fields: {
-      name: text({ validation: { isRequired: true } }),  // Store the user's name
-      email: text({ validation: { isRequired: true } }), // Store the user's email
-      phone: text({ validation: { isRequired: true } }), // Store the user's phone number
-
-      // Link each callback request to a specific project
-      project: relationship({
-        ref: 'Project.callbackRequests',
-        ui: {
-          displayMode: 'cards',
-          cardFields: ['title'],  // Show project title in the card
-          inlineEdit: { fields: ['title'] },
-        },
-      }),
-      createdAt: timestamp({ defaultValue: { kind: 'now' } }), // Timestamp of the request
-    },
-    ui: {
-      listView: {
-        initialColumns: ['name', 'email', 'phone', 'project', 'createdAt'],  // Display columns in Admin UI
-      },
-    },
-  }),
-
-  // New model for the unit info request form
-  UnitInfoRequest: list({
+  // New AmenityFilter list
+  AmenityFilter: list({
     access: allowAll,
     fields: {
-      unitType: text({ validation: { isRequired: true } }),
-      details: text({ ui: { displayMode: 'textarea' }, validation: { isRequired: true } }),
-      contactMethod: text({ validation: { isRequired: true } }),
       name: text({ validation: { isRequired: true } }),
-      phone: text(),
-      email: text(),
-      project: relationship({
-        ref: 'Project.unitInfoRequests',
-        ui: {
-          displayMode: 'cards',
-          cardFields: ['title'],
-          inlineEdit: { fields: ['title'] },
-        },
-      }),
-      createdAt: timestamp({ defaultValue: { kind: 'now' } }),
-    },
-    ui: {
-      listView: {
-        initialColumns: ['name', 'unitType', 'contactMethod', 'phone', 'email', 'project', 'createdAt'],  // Add phone and email here
-      },
+      project: relationship({ ref: 'Project.amenityFilters', many: false }),
     },
   }),
-  
+
+  // New Unit list for Units Section
+  Unit: list({
+    access: allowAll,
+    fields: {
+      type: text({ validation: { isRequired: true } }),
+      title: text({ validation: { isRequired: true } }),
+      price: text({ validation: { isRequired: true } }),
+      image: file({ storage: 'local_images' }),
+      tag: text({ validation: { isRequired: false } }),
+      cityView: checkbox({ defaultValue: false }),
+      sqft: text({ validation: { isRequired: false } }),
+      project: relationship({ ref: 'Project.units', many: false }),
+    },
+  }),
+
+  // New UnitFilter list for Units Section
+  UnitFilter: list({
+    access: allowAll,
+    fields: {
+      name: text({ validation: { isRequired: true } }),
+      project: relationship({ ref: 'Project.unitFilters', many: false }),
+    },
+  }),
+  // New MaterialCard list for Materials Section
+  MaterialCard: list({
+    access: allowAll,
+    fields: {
+      title: text({ validation: { isRequired: true } }),
+      description: text({ ui: { displayMode: 'textarea' } }),
+      image: file({ storage: 'local_images' }),
+      document: file({ storage: 'local_documents' }),
+      project: relationship({ ref: 'Project.materials', many: false }),
+    },
+  }),
+  // Updated SiteSetting list for global settings (header/footer)
+  SiteSetting: list({
+    access: allowAll,
+    fields: {
+      logo: file({ storage: 'local_images' }),
+      footerLogo: file({ storage: 'local_images' }),
+      // Replace JSON field with a relationship to SocialLink
+      footerSocialLinks: relationship({
+        ref: 'SocialLink.siteSetting',
+        many: true,
+        ui: {
+          displayMode: 'cards',
+          cardFields: ['name', 'icon', 'url'],
+          inlineCreate: { fields: ['name', 'icon', 'url'] },
+          inlineEdit: { fields: ['name', 'icon', 'url'] },
+        },
+      }),
+      footerCopyright: text({ validation: { isRequired: false } }),
+    },
+  }),
+
+  // New SocialLink list for managing footer social links
+  SocialLink: list({
+    access: allowAll,
+    fields: {
+      name: text({ validation: { isRequired: true } }),
+      icon: file({ storage: 'local_images' }),
+      url: text({ validation: { isRequired: true } }),
+      // Reverse relationship (optional)
+      siteSetting: relationship({ ref: 'SiteSetting.footerSocialLinks', many: false }),
+    },
+  }),
+  // ... other list definitions
+
+CallbackRequest: list({
+  access: allowAll,
+  fields: {
+    name: text({ validation: { isRequired: true } }),
+    email: text({ validation: { isRequired: true } }),
+    phone: text({ validation: { isRequired: true } }),
+    pageUrl: text({ validation: { isRequired: true } }),
+    ipAddress: text({ validation: { isRequired: true } }),
+    project: relationship({ ref: 'Project', many: false }), // Connect to the project by slug
+  },
+}),
 
 };
