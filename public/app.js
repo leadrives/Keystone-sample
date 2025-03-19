@@ -19,6 +19,7 @@ document.addEventListener('DOMContentLoaded', () => {
       if (heroTwoLogoImg && settingsData.heroTwoLogo && settingsData.heroTwoLogo.url) {
         heroTwoLogoImg.src = settingsData.heroTwoLogo.url;
       }
+      
       // Update footer logo
       const footerLogoImg = document.getElementById('dynamic_img_footer-logo');
       if (footerLogoImg && settingsData.footerLogo && settingsData.footerLogo.url) {
@@ -202,6 +203,21 @@ document.addEventListener('DOMContentLoaded', () => {
           }
           agentPhotoContainer.appendChild(agentCountSpan);
         }
+        // === PARALLAX SECTION ===
+        const parallaxImg = document.getElementById('dynamic_img_parallax');
+        if (parallaxImg && data.parallaxImage && data.parallaxImage.url) {
+          parallaxImg.src = data.parallaxImage.url;
+        } else if (parallaxImg) {
+          parallaxImg.src = '/assets/images/section-wide.jpg'; // fallback image
+        }
+
+        // === PANORAMIC IMAGE SECTION ===
+        const panoramicImg = document.getElementById('dynamic_img_PanoramicImage');
+        if (panoramicImg && data.panoramicImage && data.panoramicImage.url) {
+          panoramicImg.src = data.panoramicImage.url;
+        } else if (panoramicImg) {
+          panoramicImg.src = '/assets/images/section-wide2.jpg'; // fallback image
+        }
 
         // === GALLERY SECTION ===
         const galleryMainHeading = document.getElementById('dynamic_h2_gallery-main-heading');
@@ -312,6 +328,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (locationMapImageEl && data.locationMapImage && data.locationMapImage.url) {
           locationMapImageEl.src = data.locationMapImage.url;
         }
+       
 
         // === DEVELOPER SECTION ===
         const developerTitleEl = document.getElementById('dynamic_h2_About-title');

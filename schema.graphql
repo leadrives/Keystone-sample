@@ -233,6 +233,8 @@ type Project {
   contactMap: FileFieldOutput
   faq(where: FAQWhereInput! = {}, orderBy: [FAQOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: FAQWhereUniqueInput): [FAQ!]
   faqCount(where: FAQWhereInput! = {}): Int
+  parallaxImage: FileFieldOutput
+  panoramicImage: FileFieldOutput
   amenitiesSectionHeading: String
   amenitiesCards(where: AmenityCardWhereInput! = {}, orderBy: [AmenityCardOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: AmenityCardWhereUniqueInput): [AmenityCard!]
   amenitiesCardsCount(where: AmenityCardWhereInput! = {}): Int
@@ -435,6 +437,8 @@ input ProjectUpdateInput {
   contactBullets: String
   contactMap: FileFieldInput
   faq: FAQRelateToManyForUpdateInput
+  parallaxImage: FileFieldInput
+  panoramicImage: FileFieldInput
   amenitiesSectionHeading: String
   amenitiesCards: AmenityCardRelateToManyForUpdateInput
   amenityFilters: AmenityFilterRelateToManyForUpdateInput
@@ -551,6 +555,8 @@ input ProjectCreateInput {
   contactBullets: String
   contactMap: FileFieldInput
   faq: FAQRelateToManyForCreateInput
+  parallaxImage: FileFieldInput
+  panoramicImage: FileFieldInput
   amenitiesSectionHeading: String
   amenitiesCards: AmenityCardRelateToManyForCreateInput
   amenityFilters: AmenityFilterRelateToManyForCreateInput

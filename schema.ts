@@ -115,6 +115,15 @@ export const lists: Lists = {
           inlineEdit: { fields: ['question', 'answer'] },
         },
       }),
+      // New fields for the parallax and panoramic images
+      parallaxImage: file({ 
+        storage: 'local_images', 
+        ui: { description: "Image for the full parallax section" } 
+      }),
+      panoramicImage: file({ 
+        storage: 'local_images', 
+        ui: { description: "Image for the panoramic image section" } 
+      }),
 
       // Amenities Section fields
       amenitiesSectionHeading: text({ validation: { isRequired: false } }),

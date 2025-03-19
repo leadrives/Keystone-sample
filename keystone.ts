@@ -152,6 +152,8 @@ export default withAuth(
                 galleryImages { id image { url } }
                 amenitiesList
                 paymentPlanHeading
+                parallaxImage { url }
+                panoramicImage { url }
                 paymentPlanImage { url }
                 paymentPlanTitle
                 paymentPlanNumber

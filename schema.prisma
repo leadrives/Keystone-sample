@@ -78,6 +78,10 @@ model Project {
   contactMap_filesize          Int?
   contactMap_filename          String?
   faq                          FAQ[]             @relation("FAQ_project")
+  parallaxImage_filesize       Int?
+  parallaxImage_filename       String?
+  panoramicImage_filesize      Int?
+  panoramicImage_filename      String?
   amenitiesSectionHeading      String            @default("")
   amenitiesCards               AmenityCard[]     @relation("AmenityCard_project")
   amenityFilters               AmenityFilter[]   @relation("AmenityFilter_project")
