@@ -40,6 +40,7 @@ export default withAuth(
             const settingsList = await context.query.SiteSetting.findMany({
               query: `logo { url }
                 footerLogo { url }
+                heroTwoLogo { url }
                 footerSocialLinks { id name icon { url } url }
                 footerCopyright`
             });
@@ -144,6 +145,7 @@ export default withAuth(
                 subHeading
                 heroImage { url }
                 agents { name photo { url } }
+                agentCount
                 galleryMainHeading
                 galleryTitle
                 galleryParagraph

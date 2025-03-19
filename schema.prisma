@@ -38,6 +38,7 @@ model Project {
   mainHeading                  String            @default("")
   subHeading                   String            @default("")
   agents                       Agent[]           @relation("Agent_project")
+  agentCount                   Int?              @default(0)
   galleryMainHeading           String            @default("")
   galleryTitle                 String            @default("")
   galleryParagraph             String            @default("")
@@ -179,13 +180,15 @@ model MaterialCard {
 }
 
 model SiteSetting {
-  id                  String       @id @default(cuid())
-  logo_filesize       Int?
-  logo_filename       String?
-  footerLogo_filesize Int?
-  footerLogo_filename String?
-  footerSocialLinks   SocialLink[] @relation("SocialLink_siteSetting")
-  footerCopyright     String       @default("")
+  id                   String       @id @default(cuid())
+  logo_filesize        Int?
+  logo_filename        String?
+  footerLogo_filesize  Int?
+  footerLogo_filename  String?
+  heroTwoLogo_filesize Int?
+  heroTwoLogo_filename String?
+  footerSocialLinks    SocialLink[] @relation("SocialLink_siteSetting")
+  footerCopyright      String       @default("")
 }
 
 model SocialLink {

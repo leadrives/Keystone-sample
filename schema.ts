@@ -1,6 +1,6 @@
 import { list } from '@keystone-6/core';
 import { allowAll } from '@keystone-6/core/access';
-import { text, relationship, password, timestamp, file, checkbox, json } from '@keystone-6/core/fields';
+import { text, relationship, password, timestamp, file, checkbox, json, integer } from '@keystone-6/core/fields';
 import { type Lists } from '.keystone/types';
 
 export const lists: Lists = {
@@ -42,6 +42,14 @@ export const lists: Lists = {
           cardFields: ['name', 'photo'],
           inlineCreate: { fields: ['name', 'photo'] },
           inlineEdit: { fields: ['name', 'photo'] },
+        },
+      }),
+      // New field for manager count
+      agentCount: integer({
+        validation: { isRequired: false },
+        defaultValue: 0,
+        ui: {
+          description: "Manager count to display (if set, overrides computed count)",
         },
       }),
 
@@ -258,6 +266,7 @@ export const lists: Lists = {
     fields: {
       logo: file({ storage: 'local_images' }),
       footerLogo: file({ storage: 'local_images' }),
+      heroTwoLogo: file({ storage: 'local_images', ui: { description: "Logo for the Hero section (Hero Two)" } }),
       // Replace JSON field with a relationship to SocialLink
       footerSocialLinks: relationship({
         ref: 'SocialLink.siteSetting',
@@ -280,6 +289,7 @@ export const lists: Lists = {
       name: text({ validation: { isRequired: true } }),
       icon: file({ storage: 'local_images' }),
       url: text({ validation: { isRequired: true } }),
+
       // Reverse relationship (optional)
       siteSetting: relationship({ ref: 'SiteSetting.footerSocialLinks', many: false }),
     },

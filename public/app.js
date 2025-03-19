@@ -14,6 +14,11 @@ document.addEventListener('DOMContentLoaded', () => {
       if (headerLogoImg && settingsData.logo && settingsData.logo.url) {
         headerLogoImg.src = settingsData.logo.url;
       }
+      // Update hero section logo (new)
+      const heroTwoLogoImg = document.getElementById('dynamic_img_hero-two');
+      if (heroTwoLogoImg && settingsData.heroTwoLogo && settingsData.heroTwoLogo.url) {
+        heroTwoLogoImg.src = settingsData.heroTwoLogo.url;
+      }
       // Update footer logo
       const footerLogoImg = document.getElementById('dynamic_img_footer-logo');
       if (footerLogoImg && settingsData.footerLogo && settingsData.footerLogo.url) {
@@ -28,7 +33,6 @@ document.addEventListener('DOMContentLoaded', () => {
           a.href = link.url || '#';
           a.setAttribute('aria-label', link.name || 'Social Link');
           const img = document.createElement('img');
-          // Use the icon's URL from the relationship; make sure the key matches exactly
           img.src = link.icon?.url || '';
           img.alt = link.name || '';
           a.appendChild(img);
@@ -80,11 +84,8 @@ document.addEventListener('DOMContentLoaded', () => {
   const modalSubmitBtn = document.querySelector('#callbackModal .modal-btn');
   if (modalSubmitBtn) {
     modalSubmitBtn.addEventListener('click', () => {
-      // Select input fields within the modal
       const nameInput = document.querySelector('#callbackModal input[type="text"]');
       const emailInput = document.querySelector('#callbackModal input[type="email"]');
-      // 'phoneInput' already has an id
-
       if (!nameInput || !emailInput || !phoneInput) {
         console.error("Missing input fields in the callback modal");
         return;
@@ -123,11 +124,9 @@ document.addEventListener('DOMContentLoaded', () => {
         .then(result => {
           console.log("Callback request saved:", result);
           alert("Your callback request has been submitted!");
-          // Clear the form fields (optional)
           nameInput.value = "";
           emailInput.value = "";
           phoneInput.value = "";
-          // Close modal and overlay
           modal.style.display = "none";
           overlay.style.display = "none";
         })
@@ -187,6 +186,21 @@ document.addEventListener('DOMContentLoaded', () => {
             spanElement.textContent = `+${data.agents.length - 5}`;
             agentPhotoContainer.appendChild(spanElement);
           }
+          // Create and append the manager count span dynamically
+          const agentCountSpan = document.createElement('span');
+          agentCountSpan.id = 'dynamic_span_agent_count';
+          agentCountSpan.className = 'manager-count';
+
+          // Set the text using the admin-provided value if available,
+          // otherwise fall back to computed count if there are more than 5 agents.
+          if (data.agentCount && data.agentCount > 0) {
+            agentCountSpan.textContent = `+${data.agentCount}`;
+          } else if (data.agents.length > 5) {
+            agentCountSpan.textContent = `+${data.agents.length - 5}`;
+          } else {
+            agentCountSpan.textContent = "";
+          }
+          agentPhotoContainer.appendChild(agentCountSpan);
         }
 
         // === GALLERY SECTION ===
@@ -418,12 +432,12 @@ document.addEventListener('DOMContentLoaded', () => {
         } else {
           const amenitiesCardsData = (data.amenitiesCards && data.amenitiesCards.length > 0)
             ? data.amenitiesCards.map(card => {
-                let cats = [];
-                if (card.categories) {
-                  cats = card.categories.split(',').map(c => c.trim());
-                }
-                return { ...card, categories: cats };
-              })
+              let cats = [];
+              if (card.categories) {
+                cats = card.categories.split(',').map(c => c.trim());
+              }
+              return { ...card, categories: cats };
+            })
             : [];
           let selectedFilters = ['All'];
           let currentPage = 1;
@@ -475,7 +489,6 @@ document.addEventListener('DOMContentLoaded', () => {
           filterBtns.forEach(btn => {
             btn.addEventListener('click', () => {
               const filterName = btn.dataset.filter;
-              console.log("Filter button clicked:", filterName, "Before toggle:", selectedFilters);
               if (selectedFilters.includes(filterName)) {
                 selectedFilters = selectedFilters.filter(f => f !== filterName);
                 btn.classList.remove('active');
@@ -497,7 +510,6 @@ document.addEventListener('DOMContentLoaded', () => {
                   if (allBtn) allBtn.classList.remove('active');
                 }
               }
-              console.log("Selected filters after toggle:", selectedFilters);
               currentPage = 1;
               renderCards();
             });
@@ -678,7 +690,7 @@ document.addEventListener('DOMContentLoaded', () => {
               <div class="material-content">
                 <h3 class="material-title">
                   ${material.title}
-                  <span class="arrow-icon download-btn" data-file-url="${material.document?.url || ''}">&#x2197;</span>
+                  <span class="arrow-icon download-btn" data-file-url="${material.document?.url || ''}">↗</span>
                 </h3>
                 <p class="material-description">
                   ${material.description}
@@ -711,4 +723,20 @@ document.addEventListener('DOMContentLoaded', () => {
     .catch(error => {
       console.error('Error fetching project data:', error);
     });
+
+  // --- Navigation Link Handler ---
+  // Handle navigation links to update hash without changing the path
+  // Handle navigation and footer links with hash behavior
+  document.querySelectorAll('nav a[href^="#"], footer.footer-dark a[href^="#"]').forEach(link => {
+    link.addEventListener('click', function (e) {
+      e.preventDefault(); // Prevent default anchor behavior
+      const hash = this.getAttribute('href'); // Get the hash (e.g., "#gallery")
+      window.location.hash = hash; // Update the URL hash without changing the path
+      // Smooth scroll to the target section
+      const target = document.querySelector(hash);
+      if (target) {
+        target.scrollIntoView({ behavior: 'smooth' });
+      }
+    });
+  });
 });
