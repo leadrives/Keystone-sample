@@ -13,6 +13,8 @@
     <link rel="stylesheet" href="css/styles.css" />
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/css/intlTelInput.css">
+    <link href="https://fonts.googleapis.com/css2?family=Onest:wght@100;200;300;400;500;600;700;800;900&display=swap"
+        rel="stylesheet">
 
 </head>
 
@@ -77,15 +79,14 @@
                 <div class="hero-content">
                     <!-- New dynamic logo element -->
                     <img id="dynamic_img_hero-two" src="assets/images/43.png" alt="Hero Logo"
-                        style="max-width: 100px; margin-bottom: 5px;" />
+                        style="max-width: 150px; margin-bottom: 5px;" />
 
                     <div class="decorative-element" aria-hidden="true"></div>
-                    <h1 id="dynamic_h1_main-heading">Dubai Harbour Residences</h1>
+                    <h2 id="dynamic_h1_main-heading">Dubai Harbour Residences</h2>
                     <h2 id="dynamic_h2_sub-heading">by Shamal Holding</h2>
 
                     <div class="buttons">
-                        <button class="check-availability" 
-                            aria-label="Check Availability (currently disabled)">
+                        <button class="check-availability" aria-label="Check Availability">
                             Check Availability
                         </button>
                         <button class="explore-units" aria-label="Explore available units">
@@ -190,7 +191,7 @@
                 </div>
 
                 <!-- “Enquiry Now” at the bottom center -->
-                <button class="enquiry-btn">Enquiry Now</button>
+                <button class="enquiry-btn" aria-label="Enquiry Now">Enquiry Now</button>
             </section>
             <!-- END AMENITIES SECTION -->
             <!-- PAYMENT PLAN SECTION -->
@@ -491,8 +492,8 @@
             <!-- END FAQ SECTION -->
             <!-- PANARAMIC IMAGE SECTION -->
             <section id="PanoramicImage" class="fullwidth-image-section">
-                <img id="dynamic_img_PanoramicImage" src="assets/images/section-wide2.jpg" alt="Panoramic view of the coastline"
-                    class="fullwidth-image" />
+                <img id="dynamic_img_PanoramicImage" src="assets/images/section-wide2.jpg"
+                    alt="Panoramic view of the coastline" class="fullwidth-image" />
             </section>
             <!-- UNITS SECTION -->
             <section id="units" class="units-section" aria-labelledby="units-heading">
@@ -509,7 +510,7 @@
                         <button class="filter-btn" data-filter="Penthouse">Penthouse</button>
                     </div>
 
-                    <button class="units-enquiry-btn">Enquiry Now</button>
+                    <button class="units-enquiry-btn" aria-label="Enquiry Now">Enquiry Now</button>
                 </div>
 
                 <!-- Carousel container below -->
@@ -615,7 +616,7 @@
             <!-- RIGHT COLUMN -->
             <div class="footer-right">
                 <!-- Enquiry button (white background, black text) -->
-                <button class="footer-enquiry-btn">Enquiry</button>
+                <button class="footer-enquiry-btn" aria-label="Enquiry Now Footer">Enquiry</button>
 
                 <!-- Language switcher (globe icon + EN) -->
                 <div class="footer-lang-switch">
@@ -698,6 +699,22 @@
 
     <!-- Overlay -->
     <div class="overlay" id="overlay"></div>
+
+    <!-- Download Modal -->
+    <div class="modal request-call" id="downloadModal" style="display:none;">
+        <button class="close-btn" id="closeDownloadModal"
+            onclick="document.getElementById('downloadModal').style.display='none';document.getElementById('downloadOverlay').style.display='none';">&times;</button>
+        <h2>Enter Details to Download</h2>
+        <input type="text" name="name" placeholder="Your name">
+        <input type="email" name="email" placeholder="Your email">
+        <div class="phone-wrapper mb-4">
+            <input type="tel" name="phone" placeholder="Your phone number">
+        </div>
+        <button class="modal-btn">Submit</button>
+    </div>
+    <div class="overlay" id="downloadOverlay" style="display:none;"></div>
+
+
 
     <!-- Load the JS for intl-tel-input -->
     <script src="https://cdn.jsdelivr.net/npm/intl-tel-input@17.0.12/build/js/intlTelInput.min.js"></script>

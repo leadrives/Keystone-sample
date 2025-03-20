@@ -193,6 +193,7 @@ type Project {
   id: ID!
   slug: String
   heroImage: FileFieldOutput
+  heroTwoLogo: FileFieldOutput
   mainHeading: String
   subHeading: String
   agents(where: AgentWhereInput! = {}, orderBy: [AgentOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: AgentWhereUniqueInput): [Agent!]
@@ -400,6 +401,7 @@ input ProjectOrderByInput {
 input ProjectUpdateInput {
   slug: String
   heroImage: FileFieldInput
+  heroTwoLogo: FileFieldInput
   mainHeading: String
   subHeading: String
   agents: AgentRelateToManyForUpdateInput
@@ -518,6 +520,7 @@ input ProjectUpdateArgs {
 input ProjectCreateInput {
   slug: String
   heroImage: FileFieldInput
+  heroTwoLogo: FileFieldInput
   mainHeading: String
   subHeading: String
   agents: AgentRelateToManyForCreateInput
@@ -995,7 +998,6 @@ type SiteSetting {
   id: ID!
   logo: FileFieldOutput
   footerLogo: FileFieldOutput
-  heroTwoLogo: FileFieldOutput
   footerSocialLinks(where: SocialLinkWhereInput! = {}, orderBy: [SocialLinkOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: SocialLinkWhereUniqueInput): [SocialLink!]
   footerSocialLinksCount(where: SocialLinkWhereInput! = {}): Int
   footerCopyright: String
@@ -1028,7 +1030,6 @@ input SiteSettingOrderByInput {
 input SiteSettingUpdateInput {
   logo: FileFieldInput
   footerLogo: FileFieldInput
-  heroTwoLogo: FileFieldInput
   footerSocialLinks: SocialLinkRelateToManyForUpdateInput
   footerCopyright: String
 }
@@ -1048,7 +1049,6 @@ input SiteSettingUpdateArgs {
 input SiteSettingCreateInput {
   logo: FileFieldInput
   footerLogo: FileFieldInput
-  heroTwoLogo: FileFieldInput
   footerSocialLinks: SocialLinkRelateToManyForCreateInput
   footerCopyright: String
 }
@@ -1124,6 +1124,8 @@ type CallbackRequest {
   pageUrl: String
   ipAddress: String
   project: Project
+  projectName: String
+  actionFrom: String
 }
 
 input CallbackRequestWhereUniqueInput {
@@ -1141,6 +1143,8 @@ input CallbackRequestWhereInput {
   pageUrl: StringFilter
   ipAddress: StringFilter
   project: ProjectWhereInput
+  projectName: StringFilter
+  actionFrom: StringFilter
 }
 
 input CallbackRequestOrderByInput {
@@ -1150,6 +1154,8 @@ input CallbackRequestOrderByInput {
   phone: OrderDirection
   pageUrl: OrderDirection
   ipAddress: OrderDirection
+  projectName: OrderDirection
+  actionFrom: OrderDirection
 }
 
 input CallbackRequestUpdateInput {
@@ -1159,6 +1165,8 @@ input CallbackRequestUpdateInput {
   pageUrl: String
   ipAddress: String
   project: ProjectRelateToOneForUpdateInput
+  projectName: String
+  actionFrom: String
 }
 
 input CallbackRequestUpdateArgs {
@@ -1173,6 +1181,8 @@ input CallbackRequestCreateInput {
   pageUrl: String
   ipAddress: String
   project: ProjectRelateToOneForCreateInput
+  projectName: String
+  actionFrom: String
 }
 
 """

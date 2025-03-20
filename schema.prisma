@@ -35,6 +35,8 @@ model Project {
   slug                         String            @unique @default("")
   heroImage_filesize           Int?
   heroImage_filename           String?
+  heroTwoLogo_filesize         Int?
+  heroTwoLogo_filename         String?
   mainHeading                  String            @default("")
   subHeading                   String            @default("")
   agents                       Agent[]           @relation("Agent_project")
@@ -184,15 +186,13 @@ model MaterialCard {
 }
 
 model SiteSetting {
-  id                   String       @id @default(cuid())
-  logo_filesize        Int?
-  logo_filename        String?
-  footerLogo_filesize  Int?
-  footerLogo_filename  String?
-  heroTwoLogo_filesize Int?
-  heroTwoLogo_filename String?
-  footerSocialLinks    SocialLink[] @relation("SocialLink_siteSetting")
-  footerCopyright      String       @default("")
+  id                  String       @id @default(cuid())
+  logo_filesize       Int?
+  logo_filename       String?
+  footerLogo_filesize Int?
+  footerLogo_filename String?
+  footerSocialLinks   SocialLink[] @relation("SocialLink_siteSetting")
+  footerCopyright     String       @default("")
 }
 
 model SocialLink {
@@ -208,14 +208,16 @@ model SocialLink {
 }
 
 model CallbackRequest {
-  id        String   @id @default(cuid())
-  name      String   @default("")
-  email     String   @default("")
-  phone     String   @default("")
-  pageUrl   String   @default("")
-  ipAddress String   @default("")
-  project   Project? @relation("CallbackRequest_project", fields: [projectId], references: [id])
-  projectId String?  @map("project")
+  id          String   @id @default(cuid())
+  name        String   @default("")
+  email       String   @default("")
+  phone       String   @default("")
+  pageUrl     String   @default("")
+  ipAddress   String   @default("")
+  project     Project? @relation("CallbackRequest_project", fields: [projectId], references: [id])
+  projectId   String?  @map("project")
+  projectName String   @default("")
+  actionFrom  String   @default("")
 
   @@index([projectId])
 }

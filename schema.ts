@@ -32,6 +32,10 @@ export const lists: Lists = {
     fields: {
       slug: text({ validation: { isRequired: true }, isIndexed: 'unique' }),
       heroImage: file({ storage: 'local_images' }),
+      heroTwoLogo: file({ 
+        storage: 'local_images', 
+        ui: { description: "Logo for the Hero section (Hero Two)" } 
+      }),
       mainHeading: text({ validation: { isRequired: true } }),
       subHeading: text({ validation: { isRequired: true } }),
       agents: relationship({
@@ -275,7 +279,6 @@ export const lists: Lists = {
     fields: {
       logo: file({ storage: 'local_images' }),
       footerLogo: file({ storage: 'local_images' }),
-      heroTwoLogo: file({ storage: 'local_images', ui: { description: "Logo for the Hero section (Hero Two)" } }),
       // Replace JSON field with a relationship to SocialLink
       footerSocialLinks: relationship({
         ref: 'SocialLink.siteSetting',
@@ -314,6 +317,9 @@ CallbackRequest: list({
     pageUrl: text({ validation: { isRequired: true } }),
     ipAddress: text({ validation: { isRequired: true } }),
     project: relationship({ ref: 'Project', many: false }), // Connect to the project by slug
+    // NEW FIELDS:
+    projectName: text({ validation: { isRequired: false } }),
+    actionFrom: text({ validation: { isRequired: false } }),
   },
 }),
 

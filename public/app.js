@@ -19,7 +19,6 @@ document.addEventListener('DOMContentLoaded', () => {
       if (heroTwoLogoImg && settingsData.heroTwoLogo && settingsData.heroTwoLogo.url) {
         heroTwoLogoImg.src = settingsData.heroTwoLogo.url;
       }
-      
       // Update footer logo
       const footerLogoImg = document.getElementById('dynamic_img_footer-logo');
       if (footerLogoImg && settingsData.footerLogo && settingsData.footerLogo.url) {
@@ -51,29 +50,49 @@ document.addEventListener('DOMContentLoaded', () => {
       console.error('Error fetching site settings:', error);
     });
 
-  // --- Modal: Open/Close Logic and Callback Submission ---
+  // --- Modal: Open/Close Logic and Callback Submission (Callback Modal) ---
   const openModalBtn = document.getElementById("openModalBtn");
   const closeModalBtn = document.getElementById("closeModal");
   const modal = document.getElementById("callbackModal");
   const overlay = document.getElementById("overlay");
 
-  // Open modal when button is clicked
-  openModalBtn.addEventListener("click", () => {
-    modal.style.display = "block";
-    overlay.style.display = "block";
-  });
+  if (openModalBtn) {
+    openModalBtn.addEventListener("click", () => {
+      modal.style.display = "block";
+      overlay.style.display = "block";
+      // Save the actionFrom value from the button that launched the modal
+      modal.dataset.actionFrom = openModalBtn.textContent.trim();
+    });
+  }
+  if (closeModalBtn) {
+    closeModalBtn.addEventListener("click", () => {
+      modal.style.display = "none";
+      overlay.style.display = "none";
+    });
+  }
+  if (overlay) {
+    overlay.addEventListener("click", () => {
+      modal.style.display = "none";
+      overlay.style.display = "none";
+    });
+  }
 
-  // Close modal when close button or overlay is clicked
-  closeModalBtn.addEventListener("click", () => {
-    modal.style.display = "none";
-    overlay.style.display = "none";
-  });
-  overlay.addEventListener("click", () => {
-    modal.style.display = "none";
-    overlay.style.display = "none";
-  });
+  // NEW: Attach listeners to other callback launcher buttons
+  const callbackLaunchers = document.querySelectorAll(
+    '.check-availability, .explore-units, .check-availability-btn, .enquiry-btn, .payment-button'
+  );
+  if (callbackLaunchers.length > 0) {
+    callbackLaunchers.forEach(btn => {
+      btn.addEventListener('click', () => {
+        modal.style.display = "block";
+        overlay.style.display = "block";
+        // Save the actionFrom value from the clicked button
+        modal.dataset.actionFrom = btn.textContent.trim();
+      });
+    });
+  }
 
-  // Initialize intl-tel-input for phone field
+  // Initialize intl-tel-input for callback modal phone field
   const phoneInput = document.getElementById("phone");
   intlTelInput(phoneInput, {
     initialCountry: "ae",  // Default to UAE
@@ -81,7 +100,7 @@ document.addEventListener('DOMContentLoaded', () => {
     preferredCountries: ["ae", "sa", "us", "gb"]
   });
 
-  // Callback form submission event listener
+  // Callback form submission event listener (for callback modal)
   const modalSubmitBtn = document.querySelector('#callbackModal .modal-btn');
   if (modalSubmitBtn) {
     modalSubmitBtn.addEventListener('click', () => {
@@ -97,7 +116,10 @@ document.addEventListener('DOMContentLoaded', () => {
       const pageUrl = window.location.href;
       const parts = window.location.pathname.split('/').filter(Boolean);
       const slug = parts.pop();
-
+      // Get project name from hero heading and actionFrom from modal dataset
+      const projectName = document.getElementById('dynamic_h1_main-heading').textContent.trim();
+      const actionFrom = modal.dataset.actionFrom || "";
+      
       // Basic validations
       if (!name || !email || !phone) {
         alert("Please fill in all fields.");
@@ -108,8 +130,8 @@ document.addEventListener('DOMContentLoaded', () => {
         alert("Please enter a valid email address.");
         return;
       }
-
-      const payload = { name, email, phone, slug, pageUrl };
+      
+      const payload = { name, email, phone, slug, pageUrl, projectName, actionFrom };
 
       fetch('/api/submit-callback', {
         method: 'POST',
@@ -124,17 +146,23 @@ document.addEventListener('DOMContentLoaded', () => {
         })
         .then(result => {
           console.log("Callback request saved:", result);
-          alert("Your callback request has been submitted!");
-          nameInput.value = "";
-          emailInput.value = "";
-          phoneInput.value = "";
-          modal.style.display = "none";
-          overlay.style.display = "none";
+          // Redirect to thankyou.html after successful submission
+          window.location.href = '/thankyou.html';
         })
         .catch(err => {
           console.error("Error submitting callback:", err);
           alert("There was an error submitting your callback request.");
         });
+    });
+  }
+
+  // --- Initialize Download Modal Phone Field with intl-tel-input ---
+  const downloadPhoneInput = document.querySelector('#downloadModal input[name="phone"]');
+  if (downloadPhoneInput) {
+    intlTelInput(downloadPhoneInput, {
+      initialCountry: "ae",
+      separateDialCode: true,
+      preferredCountries: ["ae", "sa", "us", "gb"]
     });
   }
 
@@ -168,6 +196,11 @@ document.addEventListener('DOMContentLoaded', () => {
         if (subHeadingElement) {
           subHeadingElement.textContent = data.subHeading || 'Default Sub Heading';
         }
+        // NEW: Update hero two logo from project data
+        const heroTwoLogoImg = document.getElementById('dynamic_img_hero-two');
+        if (heroTwoLogoImg && data.heroTwoLogo && data.heroTwoLogo.url) {
+          heroTwoLogoImg.src = data.heroTwoLogo.url;
+        }
 
         // === AGENTS SECTION ===
         const agentPhotoContainer = document.getElementById('dynamic_div_agentPhoto');
@@ -180,20 +213,10 @@ document.addEventListener('DOMContentLoaded', () => {
             imgElement.alt = agent.name || 'Agent Photo';
             agentPhotoContainer.appendChild(imgElement);
           });
-          if (data.agents.length > 5) {
-            const spanElement = document.createElement('span');
-            spanElement.id = 'dynamic_span_agent_count';
-            spanElement.className = 'manager-count';
-            spanElement.textContent = `+${data.agents.length - 5}`;
-            agentPhotoContainer.appendChild(spanElement);
-          }
           // Create and append the manager count span dynamically
           const agentCountSpan = document.createElement('span');
           agentCountSpan.id = 'dynamic_span_agent_count';
           agentCountSpan.className = 'manager-count';
-
-          // Set the text using the admin-provided value if available,
-          // otherwise fall back to computed count if there are more than 5 agents.
           if (data.agentCount && data.agentCount > 0) {
             agentCountSpan.textContent = `+${data.agentCount}`;
           } else if (data.agents.length > 5) {
@@ -203,6 +226,7 @@ document.addEventListener('DOMContentLoaded', () => {
           }
           agentPhotoContainer.appendChild(agentCountSpan);
         }
+
         // === PARALLAX SECTION ===
         const parallaxImg = document.getElementById('dynamic_img_parallax');
         if (parallaxImg && data.parallaxImage && data.parallaxImage.url) {
@@ -328,7 +352,6 @@ document.addEventListener('DOMContentLoaded', () => {
         if (locationMapImageEl && data.locationMapImage && data.locationMapImage.url) {
           locationMapImageEl.src = data.locationMapImage.url;
         }
-       
 
         // === DEVELOPER SECTION ===
         const developerTitleEl = document.getElementById('dynamic_h2_About-title');
@@ -476,6 +499,8 @@ document.addEventListener('DOMContentLoaded', () => {
             pageItems.forEach(item => {
               const card = document.createElement('div');
               card.classList.add('amenity-card');
+              // Attach file URL as data attribute for download action
+              card.dataset.fileUrl = item.document?.url || '';
               card.innerHTML = `
                 <img src="${item.image?.url || ''}" alt="${item.title}" class="amenity-card-image" />
                 <div class="amenity-card-content">
@@ -484,6 +509,15 @@ document.addEventListener('DOMContentLoaded', () => {
                 </div>
               `;
               cardsContainer.appendChild(card);
+              // Make the entire card clickable to open download modal.
+              // Also store the action from as the card's title text.
+              card.addEventListener('click', () => {
+                const fileUrl = card.dataset.fileUrl;
+                if (fileUrl) {
+                  const actionFrom = card.querySelector('.amenity-title').textContent.trim();
+                  openDownloadModal(fileUrl, actionFrom);
+                }
+              });
             });
             const prevBtn2 = document.getElementById('prev-btn');
             const nextBtn2 = document.getElementById('next-btn');
@@ -700,6 +734,8 @@ document.addEventListener('DOMContentLoaded', () => {
           data.materials.forEach(material => {
             const card = document.createElement('div');
             card.className = 'material-card';
+            // Store the document file URL on the card for use on click
+            card.dataset.fileUrl = material.document?.url || '';
             card.innerHTML = `
               <div class="material-image-wrapper">
                 <img src="${material.image?.url || ''}" alt="${material.title}" class="material-image" />
@@ -707,7 +743,7 @@ document.addEventListener('DOMContentLoaded', () => {
               <div class="material-content">
                 <h3 class="material-title">
                   ${material.title}
-                  <span class="arrow-icon download-btn" data-file-url="${material.document?.url || ''}">↗</span>
+                  <span class="arrow-icon">↗</span>
                 </h3>
                 <p class="material-description">
                   ${material.description}
@@ -715,23 +751,80 @@ document.addEventListener('DOMContentLoaded', () => {
               </div>
             `;
             materialsGrid.appendChild(card);
-          });
-          const downloadBtns = document.querySelectorAll('.download-btn');
-          downloadBtns.forEach(btn => {
-            btn.addEventListener('click', () => {
-              const fileUrl = btn.getAttribute('data-file-url');
+            // Make the entire card clickable to open the download modal.
+            // Also store the action from as the card's title text.
+            card.addEventListener('click', () => {
+              const fileUrl = card.dataset.fileUrl;
               if (fileUrl) {
-                const a = document.createElement('a');
-                a.href = fileUrl;
-                a.download = '';
-                document.body.appendChild(a);
-                a.click();
-                document.body.removeChild(a);
+                const actionFrom = card.querySelector('.material-title').textContent.trim();
+                openDownloadModal(fileUrl, actionFrom);
               }
             });
           });
         } else {
           console.warn('No materials found');
+        }
+
+        // --- New Download Modal Handling Code ---
+        function openDownloadModal(fileUrl, actionFrom) {
+          const downloadModal = document.getElementById("downloadModal");
+          const downloadOverlay = document.getElementById("downloadOverlay");
+          if (downloadModal && downloadOverlay) {
+            downloadModal.style.display = "block";
+            downloadOverlay.style.display = "block";
+            // Store fileUrl and actionFrom on the modal for later use
+            downloadModal.dataset.fileUrl = fileUrl;
+            downloadModal.dataset.actionFrom = actionFrom || "Download";
+          }
+        }
+        const downloadSubmitBtn = document.querySelector('#downloadModal .modal-btn');
+        if (downloadSubmitBtn) {
+          downloadSubmitBtn.addEventListener('click', () => {
+            // Updated: Include phone input field in download modal and use intlTelInput
+            const modalNameInput = document.querySelector('#downloadModal input[name="name"]');
+            const modalEmailInput = document.querySelector('#downloadModal input[name="email"]');
+            const modalPhoneInput = document.querySelector('#downloadModal input[name="phone"]');
+            if (!modalNameInput || !modalEmailInput || !modalPhoneInput) {
+              console.error("Missing input fields in the download modal");
+              return;
+            }
+            if (!modalNameInput.value.trim() || !modalEmailInput.value.trim() || !modalPhoneInput.value.trim()) {
+              alert("Please fill in all fields.");
+              return;
+            }
+            // Build payload similar to the callback modal, plus extra fields
+            const name = modalNameInput.value.trim();
+            const email = modalEmailInput.value.trim();
+            const phone = modalPhoneInput.value.trim();
+            const pageUrl = window.location.href;
+            const parts = window.location.pathname.split('/').filter(Boolean);
+            const slug = parts.pop();
+            const projectName = document.getElementById('dynamic_h1_main-heading').textContent.trim();
+            const actionFrom = document.getElementById("downloadModal").dataset.actionFrom || "";
+            const payload = { name, email, phone, slug, pageUrl, projectName, actionFrom };
+
+            // Submit the download request to the callback endpoint
+            fetch('/api/submit-callback', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify(payload),
+            })
+              .then(response => {
+                if (!response.ok) {
+                  throw new Error(`HTTP error: ${response.status}`);
+                }
+                return response.json();
+              })
+              .then(result => {
+                console.log("Download callback saved:", result);
+                // Redirect to thankyou.html after successful submission
+                window.location.href = '/thankyou.html';
+              })
+              .catch(err => {
+                console.error("Error submitting download callback:", err);
+                alert("There was an error submitting your download request.");
+              });
+          });
         }
       } else {
         console.error('No project data found');
@@ -742,8 +835,6 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
   // --- Navigation Link Handler ---
-  // Handle navigation links to update hash without changing the path
-  // Handle navigation and footer links with hash behavior
   document.querySelectorAll('nav a[href^="#"], footer.footer-dark a[href^="#"]').forEach(link => {
     link.addEventListener('click', function (e) {
       e.preventDefault(); // Prevent default anchor behavior

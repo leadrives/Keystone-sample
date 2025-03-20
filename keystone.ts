@@ -40,7 +40,7 @@ export default withAuth(
             const settingsList = await context.query.SiteSetting.findMany({
               query: `logo { url }
                 footerLogo { url }
-                heroTwoLogo { url }
+               
                 footerSocialLinks { id name icon { url } url }
                 footerCopyright`
             });
@@ -144,6 +144,7 @@ export default withAuth(
                 mainHeading
                 subHeading
                 heroImage { url }
+                heroTwoLogo { url }
                 agents { name photo { url } }
                 agentCount
                 galleryMainHeading
@@ -199,7 +200,7 @@ export default withAuth(
           }
         });
         app.post('/api/submit-callback', express.json(), async (req, res) => {
-          const { name, email, phone, slug, pageUrl } = req.body;
+          const { name, email, phone, slug, pageUrl , projectName, actionFrom } = req.body;
           // Basic validations
           if (!name || !email || !phone || !slug || !pageUrl) {
             return res.status(400).json({ error: 'All fields are required.' });
@@ -223,6 +224,8 @@ export default withAuth(
                 email,
                 phone,
                 pageUrl,
+                projectName,     // NEW FIELD
+                actionFrom,      // NEW FIELD
                 ipAddress: typeof ip === 'string' ? ip : Array.isArray(ip) ? ip[0] : '',
                 project: { connect: { id: project.id } },
               },
