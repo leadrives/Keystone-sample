@@ -1,6 +1,14 @@
-node_modules
-.keystone/
-keystone.db
-*.log
-# Ignore uploads folder
-public/uploads/*
+# Environment variables
+.env
+
+# Node modules
+node_modules/
+
+# Yarn lock (if using npm)
+yarn.lock
+
+# Database backups
+*.backup_*
+
+# Optionally ignore package-lock.json if using Yarn
+# package-lock.json
