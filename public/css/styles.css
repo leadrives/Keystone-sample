@@ -266,7 +266,7 @@ h2 {
 .check-availability {
   background-color: #cccccc70;
   color: #ffffff;
- 
+
 }
 
 .explore-units {
@@ -529,6 +529,11 @@ h2 {
     font-size: 16px;
     /* slightly smaller body text */
   }
+
+  .amenities-list {
+
+    text-align: left;
+  }
 }
 
 @media (min-width: 768px) {
@@ -689,6 +694,11 @@ h2 {
   .payment-description,
   .payment-bullets li {
     font-size: 16px;
+  }
+
+  .payment-bullets {
+
+    text-align: left;
   }
 
   .payment-button {
@@ -882,6 +892,10 @@ h2 {
   .contact-btn {
     margin: 1rem auto 0 auto;
   }
+
+  .map-image {
+    display: none;
+  }
 }
 
 /*************************************************
@@ -1028,6 +1042,8 @@ h2 {
   .location-heading-wrapper h2 {
     margin-right: 0;
     font-size: 2rem;
+    text-align: center;
+    margin-left: 0px;
   }
 
   .location-inner {
@@ -2034,6 +2050,7 @@ h2 {
   white-space: nowrap;
   transition: background-color 0.3s ease;
   box-shadow: 0 2px 8px rgba(255, 255, 255, 0.2);
+  
 }
 
 .footer-enquiry-btn:hover {
@@ -2047,6 +2064,7 @@ h2 {
   gap: 0.3rem;
   color: #ccc;
   font-size: 0.95rem;
+  display: none;
 }
 
 .footer-lang-switch img {
@@ -2300,9 +2318,18 @@ html {
     height: 480px;
   }
 
-  .amenities-section,.gallery-carousel,.gallery-text,.payment-image-wrapper,.about-shamal,.fullwidth-contact,
-  .units-section,.fullwidth-image-section,.faq-section,.materials-section, .payment-text,.hero-content
-   {
+  .amenities-section,
+  .gallery-carousel,
+  .gallery-text,
+  .payment-image-wrapper,
+  .about-shamal,
+  .fullwidth-contact,
+  .units-section,
+  .fullwidth-image-section,
+  .faq-section,
+  .materials-section,
+  .payment-text,
+  .hero-content {
     min-width: 100%;
     width: 100%;
   }
@@ -2317,6 +2344,7 @@ html {
 
   .cta {
     margin: 10px auto;
+    display: none;
   }
 
   .d-flex-logo {
@@ -2332,21 +2360,24 @@ html {
   .explore-units {
     font-size: 14px;
   }
-  .modal{
+
+  .modal {
     width: 90%;
   }
 }
-.phone-wrapper .iti{
+
+.phone-wrapper .iti {
   width: 100%;
 }
 
-.modal.request-call input{
+.modal.request-call input {
   border-radius: 30px;
 }
 
-.mb-4{
+.mb-4 {
   margin-bottom: 1.5rem;
 }
-.iti--separate-dial-code .iti__selected-flag{
+
+.iti--separate-dial-code .iti__selected-flag {
   background-color: transparent !important;
 }
