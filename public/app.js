@@ -57,23 +57,23 @@ document.addEventListener('DOMContentLoaded', () => {
   const modal = document.getElementById("callbackModal");
   const overlay = document.getElementById("overlay");
 
-  // Function to open the callback modal
   function openModal() {
     modal.style.display = "block";
     overlay.style.display = "block";
   }
 
-  // Open modal when the desktop button is clicked
   if (openModalBtn) {
-    openModalBtn.addEventListener("click", openModal);
+    openModalBtn.addEventListener("click", () => {
+      openModal();
+      modal.dataset.actionFrom = openModalBtn.textContent.trim();
+    });
   }
-
-  // Open modal when the mobile (floating) button is clicked
   if (mobileCallbackBtn) {
-    mobileCallbackBtn.addEventListener("click", openModal);
+    mobileCallbackBtn.addEventListener("click", () => {
+      openModal();
+      modal.dataset.actionFrom = mobileCallbackBtn.textContent.trim();
+    });
   }
-
-  // Close modal when close button or overlay is clicked
   if (closeModalBtn) {
     closeModalBtn.addEventListener("click", () => {
       modal.style.display = "none";
@@ -87,7 +87,20 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // Initialize intl-tel-input for phone field
+  // NEW: Attach listeners to other callback launcher buttons
+  const callbackLaunchers = document.querySelectorAll(
+    '.check-availability, .explore-units, .check-availability-btn, .enquiry-btn, .payment-button'
+  );
+  if (callbackLaunchers.length > 0) {
+    callbackLaunchers.forEach(btn => {
+      btn.addEventListener('click', () => {
+        openModal();
+        modal.dataset.actionFrom = btn.textContent.trim();
+      });
+    });
+  }
+
+  // Initialize intl-tel-input for callback modal phone field
   const phoneInput = document.getElementById("phone");
   intlTelInput(phoneInput, {
     initialCountry: "ae",  // Default to UAE
@@ -111,7 +124,9 @@ document.addEventListener('DOMContentLoaded', () => {
       const pageUrl = window.location.href;
       const parts = window.location.pathname.split('/').filter(Boolean);
       const slug = parts.pop();
-
+      const projectName = document.getElementById('dynamic_h1_main-heading').textContent.trim();
+      const actionFrom = modal.dataset.actionFrom || "";
+      
       // Basic validations
       if (!name || !email || !phone) {
         alert("Please fill in all fields.");
@@ -122,8 +137,8 @@ document.addEventListener('DOMContentLoaded', () => {
         alert("Please enter a valid email address.");
         return;
       }
-
-      const payload = { name, email, phone, slug, pageUrl };
+      
+      const payload = { name, email, phone, slug, pageUrl, projectName, actionFrom };
 
       fetch('/api/submit-callback', {
         method: 'POST',
@@ -138,17 +153,22 @@ document.addEventListener('DOMContentLoaded', () => {
         })
         .then(result => {
           console.log("Callback request saved:", result);
-          alert("Your callback request has been submitted!");
-          nameInput.value = "";
-          emailInput.value = "";
-          phoneInput.value = "";
-          modal.style.display = "none";
-          overlay.style.display = "none";
+          window.location.href = '/thankyou.html';
         })
         .catch(err => {
           console.error("Error submitting callback:", err);
           alert("There was an error submitting your callback request.");
         });
+    });
+  }
+
+  // --- Initialize Download Modal Phone Field with intl-tel-input ---
+  const downloadPhoneInput = document.querySelector('#downloadModal input[name="phone"]');
+  if (downloadPhoneInput) {
+    intlTelInput(downloadPhoneInput, {
+      initialCountry: "ae",
+      separateDialCode: true,
+      preferredCountries: ["ae", "sa", "us", "gb"]
     });
   }
 
@@ -182,6 +202,11 @@ document.addEventListener('DOMContentLoaded', () => {
         if (subHeadingElement) {
           subHeadingElement.textContent = data.subHeading || 'Default Sub Heading';
         }
+        // NEW: Update hero two logo from project data
+        const heroTwoLogoImgFromProject = document.getElementById('dynamic_img_hero-two');
+        if (heroTwoLogoImgFromProject && data.heroTwoLogo && data.heroTwoLogo.url) {
+          heroTwoLogoImgFromProject.src = data.heroTwoLogo.url;
+        }
 
         // === AGENTS SECTION ===
         const agentPhotoContainer = document.getElementById('dynamic_div_agentPhoto');
@@ -213,7 +238,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (parallaxImg && data.parallaxImage && data.parallaxImage.url) {
           parallaxImg.src = data.parallaxImage.url;
         } else if (parallaxImg) {
-          parallaxImg.src = '/assets/images/section-wide.jpg'; // fallback image
+          parallaxImg.src = '/assets/images/section-wide.jpg';
         }
 
         // === PANORAMIC IMAGE SECTION ===
@@ -221,7 +246,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (panoramicImg && data.panoramicImage && data.panoramicImage.url) {
           panoramicImg.src = data.panoramicImage.url;
         } else if (panoramicImg) {
-          panoramicImg.src = '/assets/images/section-wide2.jpg'; // fallback image
+          panoramicImg.src = '/assets/images/section-wide2.jpg';
         }
 
         // === GALLERY SECTION ===
@@ -490,11 +515,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 </div>
               `;
               cardsContainer.appendChild(card);
-              // Make the entire card clickable to open the download modal
+              // Make the entire card clickable to open the download modal.
+              // Also store the action from as the card's title text.
               card.addEventListener('click', () => {
                 const fileUrl = card.dataset.fileUrl;
                 if (fileUrl) {
-                  openDownloadModal(fileUrl);
+                  const actionFrom = card.querySelector('.material-title').textContent.trim();
+                  openDownloadModal(fileUrl, actionFrom);
                 }
               });
             });
@@ -730,11 +757,13 @@ document.addEventListener('DOMContentLoaded', () => {
               </div>
             `;
             materialsGrid.appendChild(card);
-            // Make the entire card clickable to open the download modal
+            // Make the entire card clickable to open the download modal.
+            // Also store the action from as the card's title text.
             card.addEventListener('click', () => {
               const fileUrl = card.dataset.fileUrl;
               if (fileUrl) {
-                openDownloadModal(fileUrl);
+                const actionFrom = card.querySelector('.material-title').textContent.trim();
+                openDownloadModal(fileUrl, actionFrom);
               }
             });
           });
@@ -743,43 +772,45 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         // --- New Download Modal Handling Code ---
-        function openDownloadModal(fileUrl) {
+        function openDownloadModal(fileUrl, actionFrom) {
           const downloadModal = document.getElementById("downloadModal");
           const downloadOverlay = document.getElementById("downloadOverlay");
           if (downloadModal && downloadOverlay) {
             downloadModal.style.display = "block";
             downloadOverlay.style.display = "block";
-            // Store fileUrl on the modal for later use
+            // Store fileUrl and actionFrom on the modal for later use
             downloadModal.dataset.fileUrl = fileUrl;
+            downloadModal.dataset.actionFrom = actionFrom || "Download";
           }
         }
 
         const downloadSubmitBtn = document.querySelector('#downloadModal .modal-btn');
         if (downloadSubmitBtn) {
           downloadSubmitBtn.addEventListener('click', () => {
-            // Updated: Include phone input field in download modal
+            // Updated: Include phone input field in download modal and use intlTelInput
             const modalNameInput = document.querySelector('#downloadModal input[name="name"]');
             const modalEmailInput = document.querySelector('#downloadModal input[name="email"]');
-            const modalPhoneInput = document.querySelector('#downloadModal input[name="phone"]');  // NEW LINE
-
-            if (!modalNameInput || !modalEmailInput || !modalPhoneInput) {  // UPDATED CONDITION
+            const modalPhoneInput = document.querySelector('#downloadModal input[name="phone"]');
+            if (!modalNameInput || !modalEmailInput || !modalPhoneInput) {
               console.error("Missing input fields in the download modal");
               return;
             }
-            if (!modalNameInput.value.trim() || !modalEmailInput.value.trim() || !modalPhoneInput.value.trim()) {  // UPDATED CONDITION
+            if (!modalNameInput.value.trim() || !modalEmailInput.value.trim() || !modalPhoneInput.value.trim()) {
               alert("Please fill in all fields.");
               return;
             }
-            // Build payload similar to the callback modal
+            // Build payload similar to the callback modal, plus extra fields
             const name = modalNameInput.value.trim();
             const email = modalEmailInput.value.trim();
             const phone = modalPhoneInput.value.trim();
             const pageUrl = window.location.href;
             const parts = window.location.pathname.split('/').filter(Boolean);
             const slug = parts.pop();
-            const payload = { name, email, phone, slug, pageUrl };
+            const projectName = document.getElementById('dynamic_h1_main-heading').textContent.trim();
+            const actionFrom = document.getElementById("downloadModal").dataset.actionFrom || "";
+            const payload = { name, email, phone, slug, pageUrl, projectName, actionFrom };
 
-            // Submit the download request to the same callback endpoint
+            // Submit the download request to the callback endpoint
             fetch('/api/submit-callback', {
               method: 'POST',
               headers: { 'Content-Type': 'application/json' },
@@ -793,21 +824,7 @@ document.addEventListener('DOMContentLoaded', () => {
               })
               .then(result => {
                 console.log("Download callback saved:", result);
-                // Trigger file download after successful submission
-                const downloadModal = document.getElementById("downloadModal");
-                const fileUrl = downloadModal.dataset.fileUrl;
-                if (fileUrl) {
-                  const a = document.createElement('a');
-                  a.href = fileUrl;
-                  a.download = '';
-                  document.body.appendChild(a);
-                  a.click();
-                  document.body.removeChild(a);
-                }
-                // Close download modal and overlay
-                downloadModal.style.display = "none";
-                const downloadOverlay = document.getElementById("downloadOverlay");
-                if (downloadOverlay) downloadOverlay.style.display = "none";
+                window.location.href = '/thankyou.html';
               })
               .catch(err => {
                 console.error("Error submitting download callback:", err);
@@ -829,7 +846,6 @@ document.addEventListener('DOMContentLoaded', () => {
       e.preventDefault(); // Prevent default anchor behavior
       const hash = this.getAttribute('href'); // Get the hash (e.g., "#gallery")
       window.location.hash = hash; // Update the URL hash without changing the path
-      // Smooth scroll to the target section
       const target = document.querySelector(hash);
       if (target) {
         target.scrollIntoView({ behavior: 'smooth' });
