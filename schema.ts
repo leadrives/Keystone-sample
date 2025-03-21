@@ -2,6 +2,11 @@ import { list } from '@keystone-6/core';
 import { allowAll } from '@keystone-6/core/access';
 import { text, relationship, password, timestamp, file, checkbox, json, integer } from '@keystone-6/core/fields';
 import { type Lists } from '.keystone/types';
+import { virtual } from '@keystone-6/core/fields';
+import { graphql } from '@keystone-6/core';
+
+
+
 
 export const lists: Lists = {
   // User list remains unchanged
@@ -185,6 +190,36 @@ export const lists: Lists = {
         },
       }),
 
+      viewPage: virtual({
+        field: graphql.field({
+          type: graphql.String,
+          resolve(item) {
+            const baseUrl =
+              process.env.NODE_ENV === 'production'
+                ? 'https://properties.smylivings.com'
+                : 'http://localhost:3000';
+            return `${baseUrl}/projects/${item.slug}`;
+          },
+        }),
+        ui: {
+          listView: ({
+            fieldMode: 'read',
+            cell: async () => {
+              const { CustomLinkCell } = await import('./admin-ui/components/CustomLinkCell');
+              return CustomLinkCell;
+            },
+          } as any),
+        },
+      }),
+      
+   
+
+    },
+    
+    ui: {
+      listView: {
+        initialColumns: ['mainHeading', 'subHeading', 'slug', 'viewPage'],
+      },
     },
   }),
 

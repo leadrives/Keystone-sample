@@ -247,6 +247,7 @@ type Project {
   unitFiltersCount(where: UnitFilterWhereInput! = {}): Int
   materials(where: MaterialCardWhereInput! = {}, orderBy: [MaterialCardOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: MaterialCardWhereUniqueInput): [MaterialCard!]
   materialsCount(where: MaterialCardWhereInput! = {}): Int
+  viewPage: String
 }
 
 type FileFieldOutput {
