@@ -52,18 +52,28 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // --- Modal: Open/Close Logic and Callback Submission (Callback Modal) ---
   const openModalBtn = document.getElementById("openModalBtn");
+  const mobileCallbackBtn = document.getElementById("mobileCallbackBtn");
   const closeModalBtn = document.getElementById("closeModal");
   const modal = document.getElementById("callbackModal");
   const overlay = document.getElementById("overlay");
 
-  if (openModalBtn) {
-    openModalBtn.addEventListener("click", () => {
-      modal.style.display = "block";
-      overlay.style.display = "block";
-      // Save the actionFrom value from the button that launched the modal
-      modal.dataset.actionFrom = openModalBtn.textContent.trim();
-    });
+  // Function to open the callback modal
+  function openModal() {
+    modal.style.display = "block";
+    overlay.style.display = "block";
   }
+
+  // Open modal when the desktop button is clicked
+  if (openModalBtn) {
+    openModalBtn.addEventListener("click", openModal);
+  }
+
+  // Open modal when the mobile (floating) button is clicked
+  if (mobileCallbackBtn) {
+    mobileCallbackBtn.addEventListener("click", openModal);
+  }
+
+  // Close modal when close button or overlay is clicked
   if (closeModalBtn) {
     closeModalBtn.addEventListener("click", () => {
       modal.style.display = "none";
@@ -77,22 +87,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // NEW: Attach listeners to other callback launcher buttons
-  const callbackLaunchers = document.querySelectorAll(
-    '.check-availability, .explore-units, .check-availability-btn, .enquiry-btn, .payment-button'
-  );
-  if (callbackLaunchers.length > 0) {
-    callbackLaunchers.forEach(btn => {
-      btn.addEventListener('click', () => {
-        modal.style.display = "block";
-        overlay.style.display = "block";
-        // Save the actionFrom value from the clicked button
-        modal.dataset.actionFrom = btn.textContent.trim();
-      });
-    });
-  }
-
-  // Initialize intl-tel-input for callback modal phone field
+  // Initialize intl-tel-input for phone field
   const phoneInput = document.getElementById("phone");
   intlTelInput(phoneInput, {
     initialCountry: "ae",  // Default to UAE
@@ -116,10 +111,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const pageUrl = window.location.href;
       const parts = window.location.pathname.split('/').filter(Boolean);
       const slug = parts.pop();
-      // Get project name from hero heading and actionFrom from modal dataset
-      const projectName = document.getElementById('dynamic_h1_main-heading').textContent.trim();
-      const actionFrom = modal.dataset.actionFrom || "";
-      
+
       // Basic validations
       if (!name || !email || !phone) {
         alert("Please fill in all fields.");
@@ -130,8 +122,8 @@ document.addEventListener('DOMContentLoaded', () => {
         alert("Please enter a valid email address.");
         return;
       }
-      
-      const payload = { name, email, phone, slug, pageUrl, projectName, actionFrom };
+
+      const payload = { name, email, phone, slug, pageUrl };
 
       fetch('/api/submit-callback', {
         method: 'POST',
@@ -146,23 +138,17 @@ document.addEventListener('DOMContentLoaded', () => {
         })
         .then(result => {
           console.log("Callback request saved:", result);
-          // Redirect to thankyou.html after successful submission
-          window.location.href = '/thankyou.html';
+          alert("Your callback request has been submitted!");
+          nameInput.value = "";
+          emailInput.value = "";
+          phoneInput.value = "";
+          modal.style.display = "none";
+          overlay.style.display = "none";
         })
         .catch(err => {
           console.error("Error submitting callback:", err);
           alert("There was an error submitting your callback request.");
         });
-    });
-  }
-
-  // --- Initialize Download Modal Phone Field with intl-tel-input ---
-  const downloadPhoneInput = document.querySelector('#downloadModal input[name="phone"]');
-  if (downloadPhoneInput) {
-    intlTelInput(downloadPhoneInput, {
-      initialCountry: "ae",
-      separateDialCode: true,
-      preferredCountries: ["ae", "sa", "us", "gb"]
     });
   }
 
@@ -195,11 +181,6 @@ document.addEventListener('DOMContentLoaded', () => {
         const subHeadingElement = document.getElementById('dynamic_h2_sub-heading');
         if (subHeadingElement) {
           subHeadingElement.textContent = data.subHeading || 'Default Sub Heading';
-        }
-        // NEW: Update hero two logo from project data
-        const heroTwoLogoImg = document.getElementById('dynamic_img_hero-two');
-        if (heroTwoLogoImg && data.heroTwoLogo && data.heroTwoLogo.url) {
-          heroTwoLogoImg.src = data.heroTwoLogo.url;
         }
 
         // === AGENTS SECTION ===
@@ -509,13 +490,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 </div>
               `;
               cardsContainer.appendChild(card);
-              // Make the entire card clickable to open download modal.
-              // Also store the action from as the card's title text.
+              // Make the entire card clickable to open the download modal
               card.addEventListener('click', () => {
                 const fileUrl = card.dataset.fileUrl;
                 if (fileUrl) {
-                  const actionFrom = card.querySelector('.amenity-title').textContent.trim();
-                  openDownloadModal(fileUrl, actionFrom);
+                  openDownloadModal(fileUrl);
                 }
               });
             });
@@ -751,13 +730,11 @@ document.addEventListener('DOMContentLoaded', () => {
               </div>
             `;
             materialsGrid.appendChild(card);
-            // Make the entire card clickable to open the download modal.
-            // Also store the action from as the card's title text.
+            // Make the entire card clickable to open the download modal
             card.addEventListener('click', () => {
               const fileUrl = card.dataset.fileUrl;
               if (fileUrl) {
-                const actionFrom = card.querySelector('.material-title').textContent.trim();
-                openDownloadModal(fileUrl, actionFrom);
+                openDownloadModal(fileUrl);
               }
             });
           });
@@ -766,44 +743,43 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         // --- New Download Modal Handling Code ---
-        function openDownloadModal(fileUrl, actionFrom) {
+        function openDownloadModal(fileUrl) {
           const downloadModal = document.getElementById("downloadModal");
           const downloadOverlay = document.getElementById("downloadOverlay");
           if (downloadModal && downloadOverlay) {
             downloadModal.style.display = "block";
             downloadOverlay.style.display = "block";
-            // Store fileUrl and actionFrom on the modal for later use
+            // Store fileUrl on the modal for later use
             downloadModal.dataset.fileUrl = fileUrl;
-            downloadModal.dataset.actionFrom = actionFrom || "Download";
           }
         }
+
         const downloadSubmitBtn = document.querySelector('#downloadModal .modal-btn');
         if (downloadSubmitBtn) {
           downloadSubmitBtn.addEventListener('click', () => {
-            // Updated: Include phone input field in download modal and use intlTelInput
+            // Updated: Include phone input field in download modal
             const modalNameInput = document.querySelector('#downloadModal input[name="name"]');
             const modalEmailInput = document.querySelector('#downloadModal input[name="email"]');
-            const modalPhoneInput = document.querySelector('#downloadModal input[name="phone"]');
-            if (!modalNameInput || !modalEmailInput || !modalPhoneInput) {
+            const modalPhoneInput = document.querySelector('#downloadModal input[name="phone"]');  // NEW LINE
+
+            if (!modalNameInput || !modalEmailInput || !modalPhoneInput) {  // UPDATED CONDITION
               console.error("Missing input fields in the download modal");
               return;
             }
-            if (!modalNameInput.value.trim() || !modalEmailInput.value.trim() || !modalPhoneInput.value.trim()) {
+            if (!modalNameInput.value.trim() || !modalEmailInput.value.trim() || !modalPhoneInput.value.trim()) {  // UPDATED CONDITION
               alert("Please fill in all fields.");
               return;
             }
-            // Build payload similar to the callback modal, plus extra fields
+            // Build payload similar to the callback modal
             const name = modalNameInput.value.trim();
             const email = modalEmailInput.value.trim();
             const phone = modalPhoneInput.value.trim();
             const pageUrl = window.location.href;
             const parts = window.location.pathname.split('/').filter(Boolean);
             const slug = parts.pop();
-            const projectName = document.getElementById('dynamic_h1_main-heading').textContent.trim();
-            const actionFrom = document.getElementById("downloadModal").dataset.actionFrom || "";
-            const payload = { name, email, phone, slug, pageUrl, projectName, actionFrom };
+            const payload = { name, email, phone, slug, pageUrl };
 
-            // Submit the download request to the callback endpoint
+            // Submit the download request to the same callback endpoint
             fetch('/api/submit-callback', {
               method: 'POST',
               headers: { 'Content-Type': 'application/json' },
@@ -817,8 +793,21 @@ document.addEventListener('DOMContentLoaded', () => {
               })
               .then(result => {
                 console.log("Download callback saved:", result);
-                // Redirect to thankyou.html after successful submission
-                window.location.href = '/thankyou.html';
+                // Trigger file download after successful submission
+                const downloadModal = document.getElementById("downloadModal");
+                const fileUrl = downloadModal.dataset.fileUrl;
+                if (fileUrl) {
+                  const a = document.createElement('a');
+                  a.href = fileUrl;
+                  a.download = '';
+                  document.body.appendChild(a);
+                  a.click();
+                  document.body.removeChild(a);
+                }
+                // Close download modal and overlay
+                downloadModal.style.display = "none";
+                const downloadOverlay = document.getElementById("downloadOverlay");
+                if (downloadOverlay) downloadOverlay.style.display = "none";
               })
               .catch(err => {
                 console.error("Error submitting download callback:", err);

@@ -704,6 +704,12 @@ h2 {
   .payment-button {
     margin: 0 auto;
   }
+
+  .payment-image {
+
+    height: auto;
+
+  }
 }
 
 /*************************************************
@@ -1075,6 +1081,12 @@ h2 {
 
   .location-bullets li {
     font-size: 16px;
+  }
+
+  .location-image {
+    width: 100%;
+    height: auto;
+
   }
 
   /* If you want the button to move so it's still half out on mobile, 
@@ -2050,7 +2062,7 @@ h2 {
   white-space: nowrap;
   transition: background-color 0.3s ease;
   box-shadow: 0 2px 8px rgba(255, 255, 255, 0.2);
-  
+
 }
 
 .footer-enquiry-btn:hover {
@@ -2380,4 +2392,30 @@ html {
 
 .iti--separate-dial-code .iti__selected-flag {
   background-color: transparent !important;
+}
+
+
+/* Floating Mobile Callback Button Styles */
+#mobileCallbackBtn {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 1000;
+  /* Use the same styling as your desktop button */
+  background-color: #ff0000;
+  color: #ffffff;
+  border: 1px solid #9f9c9c;
+  padding: 12px 24px;
+  border-radius: 25px;
+  font-size: 16px;
+  cursor: pointer;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+  display: none; /* Hidden by default */
+}
+
+/* Show the floating button only on mobile screens */
+@media (max-width: 768px) {
+  #mobileCallbackBtn {
+    display: block;
+  }
 }
