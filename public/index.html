@@ -766,6 +766,30 @@
             });
         });
     </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Get the contact bullets list
+            const contactBullets = document.getElementById('dynamic_ul_contact-bullets');
+            if (contactBullets) {
+                // Select all li items inside the list
+                const liItems = contactBullets.querySelectorAll('li');
+                liItems.forEach(li => {
+                    const text = li.textContent.trim();
+                    // If the text contains an '@', assume it's an email address
+                    if (text.includes('@')) {
+                        li.innerHTML = `<a href="mailto:${text}">${text}</a>`;
+                    }
+                    // Otherwise, if it matches a phone number pattern (basic regex), assume it's a phone number
+                    else if (/^\+?\d[\d\s-]*\d$/.test(text)) {
+                        // Remove any spaces for the tel: link (optional)
+                        const telNumber = text.replace(/\s+/g, '');
+                        li.innerHTML = `<a href="tel:${telNumber}">${text}</a>`;
+                    }
+                });
+            }
+        });
+
+    </script>
 
 </body>
 
