@@ -126,7 +126,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const slug = parts.pop();
       const projectName = document.getElementById('dynamic_h1_main-heading').textContent.trim();
       const actionFrom = modal.dataset.actionFrom || "";
-      
+
       // Basic validations
       if (!name || !email || !phone) {
         alert("Please fill in all fields.");
@@ -137,7 +137,7 @@ document.addEventListener('DOMContentLoaded', () => {
         alert("Please enter a valid email address.");
         return;
       }
-      
+
       const payload = { name, email, phone, slug, pageUrl, projectName, actionFrom };
 
       fetch('/api/submit-callback', {
@@ -407,9 +407,29 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         const contactBulletsEl = document.getElementById('dynamic_ul_contact-bullets');
         if (contactBulletsEl && data.contactBullets) {
-          const contactBullets = data.contactBullets.split('\n').map(item => item.trim()).filter(item => item);
-          contactBulletsEl.innerHTML = contactBullets.map(item => `<li>${item}</li>`).join('');
+          const contactBullets = data.contactBullets
+            .split('\n')
+            .map(item => item.trim())
+            .filter(item => item);
+
+          contactBulletsEl.innerHTML = contactBullets.map(item => {
+            // Check if item is an email address
+            if (/^[\w\.-]+@[\w\.-]+\.\w+$/.test(item)) {
+              return `<li><a href="mailto:${item}">${item}</a></li>`;
+            }
+            // Check if item is a phone number (allow plus sign, digits, spaces, dashes)
+            else if (/^[+\d][\d\s\-]+$/.test(item)) {
+              // Remove spaces and dashes for the tel: href
+              const telLink = item.replace(/[\s\-]/g, '');
+              return `<li><a href="tel:${telLink}">${item}</a></li>`;
+            }
+            // Otherwise, just return the item in a list item
+            else {
+              return `<li>${item}</li>`;
+            }
+          }).join('');
         }
+
         const contactMapEl = document.getElementById('dynamic_img_contact-map');
         if (contactMapEl && data.contactMap && data.contactMap.url) {
           contactMapEl.src = data.contactMap.url;
