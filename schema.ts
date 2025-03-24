@@ -356,6 +356,11 @@ CallbackRequest: list({
     projectName: text({ validation: { isRequired: false } }),
     actionFrom: text({ validation: { isRequired: false } }),
   },
+  ui: {
+    listView: {
+      initialColumns: ['name', 'phone', 'projectName', 'ipAddress', 'actionFrom'],
+    },
+  },
 }),
 
 };
