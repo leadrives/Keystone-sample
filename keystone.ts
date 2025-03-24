@@ -80,6 +80,10 @@ export default withAuth(
             res.status(500).json({ error: 'Failed to fetch projects' });
           }
         });
+        // Serve thank-you page at "/thank-you"
+        app.get('/thank-you', (req, res) => {
+          res.sendFile(path.join(publicDir, 'thank-you.html'));
+        });
 
         // Serve static HTML for project pages
         app.get('/projects/:slug', async (req, res) => {

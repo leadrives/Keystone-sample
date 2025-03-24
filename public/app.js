@@ -153,7 +153,7 @@ document.addEventListener('DOMContentLoaded', () => {
         })
         .then(result => {
           console.log("Callback request saved:", result);
-          window.location.href = '/thankyou.html';
+          window.location.href = '/thank-you';
         })
         .catch(err => {
           console.error("Error submitting callback:", err);
@@ -824,7 +824,7 @@ document.addEventListener('DOMContentLoaded', () => {
               })
               .then(result => {
                 console.log("Download callback saved:", result);
-                window.location.href = '/thankyou.html';
+                window.location.href = '/thank-you';
               })
               .catch(err => {
                 console.error("Error submitting download callback:", err);
