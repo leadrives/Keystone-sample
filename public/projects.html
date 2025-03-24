@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Projects</title>
+
+  <!-- Bootstrap CSS (CDN) -->
+  <link
+    rel="stylesheet"
+    href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+  />
+
+  <style>
+    /* Container spacing */
+    .projects-container {
+      margin-top: 40px;
+      margin-bottom: 40px;
+    }
+
+    /* Project card row */
+    .project-card {
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      background-color: #fff;
+      overflow: hidden; /* If you want the image corners to clip */
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      margin-bottom: 2rem; /* space between rows */
+    }
+    .project-card:hover {
+      transform: scale(1.02);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+
+    /* Project image styling */
+    .project-card img {
+      width: 100%;
+      max-height: 300px;
+      object-fit: cover; /* so images fill the area nicely */
+    }
+
+    /* Text side */
+    .project-info {
+      padding: 20px;
+    }
+
+    .project-info h2 {
+      font-size: 1.75rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .project-info p {
+      font-size: 1rem;
+      color: #555;
+      margin-bottom: 1rem;
+    }
+
+    .pagination {
+      justify-content: center;
+    }
+  </style>
+</head>
+<body>
+  <div class="container projects-container">
+    <h1 class="mb-4 text-center">Latest Offplan Projects in Dubai</h1>
+
+    <!-- Projects list -->
+    <div id="projectsContainer"></div>
+
+    <!-- Pagination controls -->
+    <nav aria-label="Project pagination">
+      <ul id="pagination" class="pagination mt-4"></ul>
+    </nav>
+  </div>
+
+  <!-- Bootstrap and jQuery JS -->
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
+
+  <script>
+    const projectsContainer = document.getElementById('projectsContainer');
+    const paginationContainer = document.getElementById('pagination');
+
+    let projects = [];
+    const projectsPerPage = 6;
+    let currentPage = 1;
+
+    // 1. Fetch the project data
+    function fetchProjects() {
+      fetch('/api/projects')
+        .then((response) => response.json())
+        .then((data) => {
+          // data should be an array of objects:
+          // { mainHeading, slug, subHeading, heroImage: { url } }
+          projects = data;
+          renderPage(currentPage);
+          renderPagination();
+        })
+        .catch((err) => console.error('Error fetching projects:', err));
+    }
+
+    // 2. Render the projects for a given page
+    function renderPage(page) {
+      projectsContainer.innerHTML = '';
+      const startIndex = (page - 1) * projectsPerPage;
+      const endIndex = startIndex + projectsPerPage;
+      const pageProjects = projects.slice(startIndex, endIndex);
+
+      pageProjects.forEach((project) => {
+        const row = document.createElement('div');
+        row.className = 'row project-card align-items-center';
+
+        row.innerHTML = `
+          <div class="col-md-6 p-0">
+            <img
+              src="${
+                project.heroImage && project.heroImage.url
+                  ? project.heroImage.url
+                  : 'placeholder.jpg'
+              }"
+              alt="${project.mainHeading}"
+            />
+          </div>
+          <div class="col-md-6 project-info">
+            <h2>${project.mainHeading}</h2>
+            <p>${project.galleryParagraph || ''}</p>
+            <a href="/projects/${project.slug}" style="
+    background-color: red;"  class="btn btn-primary">
+              Visit Page
+            </a>
+          </div>
+        `;
+        projectsContainer.appendChild(row);
+      });
+    }
+
+    // 3. Render pagination controls
+    function renderPagination() {
+      paginationContainer.innerHTML = '';
+      const totalPages = Math.ceil(projects.length / projectsPerPage);
+
+      for (let i = 1; i <= totalPages; i++) {
+        const li = document.createElement('li');
+        li.className = 'page-item ' + (i === currentPage ? 'active' : '');
+        li.innerHTML = `<a style="background-color:red" class="page-link" href="#">${i}</a>`;
+
+        li.addEventListener('click', (e) => {
+          e.preventDefault();
+          currentPage = i;
+          renderPage(currentPage);
+          renderPagination();
+        });
+
+        paginationContainer.appendChild(li);
+      }
+    }
+
+    // 4. On page load, fetch projects
+    fetchProjects();
+  </script>
+</body>
+</html>

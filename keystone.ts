@@ -31,7 +31,8 @@ export default withAuth(
     server: {
       extendExpressApp: (app, context) => {
         const publicDir = path.join(process.cwd(), 'public');
-        app.use(express.static(publicDir));
+        app.use(express.static(publicDir, { index: false }));
+
         app.use(express.json());
         app.use(express.urlencoded({ extended: true }));
 
@@ -54,50 +55,12 @@ export default withAuth(
             res.status(500).json({ error: 'Failed to fetch settings' });
           }
         });
-        
 
-        // Root: List projects
+
+        // Replace your current app.get('/') route with this code:
         app.get('/', async (req, res) => {
-          try {
-            const projects = await context.query.Project.findMany({
-              query: 'mainHeading slug subHeading',
-            });
-            if (!projects || projects.length === 0) {
-              throw new Error('No projects found.');
-            }
-            let projectListHtml = `
-              <html>
-              <head>
-                <title>All Projects</title>
-                <style>
-                  body { font-family: Arial, sans-serif; }
-                  .project { padding: 10px; border-bottom: 1px solid #ccc; }
-                  a { text-decoration: none; color: #333; }
-                </style>
-              </head>
-              <body>
-                <h1>All Projects</h1>
-                <ul>
-                  ${projects
-                    .map(
-                      (project) => `
-                        <li class="project">
-                          <a href="/projects/${project.slug}">
-                            <h2>${project.mainHeading}</h2>
-                            <p>${project.subHeading || 'No subheading available'}</p>
-                          </a>
-                        </li>
-                      `
-                    )
-                    .join('')}
-                </ul>
-              </body>
-              </html>
-            `;
-            res.send(projectListHtml);
-          } catch (error) {
-            res.status(500).send('Failed to load projects. Please try again later.');
-          }
+          const publicDir = path.join(process.cwd(), 'public');
+          res.sendFile(path.join(publicDir, 'projects.html'));
         });
 
         // API: All projects as JSON
@@ -108,6 +71,7 @@ export default withAuth(
                 mainHeading
                 slug
                 heroImage { url }
+                galleryParagraph
               `,
             });
             res.json(projects);
@@ -200,7 +164,7 @@ export default withAuth(
           }
         });
         app.post('/api/submit-callback', express.json(), async (req, res) => {
-          const { name, email, phone, slug, pageUrl , projectName, actionFrom } = req.body;
+          const { name, email, phone, slug, pageUrl, projectName, actionFrom } = req.body;
           // Basic validations
           if (!name || !email || !phone || !slug || !pageUrl) {
             return res.status(400).json({ error: 'All fields are required.' });
@@ -237,7 +201,7 @@ export default withAuth(
             res.status(500).json({ success: false, error: 'Failed to save callback request' });
           }
         });
-        
+
 
         // [Other API routes remain unchanged...]
       },
