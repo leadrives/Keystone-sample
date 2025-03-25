@@ -741,16 +741,18 @@ h2 {
   margin-right: 2rem;
 }
 
-/* Outer container for the contact content */
+/* Outer container for the contact content – update align-items and add a min-height */
 .contact-inner {
   display: flex;
-  align-items: flex-start;
+  align-items: stretch; /* Changed from flex-start to stretch so children take equal height */
   justify-content: center;
   gap: 50px;
   max-width: 1440px;
   margin: 0 auto;
   padding: 0 2rem;
+  min-height: 400px;  /* New: sets a minimum height for the row */
 }
+
 
 /*** LEFT COLUMN: Profile ***/
 .contact-profile {
@@ -760,6 +762,15 @@ h2 {
   flex-direction: column;
   justify-content: flex-start;
   color: #666666;
+}
+
+/*** RIGHT COLUMN: Map – ensure it stretches */
+.contact-map {
+  flex: 1;
+  min-width: 400px;
+  display: flex;
+  align-items: stretch; /* Change to stretch to fill the container's height */
+  justify-content: center;
 }
 
 /* Gently rounded photo */
@@ -834,13 +845,13 @@ h2 {
   background-color: #e60000;
 }
 
-/*** RIGHT COLUMN: Map ***/
-.contact-map {
-  flex: 1;
-  min-width: 400px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+/* Map image – force it to fill the container */
+.map-image {
+  width: 100%;
+  height: 100%;       /* New: image fills its container vertically */
+  object-fit: cover;  /* maintain aspect ratio while covering the area */
+  border-radius: 25px;
+  display: block;
 }
 
 .map-image {
