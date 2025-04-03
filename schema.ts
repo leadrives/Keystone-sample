@@ -366,6 +366,8 @@ export const lists: Lists = {
       project: relationship({ ref: 'Project', many: false }),
       projectName: text({ validation: { isRequired: false } }),
       actionFrom: text({ validation: { isRequired: false } }),
+      // Remove `defaultValue: { kind: 'now' }` to avoid “non-constant default” error in SQLite
+      createdAt: timestamp(),
     },
     ui: {
       listView: {
@@ -374,13 +376,24 @@ export const lists: Lists = {
     },
 
     hooks: {
+      // 1) Use resolveInput to auto-set createdAt if it's missing
+      resolveInput: {
+        create: async ({ resolvedData }) => {
+          // Overcome TS mismatch by spreading into an 'any'
+          const updatedData = { ...(resolvedData as any) };
+
+          // If user didn't provide createdAt, set it now
+          if (!updatedData.createdAt) {
+            updatedData.createdAt = new Date();
+          }
+          // Return updatedData (TS sees it as any, so no complaint)
+          return updatedData;
+        },
+      },
       afterOperation: {
         create: async ({ item }) => {
-          // Zapier Catch Hook URL:
           const zapierWebhookUrl = 'https://hooks.zapier.com/hooks/catch/13105276/2cwnpjd/';
-
           try {
-            // Prepare the payload from the item
             const payload = {
               name: item.name,
               projectName: item.projectName,
@@ -388,13 +401,11 @@ export const lists: Lists = {
               ipAddress: item.ipAddress,
               email: item.email,
               phone: item.phone,
-              // Because `project` is a relationship field, item.project might be an ID or object
-              // If you need the project slug or mainHeading, you can do a second query or store them
+              pageUrl: item.pageUrl,
+              createdAt: item.createdAt, // Now we have a date/time in the DB
             };
 
-            // POST to Zapier
             await axios.post(zapierWebhookUrl, payload);
-
             console.log('✅ Sent CallbackRequest to Zapier:', payload);
           } catch (error) {
             console.error('❌ Error sending CallbackRequest to Zapier:', error);

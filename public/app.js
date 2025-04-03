@@ -100,9 +100,12 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // Initialize intl-tel-input for callback modal phone field
+  // =============================================
+  // 1) Initialize intl-tel-input for callback phone
+  // =============================================
   const phoneInput = document.getElementById("phone");
-  intlTelInput(phoneInput, {
+  // Store in a variable so we can retrieve dial code later
+  const callbackIti = intlTelInput(phoneInput, {
     initialCountry: "ae",  // Default to UAE
     separateDialCode: true,
     preferredCountries: ["ae", "sa", "us", "gb"]
@@ -121,6 +124,9 @@ document.addEventListener('DOMContentLoaded', () => {
       const name = nameInput.value.trim();
       const email = emailInput.value.trim();
       const phone = phoneInput.value.trim();
+      // <-- NEW: retrieve the dial code -->
+      const phoneCode = callbackIti.getSelectedCountryData().dialCode;
+
       const pageUrl = window.location.href;
       const parts = window.location.pathname.split('/').filter(Boolean);
       const slug = parts.pop();
@@ -138,7 +144,11 @@ document.addEventListener('DOMContentLoaded', () => {
         return;
       }
 
-      const payload = { name, email, phone, slug, pageUrl, projectName, actionFrom };
+      // Combine country code + user phone
+      const fullPhone = `+${phoneCode} ${phone}`;
+      // Now pass `fullPhone` in the `phone` field
+      const payload = { name, email, phone: fullPhone, slug, pageUrl, projectName, actionFrom };
+
 
       fetch('/api/submit-callback', {
         method: 'POST',
@@ -162,10 +172,13 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // --- Initialize Download Modal Phone Field with intl-tel-input ---
+  // =============================================
+  // 2) Initialize Download Modal Phone Field with intl-tel-input
+  // =============================================
   const downloadPhoneInput = document.querySelector('#downloadModal input[name="phone"]');
+  let downloadIti = null;
   if (downloadPhoneInput) {
-    intlTelInput(downloadPhoneInput, {
+    downloadIti = intlTelInput(downloadPhoneInput, {
       initialCountry: "ae",
       separateDialCode: true,
       preferredCountries: ["ae", "sa", "us", "gb"]
@@ -540,7 +553,7 @@ document.addEventListener('DOMContentLoaded', () => {
               card.addEventListener('click', () => {
                 const fileUrl = card.dataset.fileUrl;
                 if (fileUrl) {
-                  const actionFrom = card.querySelector('.material-title').textContent.trim();
+                  const actionFrom = card.querySelector('.material-title')?.textContent?.trim() || item.title || "Download";
                   openDownloadModal(fileUrl, actionFrom);
                 }
               });
@@ -807,7 +820,6 @@ document.addEventListener('DOMContentLoaded', () => {
         const downloadSubmitBtn = document.querySelector('#downloadModal .modal-btn');
         if (downloadSubmitBtn) {
           downloadSubmitBtn.addEventListener('click', () => {
-            // Updated: Include phone input field in download modal and use intlTelInput
             const modalNameInput = document.querySelector('#downloadModal input[name="name"]');
             const modalEmailInput = document.querySelector('#downloadModal input[name="email"]');
             const modalPhoneInput = document.querySelector('#downloadModal input[name="phone"]');
@@ -823,12 +835,21 @@ document.addEventListener('DOMContentLoaded', () => {
             const name = modalNameInput.value.trim();
             const email = modalEmailInput.value.trim();
             const phone = modalPhoneInput.value.trim();
+            // <-- NEW: retrieve the dial code -->
+            let phoneCode = "";
+            if (downloadIti) {
+              phoneCode = downloadIti.getSelectedCountryData().dialCode;
+            }
+
             const pageUrl = window.location.href;
             const parts = window.location.pathname.split('/').filter(Boolean);
             const slug = parts.pop();
             const projectName = document.getElementById('dynamic_h1_main-heading').textContent.trim();
             const actionFrom = document.getElementById("downloadModal").dataset.actionFrom || "";
-            const payload = { name, email, phone, slug, pageUrl, projectName, actionFrom };
+
+            // NEW: Combine dial code & phone
+            const fullPhone = `+${phoneCode} ${phone}`;
+            const payload = { name, email, phone: fullPhone, slug, pageUrl, projectName, actionFrom };
 
             // Submit the download request to the callback endpoint
             fetch('/api/submit-callback', {
