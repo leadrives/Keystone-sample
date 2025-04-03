@@ -1,14 +1,24 @@
 import { list } from '@keystone-6/core';
 import { allowAll } from '@keystone-6/core/access';
-import { text, relationship, password, timestamp, file, checkbox, json, integer } from '@keystone-6/core/fields';
+import {
+  text,
+  relationship,
+  password,
+  timestamp,
+  file,
+  checkbox,
+  json,
+  integer,
+} from '@keystone-6/core/fields';
 import { type Lists } from '.keystone/types';
 import { virtual } from '@keystone-6/core/fields';
 import { graphql } from '@keystone-6/core';
 
-
-
+// 1) Import axios for the webhook
+import axios from 'axios';
 
 export const lists: Lists = {
+  // -----------------------------
   // User list remains unchanged
   User: list({
     access: allowAll,
@@ -21,6 +31,7 @@ export const lists: Lists = {
     },
   }),
 
+  // -----------------------------
   // Post list remains unchanged
   Post: list({
     access: allowAll,
@@ -29,17 +40,21 @@ export const lists: Lists = {
       content: text({ ui: { displayMode: 'textarea' } }),
       author: relationship({ ref: 'User.posts', many: false }),
     },
+    ui: {
+      isHidden: true, // Hides the Post list from the admin UI
+    },
   }),
 
+  // -----------------------------
   // Updated Project list with fields for all sections including Units
   Project: list({
     access: allowAll,
     fields: {
       slug: text({ validation: { isRequired: true }, isIndexed: 'unique' }),
       heroImage: file({ storage: 'local_images' }),
-      heroTwoLogo: file({ 
-        storage: 'local_images', 
-        ui: { description: "Logo for the Hero section (Hero Two)" } 
+      heroTwoLogo: file({
+        storage: 'local_images',
+        ui: { description: 'Logo for the Hero section (Hero Two)' },
       }),
       mainHeading: text({ validation: { isRequired: true } }),
       subHeading: text({ validation: { isRequired: true } }),
@@ -53,16 +68,13 @@ export const lists: Lists = {
           inlineEdit: { fields: ['name', 'photo'] },
         },
       }),
-      // New field for manager count
       agentCount: integer({
         validation: { isRequired: false },
         defaultValue: 0,
         ui: {
-          description: "Manager count to display (if set, overrides computed count)",
+          description: 'Manager count to display (if set, overrides computed count)',
         },
       }),
-
-      // Gallery fields
       galleryMainHeading: text({ validation: { isRequired: false } }),
       galleryTitle: text({ validation: { isRequired: false } }),
       galleryParagraph: text({ ui: { displayMode: 'textarea' } }),
@@ -77,8 +89,6 @@ export const lists: Lists = {
         },
       }),
       amenitiesList: text({ ui: { displayMode: 'textarea' } }),
-
-      // Payment Plan fields
       paymentPlanHeading: text({ validation: { isRequired: false } }),
       paymentPlanImage: file({ storage: 'local_images' }),
       paymentPlanTitle: text({ validation: { isRequired: false } }),
@@ -86,8 +96,6 @@ export const lists: Lists = {
       paymentPlanSuffix: text({ validation: { isRequired: false } }),
       paymentPlanDescription: text({ ui: { displayMode: 'textarea' } }),
       paymentPlanBullets: text({ ui: { displayMode: 'textarea' } }),
-
-      // Location fields
       locationHeading: text({ validation: { isRequired: false } }),
       locationSubheading: text({ validation: { isRequired: false } }),
       locationTitle: text({ validation: { isRequired: false } }),
@@ -95,8 +103,6 @@ export const lists: Lists = {
       locationDescription2: text({ ui: { displayMode: 'textarea' } }),
       locationBullets: text({ ui: { displayMode: 'textarea' } }),
       locationMapImage: file({ storage: 'local_images' }),
-
-      // Developer fields
       developerTitle: text({ validation: { isRequired: false } }),
       developerParagraph1: text({ ui: { displayMode: 'textarea' } }),
       developerParagraph2: text({ ui: { displayMode: 'textarea' } }),
@@ -104,16 +110,12 @@ export const lists: Lists = {
       developerRedBoldText: text({ validation: { isRequired: false } }),
       developerImage1: file({ storage: 'local_images' }),
       developerImage2: file({ storage: 'local_images' }),
-
-      // Contact fields
       contactHeading: text({ validation: { isRequired: false } }),
       contactProfilePic: file({ storage: 'local_images' }),
       contactProfileName: text({ validation: { isRequired: false } }),
       contactProfileDescription: text({ ui: { displayMode: 'textarea' } }),
       contactBullets: text({ ui: { displayMode: 'textarea' } }),
       contactMap: file({ storage: 'local_images' }),
-
-      // FAQ field (relationship to many FAQ items)
       faq: relationship({
         ref: 'FAQ.project',
         many: true,
@@ -124,17 +126,14 @@ export const lists: Lists = {
           inlineEdit: { fields: ['question', 'answer'] },
         },
       }),
-      // New fields for the parallax and panoramic images
-      parallaxImage: file({ 
-        storage: 'local_images', 
-        ui: { description: "Image for the full parallax section" } 
+      parallaxImage: file({
+        storage: 'local_images',
+        ui: { description: 'Image for the full parallax section' },
       }),
-      panoramicImage: file({ 
-        storage: 'local_images', 
-        ui: { description: "Image for the panoramic image section" } 
+      panoramicImage: file({
+        storage: 'local_images',
+        ui: { description: 'Image for the panoramic image section' },
       }),
-
-      // Amenities Section fields
       amenitiesSectionHeading: text({ validation: { isRequired: false } }),
       amenitiesCards: relationship({
         ref: 'AmenityCard.project',
@@ -156,16 +155,26 @@ export const lists: Lists = {
           inlineEdit: { fields: ['name'] },
         },
       }),
-
-      // UNITS SECTION fields
       units: relationship({
         ref: 'Unit.project',
         many: true,
         ui: {
           displayMode: 'cards',
-          cardFields: ['type', 'title', 'price', 'tag', 'cityView', 'sqft', 'image'],
-          inlineCreate: { fields: ['type', 'title', 'price', 'tag', 'cityView', 'sqft', 'image'] },
-          inlineEdit: { fields: ['type', 'title', 'price', 'tag', 'cityView', 'sqft', 'image'] },
+          cardFields: [
+            'type',
+            'title',
+            'price',
+            'tag',
+            'cityView',
+            'sqft',
+            'image',
+          ],
+          inlineCreate: {
+            fields: ['type', 'title', 'price', 'tag', 'cityView', 'sqft', 'image'],
+          },
+          inlineEdit: {
+            fields: ['type', 'title', 'price', 'tag', 'cityView', 'sqft', 'image'],
+          },
         },
       }),
       unitFilters: relationship({
@@ -178,7 +187,6 @@ export const lists: Lists = {
           inlineEdit: { fields: ['name'] },
         },
       }),
-      // MATERIALS SECTION fields
       materials: relationship({
         ref: 'MaterialCard.project',
         many: true,
@@ -189,7 +197,6 @@ export const lists: Lists = {
           inlineEdit: { fields: ['title', 'description', 'image', 'document'] },
         },
       }),
-
       viewPage: virtual({
         field: graphql.field({
           type: graphql.String,
@@ -202,20 +209,16 @@ export const lists: Lists = {
           },
         }),
         ui: {
-          listView: ({
+          listView: {
             fieldMode: 'read',
             cell: async () => {
               const { CustomLinkCell } = await import('./admin-ui/components/CustomLinkCell');
               return CustomLinkCell;
             },
-          } as any),
+          } as any,
         },
       }),
-      
-   
-
     },
-    
     ui: {
       listView: {
         initialColumns: ['mainHeading', 'subHeading', 'slug', 'viewPage'],
@@ -223,7 +226,8 @@ export const lists: Lists = {
     },
   }),
 
-  // New Agent list
+  // -----------------------------
+  // Agent list
   Agent: list({
     access: allowAll,
     fields: {
@@ -233,7 +237,8 @@ export const lists: Lists = {
     },
   }),
 
-  // New GalleryImage list
+  // -----------------------------
+  // GalleryImage list
   GalleryImage: list({
     access: allowAll,
     fields: {
@@ -242,7 +247,8 @@ export const lists: Lists = {
     },
   }),
 
-  // New FAQ list
+  // -----------------------------
+  // FAQ list
   FAQ: list({
     access: allowAll,
     fields: {
@@ -252,20 +258,21 @@ export const lists: Lists = {
     },
   }),
 
-  // New AmenityCard list
+  // -----------------------------
+  // AmenityCard list
   AmenityCard: list({
     access: allowAll,
     fields: {
       title: text({ validation: { isRequired: true } }),
       description: text({ ui: { displayMode: 'textarea' } }),
       image: file({ storage: 'local_images' }),
-      // Categories stored as a comma-separated string
       categories: text({ validation: { isRequired: false } }),
       project: relationship({ ref: 'Project.amenitiesCards', many: false }),
     },
   }),
 
-  // New AmenityFilter list
+  // -----------------------------
+  // AmenityFilter list
   AmenityFilter: list({
     access: allowAll,
     fields: {
@@ -274,7 +281,8 @@ export const lists: Lists = {
     },
   }),
 
-  // New Unit list for Units Section
+  // -----------------------------
+  // Unit list
   Unit: list({
     access: allowAll,
     fields: {
@@ -289,7 +297,8 @@ export const lists: Lists = {
     },
   }),
 
-  // New UnitFilter list for Units Section
+  // -----------------------------
+  // UnitFilter list
   UnitFilter: list({
     access: allowAll,
     fields: {
@@ -297,7 +306,9 @@ export const lists: Lists = {
       project: relationship({ ref: 'Project.unitFilters', many: false }),
     },
   }),
-  // New MaterialCard list for Materials Section
+
+  // -----------------------------
+  // MaterialCard list
   MaterialCard: list({
     access: allowAll,
     fields: {
@@ -308,13 +319,14 @@ export const lists: Lists = {
       project: relationship({ ref: 'Project.materials', many: false }),
     },
   }),
-  // Updated SiteSetting list for global settings (header/footer)
+
+  // -----------------------------
+  // SiteSetting list
   SiteSetting: list({
     access: allowAll,
     fields: {
       logo: file({ storage: 'local_images' }),
       footerLogo: file({ storage: 'local_images' }),
-      // Replace JSON field with a relationship to SocialLink
       footerSocialLinks: relationship({
         ref: 'SocialLink.siteSetting',
         many: true,
@@ -329,38 +341,66 @@ export const lists: Lists = {
     },
   }),
 
-  // New SocialLink list for managing footer social links
+  // -----------------------------
+  // SocialLink list
   SocialLink: list({
     access: allowAll,
     fields: {
       name: text({ validation: { isRequired: true } }),
       icon: file({ storage: 'local_images' }),
       url: text({ validation: { isRequired: true } }),
-
-      // Reverse relationship (optional)
       siteSetting: relationship({ ref: 'SiteSetting.footerSocialLinks', many: false }),
     },
   }),
-  // ... other list definitions
 
-CallbackRequest: list({
-  access: allowAll,
-  fields: {
-    name: text({ validation: { isRequired: true } }),
-    email: text({ validation: { isRequired: true } }),
-    phone: text({ validation: { isRequired: true } }),
-    pageUrl: text({ validation: { isRequired: true } }),
-    ipAddress: text({ validation: { isRequired: true } }),
-    project: relationship({ ref: 'Project', many: false }), // Connect to the project by slug
-    // NEW FIELDS:
-    projectName: text({ validation: { isRequired: false } }),
-    actionFrom: text({ validation: { isRequired: false } }),
-  },
-  ui: {
-    listView: {
-      initialColumns: ['name', 'phone', 'projectName', 'ipAddress', 'actionFrom'],
+  // -----------------------------
+  // CallbackRequest list (with afterOperation hook to post to Zapier)
+  CallbackRequest: list({
+    access: allowAll,
+    fields: {
+      name: text({ validation: { isRequired: true } }),
+      email: text({ validation: { isRequired: true } }),
+      phone: text({ validation: { isRequired: true } }),
+      pageUrl: text({ validation: { isRequired: true } }),
+      ipAddress: text({ validation: { isRequired: true } }),
+      project: relationship({ ref: 'Project', many: false }),
+      projectName: text({ validation: { isRequired: false } }),
+      actionFrom: text({ validation: { isRequired: false } }),
     },
-  },
-}),
+    ui: {
+      listView: {
+        initialColumns: ['name', 'phone', 'projectName', 'ipAddress', 'actionFrom'],
+      },
+    },
 
+    hooks: {
+      afterOperation: {
+        create: async ({ item }) => {
+          // Zapier Catch Hook URL:
+          const zapierWebhookUrl = 'https://hooks.zapier.com/hooks/catch/13105276/2cwnpjd/';
+
+          try {
+            // Prepare the payload from the item
+            const payload = {
+              name: item.name,
+              projectName: item.projectName,
+              actionFrom: item.actionFrom,
+              ipAddress: item.ipAddress,
+              email: item.email,
+              phone: item.phone,
+              // Because `project` is a relationship field, item.project might be an ID or object
+              // If you need the project slug or mainHeading, you can do a second query or store them
+            };
+
+            // POST to Zapier
+            await axios.post(zapierWebhookUrl, payload);
+
+            console.log('✅ Sent CallbackRequest to Zapier:', payload);
+          } catch (error) {
+            console.error('❌ Error sending CallbackRequest to Zapier:', error);
+          }
+        },
+      },
+    },
+  }),
 };
