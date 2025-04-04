@@ -147,7 +147,7 @@ document.addEventListener('DOMContentLoaded', () => {
       // Combine country code + user phone
       const fullPhone = `+${phoneCode} ${phone}`;
       // Now pass `fullPhone` in the `phone` field
-      const payload = { name, email, phone: fullPhone, slug, pageUrl, projectName, actionFrom };
+      const payload = { name, email, phone: fullPhone, slug, pageUrl, actionFrom };
 
 
       fetch('/api/submit-callback', {

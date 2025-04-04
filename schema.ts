@@ -58,6 +58,12 @@ export const lists: Lists = {
       }),
       mainHeading: text({ validation: { isRequired: true } }),
       subHeading: text({ validation: { isRequired: true } }),
+      projectName: text({ 
+        validation: { isRequired: true },
+        ui: { 
+          description: 'Internal name for the project (admin only)' 
+        },
+      }),
       agents: relationship({
         ref: 'Agent.project',
         many: true,

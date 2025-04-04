@@ -168,7 +168,7 @@ export default withAuth(
           }
         });
         app.post('/api/submit-callback', express.json(), async (req, res) => {
-          const { name, email, phone, slug, pageUrl, projectName, actionFrom } = req.body;
+          const { name, email, phone, slug, pageUrl, actionFrom } = req.body;
           // Basic validations
           if (!name || !email || !phone || !slug || !pageUrl) {
             return res.status(400).json({ error: 'All fields are required.' });
@@ -180,11 +180,12 @@ export default withAuth(
             // Find the project by slug to associate with the lead
             const project = await context.query.Project.findOne({
               where: { slug },
-              query: 'id mainHeading',
+              query: 'id projectName',
             });
             if (!project) {
               return res.status(404).json({ error: 'Project not found' });
             }
+            const finalProjectName = project ? project.projectName : '';
             // Create a new callback request (lead)
             const newCallbackRequest = await context.query.CallbackRequest.createOne({
               data: {
@@ -192,13 +193,13 @@ export default withAuth(
                 email,
                 phone,
                 pageUrl,
-                projectName,     // NEW FIELD
+                projectName: finalProjectName,
                 actionFrom,      // NEW FIELD
                 ipAddress: typeof ip === 'string' ? ip : Array.isArray(ip) ? ip[0] : '',
                 project: { connect: { id: project.id } },
                 
               },
-              query: 'id name email phone pageUrl ipAddress createdAt project { mainHeading } ',
+              query: 'id name email phone pageUrl ipAddress createdAt projectName ',
             });
             res.json({ success: true, data: newCallbackRequest });
           } catch (error) {
