@@ -2470,3 +2470,8 @@ html {
   transform: translateX(5px);
   color: #ff0000;
 }
+.parallax-custom {
+  width: 100%;
+  object-fit: cover;
+}
+
