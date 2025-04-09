@@ -385,13 +385,36 @@ document.addEventListener('DOMContentLoaded', () => {
         if (developerParagraph2El) {
           developerParagraph2El.textContent = data.developerParagraph2 || developerParagraph2El.textContent;
         }
+        // === DEVELOPER SECTION ===
         const developerRedParagraphEl = document.getElementById('dynamic_p_red-paragraph3');
         if (developerRedParagraphEl) {
-          const strongEl = developerRedParagraphEl.querySelector('#dynamic_strong_red-paragraph-bold-text');
-          if (strongEl) {
-            strongEl.textContent = data.developerRedBoldText || strongEl.textContent;
+          if (data.developerRedParagraph && data.developerRedBoldText) {
+            // Define the placeholder token.
+            const placeholder = '{{BOLD}}';
+            let paragraphHTML;
+            if (data.developerRedParagraph.includes(placeholder)) {
+              // Replace the placeholder with the bold text.
+              paragraphHTML = data.developerRedParagraph.replace(
+                placeholder,
+                `<strong id="dynamic_strong_red-paragraph-bold-text">${data.developerRedBoldText}</strong>`
+              );
+            } else {
+              // Fallback: Insert the bold text approximately in the middle.
+              const fullText = data.developerRedParagraph;
+              const midIndex = Math.floor(fullText.length / 2);
+              const firstHalf = fullText.substring(0, midIndex).trim();
+              const secondHalf = fullText.substring(midIndex).trim();
+              paragraphHTML = `${firstHalf} <strong id="dynamic_strong_red-paragraph-bold-text">${data.developerRedBoldText}</strong> ${secondHalf}`;
+            }
+            developerRedParagraphEl.innerHTML = paragraphHTML;
+          } else if (data.developerRedParagraph) {
+            developerRedParagraphEl.textContent = data.developerRedParagraph;
+          } else if (data.developerRedBoldText) {
+            developerRedParagraphEl.innerHTML = `<strong id="dynamic_strong_red-paragraph-bold-text">${data.developerRedBoldText}</strong>`;
           }
         }
+
+
         const developerImage1El = document.getElementById('dynamic_img_Developer-first-image');
         if (developerImage1El && data.developerImage1 && data.developerImage1.url) {
           developerImage1El.src = data.developerImage1.url;

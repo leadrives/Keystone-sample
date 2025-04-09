@@ -112,8 +112,18 @@ export const lists: Lists = {
       developerTitle: text({ validation: { isRequired: false } }),
       developerParagraph1: text({ ui: { displayMode: 'textarea' } }),
       developerParagraph2: text({ ui: { displayMode: 'textarea' } }),
-      developerRedParagraph: text({ ui: { displayMode: 'textarea' } }),
-      developerRedBoldText: text({ validation: { isRequired: false } }),
+      developerRedParagraph: text({ 
+        ui: { 
+          displayMode: 'textarea',
+          description: 'Enter the full developer paragraph text. Insert the token {{BOLD}} at the exact place where the bold text should appear.' 
+        }
+      }),
+      developerRedBoldText: text({ 
+        validation: { isRequired: false },
+        ui: { 
+          description: 'Enter the bold text that will replace the token {{BOLD}} in the developer paragraph.' 
+        }
+      }),      
       developerImage1: file({ storage: 'local_images' }),
       developerImage2: file({ storage: 'local_images' }),
       contactHeading: text({ validation: { isRequired: false } }),
@@ -227,7 +237,7 @@ export const lists: Lists = {
     },
     ui: {
       listView: {
-        initialColumns: ['mainHeading', 'subHeading', 'slug', 'viewPage'],
+        initialColumns: ['projectName', 'subHeading', 'slug', 'viewPage'],
       },
     },
   }),
