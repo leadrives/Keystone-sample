@@ -5,7 +5,7 @@ import React from 'react';
 function CustomLogo() {
   return (
     <img
-      src="/images/logo33.svg" // Path to your custom logo
+      src="/images/logo33.png" // Path to your custom logo
       alt="My Custom Logo"
     />
     
