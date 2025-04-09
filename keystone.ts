@@ -69,6 +69,7 @@ export default withAuth(
             const projects = await context.query.Project.findMany({
               query: `
                 mainHeading
+                projectName
                 slug
                 heroImage { url }
                 galleryParagraph
@@ -91,7 +92,7 @@ export default withAuth(
           try {
             const project = await context.query.Project.findOne({
               where: { slug },
-              query: `mainHeading subHeading heroImage { url } agents { name photo { url } }`,
+              query: `mainHeading projectName subHeading heroImage { url } agents { name photo { url } }`,
             });
             if (!project) {
               return res.status(404).send('Project not found');
