@@ -237,7 +237,7 @@ export const lists: Lists = {
     },
     ui: {
       listView: {
-        initialColumns: ['projectName', 'subHeading', 'slug', 'viewPage'],
+        initialColumns: ['projectName', 'slug', 'viewPage'],
       },
     },
   }),
@@ -251,6 +251,11 @@ export const lists: Lists = {
       photo: file({ storage: 'local_images' }),
       project: relationship({ ref: 'Project.agents', many: false }),
     },
+    ui: {
+      listView: {
+        initialColumns: ['name', 'project'],
+      },
+    },
   }),
 
   // -----------------------------
@@ -260,6 +265,11 @@ export const lists: Lists = {
     fields: {
       image: file({ storage: 'local_images' }),
       project: relationship({ ref: 'Project.galleryImages', many: false }),
+    },
+    ui: {
+      listView: {
+        initialColumns: ['project'],
+      },
     },
   }),
 
@@ -284,6 +294,11 @@ export const lists: Lists = {
       image: file({ storage: 'local_images' }),
       categories: text({ validation: { isRequired: false } }),
       project: relationship({ ref: 'Project.amenitiesCards', many: false }),
+    },
+    ui: {
+      listView: {
+        initialColumns: ['title', 'description'],
+      },
     },
   }),
 
@@ -311,6 +326,11 @@ export const lists: Lists = {
       sqft: text({ validation: { isRequired: false } }),
       project: relationship({ ref: 'Project.units', many: false }),
     },
+    ui: {
+      listView: {
+        initialColumns: ['title', 'price'],
+      },
+    },
   }),
 
   // -----------------------------
@@ -333,6 +353,11 @@ export const lists: Lists = {
       image: file({ storage: 'local_images' }),
       document: file({ storage: 'local_documents' }),
       project: relationship({ ref: 'Project.materials', many: false }),
+    },
+    ui: {
+      listView: {
+        initialColumns: ['title', 'description'],
+      },
     },
   }),
 
