@@ -2238,6 +2238,7 @@ h2 {
   .full-parallax-section {
     background-attachment: scroll;
     height: 100vh;
+    display: none;
     /* still fill screen height on mobile */
   }
 
