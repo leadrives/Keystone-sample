@@ -64,16 +64,18 @@ export const lists: Lists = {
           description: 'Internal name for the project (admin only)' 
         },
       }),
-      agents: relationship({
-        ref: 'Agent.project',
-        many: true,
-        ui: {
-          displayMode: 'cards',
-          cardFields: ['name', 'photo'],
-          inlineCreate: { fields: ['name', 'photo'] },
-          inlineEdit: { fields: ['name', 'photo'] },
-        },
-      }),
+     // Update agents field to only enable selection from existing agents
+    agents: relationship({
+      ref: 'Agent',  // reference Agent list only (no "project" inverse required)
+      many: true,
+      ui: {
+        // Use a select/dropdown instead of inline cards creation
+        displayMode: 'select',
+        // Removing inlineCreate/inlineEdit forces selection from existing records:
+        hideCreate: true,       // Disable inline creation
+       
+      },
+    }),
       agentCount: integer({
         validation: { isRequired: false },
         defaultValue: 0,
@@ -249,11 +251,11 @@ export const lists: Lists = {
     fields: {
       name: text({ validation: { isRequired: true } }),
       photo: file({ storage: 'local_images' }),
-      project: relationship({ ref: 'Project.agents', many: false }),
+     // project: relationship({ ref: 'Project.agents', many: false }),
     },
     ui: {
       listView: {
-        initialColumns: ['name', 'project'],
+        initialColumns: ['name'],
       },
     },
   }),
