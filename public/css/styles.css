@@ -2127,6 +2127,25 @@ h2 {
   color: #fff;
 }
 
+/* QR Code Styles in the Dark Footer */
+.footer-qr-wrapper {
+  margin-top: 1rem;       /* Space below the enquiry button */
+  text-align: center;     /* Center the QR code within the column */
+}
+
+.footer-qr-code {
+  max-width: 100px;       /* Adjust the size as needed */
+  height: auto;
+  border: 2px solid #fff; /* Optional: white border to help it stand out */
+  border-radius: 4px;     /* Slightly rounded corners */
+}
+/* New style for the permit text below the QR code */
+.footer-qr-text {
+  margin-top: 0.5rem;     /* Small space above the text */
+  font-size: 0.9rem;      /* Adjust font size as needed */
+  color: #ccc;           /* Use a light gray that fits the dark footer */
+}
+
 /*************************************************
     RESPONSIVE (Mobile)
   **************************************************/

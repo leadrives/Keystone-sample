@@ -157,6 +157,8 @@ export default withAuth(
                 units { id type title price tag cityView sqft, image { url } }
                 unitFilters { id name }
                 materials { id title description, image { url }, document { url } }
+                qrCode { url }      
+                permitNo 
               `,
             });
             if (!project) {
@@ -198,7 +200,7 @@ export default withAuth(
                 actionFrom,      // NEW FIELD
                 ipAddress: typeof ip === 'string' ? ip : Array.isArray(ip) ? ip[0] : '',
                 project: { connect: { id: project.id } },
-                
+
               },
               query: 'id name email phone pageUrl ipAddress createdAt projectName ',
             });

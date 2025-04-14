@@ -58,24 +58,24 @@ export const lists: Lists = {
       }),
       mainHeading: text({ validation: { isRequired: true } }),
       subHeading: text({ validation: { isRequired: true } }),
-      projectName: text({ 
+      projectName: text({
         validation: { isRequired: true },
-        ui: { 
-          description: 'Internal name for the project (admin only)' 
+        ui: {
+          description: 'Internal name for the project (admin only)'
         },
       }),
-     // Update agents field to only enable selection from existing agents
-    agents: relationship({
-      ref: 'Agent',  // reference Agent list only (no "project" inverse required)
-      many: true,
-      ui: {
-        // Use a select/dropdown instead of inline cards creation
-        displayMode: 'select',
-        // Removing inlineCreate/inlineEdit forces selection from existing records:
-        hideCreate: true,       // Disable inline creation
-       
-      },
-    }),
+      // Update agents field to only enable selection from existing agents
+      agents: relationship({
+        ref: 'Agent',  // reference Agent list only (no "project" inverse required)
+        many: true,
+        ui: {
+          // Use a select/dropdown instead of inline cards creation
+          displayMode: 'select',
+          // Removing inlineCreate/inlineEdit forces selection from existing records:
+          hideCreate: true,       // Disable inline creation
+
+        },
+      }),
       agentCount: integer({
         validation: { isRequired: false },
         defaultValue: 0,
@@ -96,6 +96,8 @@ export const lists: Lists = {
           inlineEdit: { fields: ['image'] },
         },
       }),
+      
+
       amenitiesList: text({ ui: { displayMode: 'textarea' } }),
       paymentPlanHeading: text({ validation: { isRequired: false } }),
       paymentPlanImage: file({ storage: 'local_images' }),
@@ -114,18 +116,18 @@ export const lists: Lists = {
       developerTitle: text({ validation: { isRequired: false } }),
       developerParagraph1: text({ ui: { displayMode: 'textarea' } }),
       developerParagraph2: text({ ui: { displayMode: 'textarea' } }),
-      developerRedParagraph: text({ 
-        ui: { 
+      developerRedParagraph: text({
+        ui: {
           displayMode: 'textarea',
-          description: 'Enter the full developer paragraph text. Insert the token {{BOLD}} at the exact place where the bold text should appear.' 
+          description: 'Enter the full developer paragraph text. Insert the token {{BOLD}} at the exact place where the bold text should appear.'
         }
       }),
-      developerRedBoldText: text({ 
+      developerRedBoldText: text({
         validation: { isRequired: false },
-        ui: { 
-          description: 'Enter the bold text that will replace the token {{BOLD}} in the developer paragraph.' 
+        ui: {
+          description: 'Enter the bold text that will replace the token {{BOLD}} in the developer paragraph.'
         }
-      }),      
+      }),
       developerImage1: file({ storage: 'local_images' }),
       developerImage2: file({ storage: 'local_images' }),
       contactHeading: text({ validation: { isRequired: false } }),
@@ -151,6 +153,15 @@ export const lists: Lists = {
       panoramicImage: file({
         storage: 'local_images',
         ui: { description: 'Image for the panoramic image section' },
+      }),
+      // In your Project list fields
+      qrCode: file({
+        storage: 'local_images',
+        ui: { description: 'Upload the QR code image for this project' }
+      }),
+      permitNo: text({
+        validation: { isRequired: false },
+        ui: { description: 'Enter the permit number for this project' }
       }),
       amenitiesSectionHeading: text({ validation: { isRequired: false } }),
       amenitiesCards: relationship({
@@ -242,6 +253,7 @@ export const lists: Lists = {
         initialColumns: ['projectName', 'slug', 'viewPage'],
       },
     },
+
   }),
 
   // -----------------------------
@@ -251,7 +263,7 @@ export const lists: Lists = {
     fields: {
       name: text({ validation: { isRequired: true } }),
       photo: file({ storage: 'local_images' }),
-     // project: relationship({ ref: 'Project.agents', many: false }),
+      // project: relationship({ ref: 'Project.agents', many: false }),
     },
     ui: {
       listView: {

@@ -371,6 +371,16 @@ document.addEventListener('DOMContentLoaded', () => {
         if (locationMapImageEl && data.locationMapImage && data.locationMapImage.url) {
           locationMapImageEl.src = data.locationMapImage.url;
         }
+        // NEW: Update QR Code image & Permit No. text from project data
+        const footerQrCodeImg = document.getElementById('dynamic_img_footer-qr-code');
+        if (footerQrCodeImg && data.qrCode && data.qrCode.url) {
+          footerQrCodeImg.src = data.qrCode.url;
+        }
+        const permitNoEl = document.getElementById('dynamic_p_permit-no');
+        if (permitNoEl && data.permitNo) {
+          permitNoEl.innerHTML = data.permitNo;
+        }
+
 
         // === DEVELOPER SECTION ===
         const developerTitleEl = document.getElementById('dynamic_h2_About-title');
