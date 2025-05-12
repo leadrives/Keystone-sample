@@ -830,6 +830,25 @@
         });
 
     </script>
+    <script>
+document.addEventListener("DOMContentLoaded", function(){
+    // Get the WhatsApp anchor (starting with our WhatsApp URL)
+    const whatsappLink = document.querySelector('a[href^="https://api.whatsapp.com/send?phone="]');
+    // Get the dynamic heading and sub-heading texts
+    const heading1 = document.getElementById("dynamic_h1_main-heading");
+    const heading2 = document.getElementById("dynamic_h2_sub-heading");
+
+    if (whatsappLink && heading1 && heading2) {
+        const text1 = heading1.textContent.trim();
+        const text2 = heading2.textContent.trim();
+        // Create the complete message
+        const message = encodeURIComponent(`Hi, I'm interested to know more about '${text1}' '${text2}'.`);
+        const baseUrl = "https://api.whatsapp.com/send?phone=971502622676";
+        // Update the href with the new message parameter
+        whatsappLink.href = `${baseUrl}&text=${message}`;
+    }
+});
+</script>
 
 
 </body>
