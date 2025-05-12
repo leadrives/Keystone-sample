@@ -100,15 +100,25 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // =============================================
-  // 1) Initialize intl-tel-input for callback phone
-  // =============================================
+  
+
+  // Initialize intl-tel-input
   const phoneInput = document.getElementById("phone");
-  // Store in a variable so we can retrieve dial code later
-  const callbackIti = intlTelInput(phoneInput, {
-    initialCountry: "ae",  // Default to UAE
-    separateDialCode: true,
-    preferredCountries: ["ae", "sa", "us", "gb"]
+  const iti = intlTelInput(phoneInput, {
+      separateDialCode: true,
+      preferredCountries: ["ae", "us", "gb", "sa"], // Preferred countries
+      initialCountry: "auto", // Automatically detect country
+      geoIpLookup: function (callback) {
+          // Use a geolocation API to get the user's country
+          fetch("https://ipapi.co/json/")
+              .then((response) => response.json())
+              .then((data) => {
+                  callback(data.country_code.toLowerCase());
+              })
+              .catch(() => {
+                  callback("ae"); // Default to UAE if geolocation fails
+              });
+      },
   });
 
   // Callback form submission event listener (for callback modal)

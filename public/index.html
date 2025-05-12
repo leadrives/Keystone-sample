@@ -28,6 +28,18 @@
     </script>
     <!-- End Google Tag Manager -->
 
+    <style>
+        /* Ensure the intl-tel-input container displays properly */
+        .iti {
+            width: 100%;
+        }
+
+        .iti__flag-container {
+            padding: 0 5px;
+        }
+
+       
+    </style>
 </head>
 
 <body>
@@ -36,6 +48,8 @@
             style="display:none;visibility:hidden"></iframe></noscript>
     <!-- End Google Tag Manager (noscript) -->
     <script src="/app.js"></script>
+    <!-- Load intl‑tel‑input JS library -->
+    <script src="https://cdn.jsdelivr.net/npm/intl-tel-input@17.0.12/build/js/intlTelInput.min.js"></script>
     <!-- Header (Sticky navigation + burger menu) -->
     <header>
         <div class="container header-container">
@@ -740,7 +754,6 @@
       </a>
 
     <!-- Load the JS for intl-tel-input -->
-    <script src="https://cdn.jsdelivr.net/npm/intl-tel-input@17.0.12/build/js/intlTelInput.min.js"></script>
     <script>
         document.addEventListener("DOMContentLoaded", function () {
             const modal = document.getElementById("callbackModal");
@@ -775,12 +788,21 @@
             // Close modal when overlay is clicked
             overlay.addEventListener("click", closeModal);
 
-            // Initialize intl-tel-input
-            const phoneInput = document.getElementById("phone");
-            intlTelInput(phoneInput, {
-                initialCountry: "ae",  // UAE default
-                separateDialCode: true,
-                preferredCountries: ["ae", "sa", "us", "gb"]
+            
+
+            // Add phone number validation
+            const modalBtn = document.querySelector(".modal-btn");
+            modalBtn.addEventListener("click", function () {
+                if (iti.isValidNumber()) {
+                    alert("Phone number is valid!");
+                } else {
+                    alert("Please enter a valid phone number.");
+                }
+            });
+
+            phoneInput.addEventListener("countrychange", function() {
+                // Optionally clear the input (or you can leave the user’s entered number)
+                phoneInput.value = "";
             });
         });
     </script>
