@@ -111,8 +111,8 @@
                         style="max-width: 150px; margin-bottom: 5px;" />
 
                     <div class="decorative-element" aria-hidden="true"></div>
-                    <h2 id="dynamic_h1_main-heading">Dubai Harbour Residences</h2>
-                    <h2 id="dynamic_h2_sub-heading">by Shamal Holding</h2>
+                    <h2 id="dynamic_h1_main-heading"></h2>
+                    <h2 id="dynamic_h2_sub-heading"></h2>
 
                     <div class="buttons">
                         <button class="check-availability" aria-label="Check Availability">
@@ -847,6 +847,39 @@ document.addEventListener("DOMContentLoaded", function(){
         // Update the href with the new message parameter
         whatsappLink.href = `${baseUrl}&text=${message}`;
     }
+});
+</script>
+<script>
+document.addEventListener("DOMContentLoaded", function(){
+  // Select the dynamic headings and WhatsApp link
+  const heading1 = document.getElementById("dynamic_h1_main-heading");
+  const heading2 = document.getElementById("dynamic_h2_sub-heading");
+  const whatsappLink = document.querySelector('a[href^="https://api.whatsapp.com/send?phone="]');
+
+  // Function to update the WhatsApp link
+  function updateWhatsAppLink() {
+    const text1 = heading1.textContent.trim();
+    const text2 = heading2.textContent.trim();
+    const message = encodeURIComponent(`Hi, I'm interested to know more about '${text1}' '${text2}'.`);
+    const baseUrl = "https://api.whatsapp.com/send?phone=971502622676";
+    whatsappLink.href = `${baseUrl}&text=${message}`;
+  }
+
+  // Option 1: Use a delay if you know updates finish after a certain time
+  //setTimeout(updateWhatsAppLink, 3000);
+
+  // Option 2: Use a MutationObserver to update every time the headings change
+  // Uncomment the following block if you prefer this approach
+  
+  const observerConfig = { childList: true, subtree: true };
+  const observerCallback = function(mutationsList, observer) {
+    updateWhatsAppLink();
+  };
+  const observer1 = new MutationObserver(observerCallback);
+  const observer2 = new MutationObserver(observerCallback);
+  observer1.observe(heading1, observerConfig);
+  observer2.observe(heading2, observerConfig);
+  
 });
 </script>
 
